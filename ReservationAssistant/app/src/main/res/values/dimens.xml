@@ -1,0 +1,31 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="register_icon_height">119dp</dimen>
+    <dimen name="register_right_margin">100dp</dimen>
+    <dimen name="register_edittext_height">54dp</dimen>
+    <dimen name="register_sex_tv_size">18sp</dimen>
+    <dimen name="register_ic_height">80dp</dimen>
+    <dimen name="register_ic_iv_size">60dp</dimen>
+    <dimen name="register_check_size">15dp</dimen>
+    <dimen name="total_money_tv_size">18sp</dimen>
+    <dimen name="goods_car_iv_size">35dp</dimen>
+    <dimen name="goods_car_tv_size">18sp</dimen>
+    <dimen name="meeting_padding">120dp</dimen>
+    <dimen name="shidi_padding">50dp</dimen>
+    <dimen name="can_meeting_nums">35dp</dimen>
+    <dimen name="last_meeting_time">20sp</dimen>
+    <dimen name="meeting_info_tv_size">20sp</dimen>
+    <dimen name="replay_bt_size">20sp</dimen>
+    <dimen name="tv_cancel_size">24sp</dimen>
+    <dimen name="text_size_10">10sp</dimen>
+    <dimen name="main_tab_height">60dp</dimen>
+    <dimen name="agreement_tv_space">5dp</dimen>
+    <dimen name="agreement_tv_size">14sp</dimen>
+
+    <!-- sweet-alert-dialog相关 -->
+    <dimen name="alert_width">290dp</dimen>
+    <dimen name="common_circle_width">3dp</dimen>
+    <dimen name="progress_circle_radius">34dp</dimen>
+</resources>
