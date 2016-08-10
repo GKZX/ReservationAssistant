@@ -3,9 +3,13 @@ package com.gkzxhn.xjyyzs.activities;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.text.TextUtils;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.RadioButton;
@@ -75,9 +79,10 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void initData() {
+        setSupportActionBar(tool_bar);
         setTitleText("主页");
-        setLogoutVisibility(View.VISIBLE);
-        setLogoutClickedListener();
+//        setLogoutVisibility(View.VISIBLE);
+//        setLogoutClickedListener();
         initFragment();
         checkOnlineStatus();// 检查云信id在线状态
         rg_main_tabs.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -105,34 +110,41 @@ public class MainActivity extends BaseActivity {
      * 设置注销点击事件
      */
     private void setLogoutClickedListener() {
-        bt_logout.setOnClickListener(new View.OnClickListener() {
+//        bt_logout.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                showLogoutDialog();
+//            }
+//        });
+    }
+
+    /**
+     * 注销对话框
+     */
+    private void showLogoutDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        View logout_dialog_view = View.inflate(MainActivity.this, R.layout.msg_ok_cancel_dialog, null);
+        builder.setView(logout_dialog_view);
+        TextView tv_cancel = (TextView) logout_dialog_view.findViewById(R.id.tv_cancel);
+        final AlertDialog dialog = builder.create();
+        tv_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                View logout_dialog_view = View.inflate(MainActivity.this, R.layout.msg_ok_cancel_dialog, null);
-                builder.setView(logout_dialog_view);
-                TextView tv_cancel = (TextView) logout_dialog_view.findViewById(R.id.tv_cancel);
-                final AlertDialog dialog = builder.create();
-                tv_cancel.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        dialog.dismiss();
-                    }
-                });
-                TextView tv_ok = (TextView) logout_dialog_view.findViewById(R.id.tv_ok);
-                tv_ok.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                        SPUtil.clear(MainActivity.this);
-                        startActivity(intent);
-                        NIMClient.getService(AuthService.class).logout();
-                    }
-                });
-                dialog.show();
+                dialog.dismiss();
             }
         });
+        TextView tv_ok = (TextView) logout_dialog_view.findViewById(R.id.tv_ok);
+        tv_ok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                SPUtil.clear(MainActivity.this);
+                startActivity(intent);
+                NIMClient.getService(AuthService.class).logout();
+            }
+        });
+        dialog.show();
     }
 
     /**
@@ -235,5 +247,27 @@ public class MainActivity extends BaseActivity {
             logout_dialog = null;
         }
         super.onDestroy();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if(id == R.id.logout){
+            showLogoutDialog();
+        }else if(id == R.id.change_pwd){
+            Intent intent = new Intent(this, ChangePwdActivity.class);
+            startActivity(intent);
+        }else if(id == R.id.change_phone){
+            Intent intent = new Intent(this, SetWorkerPhoneActivity.class);
+            startActivity(intent);
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

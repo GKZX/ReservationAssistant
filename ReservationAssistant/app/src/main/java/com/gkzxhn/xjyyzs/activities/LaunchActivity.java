@@ -1,16 +1,13 @@
 package com.gkzxhn.xjyyzs.activities;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
-import android.view.Window;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 
 import com.gkzxhn.xjyyzs.R;
 import com.gkzxhn.xjyyzs.base.BaseActivity;

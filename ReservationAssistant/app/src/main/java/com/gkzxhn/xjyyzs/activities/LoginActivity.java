@@ -24,7 +24,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
-import okhttp3.ResponseBody;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -127,6 +126,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
      */
     private void saveUserInfo(LoginResult result) {
         SPUtil.put(LoginActivity.this, "userid", result.getUser().getUserid());
+        SPUtil.put(LoginActivity.this, "password", password);
         SPUtil.put(LoginActivity.this, "token", result.getUser().getToken());
         SPUtil.put(LoginActivity.this, "name", result.getUser().getName());
         SPUtil.put(LoginActivity.this, "cloudToken", result.getUser().getCloudMsg().getToken());

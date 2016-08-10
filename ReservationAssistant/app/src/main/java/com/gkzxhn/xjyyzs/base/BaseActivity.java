@@ -6,10 +6,12 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.gkzxhn.xjyyzs.R;
+import com.gkzxhn.xjyyzs.utils.ToastUtil;
 
 
 /**
@@ -22,9 +24,10 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     private View ly_title_bar;
     private RelativeLayout rl_content;// 标题以下内容布局
-    private Toolbar tool_bar; // toolbar
+    public Toolbar tool_bar; // toolbar
     private TextView tv_title;// 标题
-    protected Button bt_logout;
+    private ImageButton ib_back;// 返回
+//    protected Button bt_logout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +38,8 @@ public abstract class BaseActivity extends AppCompatActivity {
         rl_content = (RelativeLayout) findViewById(R.id.rl_content);
         tool_bar = (Toolbar) findViewById(R.id.tool_bar);
         tv_title = (TextView) findViewById(R.id.tv_title);
-        bt_logout = (Button) findViewById(R.id.bt_logout);
+        ib_back = (ImageButton) findViewById(R.id.ib_back);
+//        bt_logout = (Button) findViewById(R.id.bt_logout);
         View view = initView();// 初始化view
         if(rl_content.getChildCount() != 0) {
             rl_content.removeAllViews();
@@ -79,7 +83,38 @@ public abstract class BaseActivity extends AppCompatActivity {
      * 设置注销是否可见
      * @param visibility
      */
-    public void setLogoutVisibility(int visibility){
-        bt_logout.setVisibility(visibility);
+//    public void setLogoutVisibility(int visibility){
+//        bt_logout.setVisibility(visibility);
+//    }
+
+    /**
+     * 显示返回按钮
+     */
+    protected void setBackVisibility(){
+        ib_back.setVisibility(View.VISIBLE);
+    }
+
+    /**
+     * 设置返回按钮监听
+     * @param listener
+     */
+    protected void setBackPressListener(View.OnClickListener listener){
+        ib_back.setOnClickListener(listener);
+    }
+
+    /**
+     * short toast
+     * @param msg
+     */
+    protected void showToastShortMsg(String msg){
+        ToastUtil.showShortToast(this, msg);
+    }
+
+    /**
+     * long toast
+     * @param msg
+     */
+    protected void showToastLongMsg(String msg){
+        ToastUtil.showLongToast(this, msg);
     }
 }

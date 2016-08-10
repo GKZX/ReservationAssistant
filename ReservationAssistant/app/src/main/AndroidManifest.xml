@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.gkzxhn.xjyyzs" >
+<manifest package="com.gkzxhn.xjyyzs"
+          xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!-- 访问网络状态 -->
     <uses-permission android:name="android.permission.INTERNET"/>
@@ -51,8 +51,10 @@
         <activity
             android:name=".activities.LoginActivity"
             android:screenOrientation="portrait"/>
-        <service android:name=".service.LoginNimService"
-                 android:exported="false"/>
+
+        <service
+            android:name=".service.LoginNimService"
+            android:exported="false"/>
 
         <!-- 声明云信后台服务，如需保持后台推送，使用独立进程效果会更好。 -->
         <service
@@ -98,6 +100,10 @@
             android:name="com.netease.cosine.target.receiver"
             android:value="com.netease.nimlib.service.NimReceiver"/>
 
+        <activity android:name=".activities.ChangePwdActivity">
+        </activity>
+        <activity android:name=".activities.SetWorkerPhoneActivity">
+        </activity>
     </application>
 
 </manifest>

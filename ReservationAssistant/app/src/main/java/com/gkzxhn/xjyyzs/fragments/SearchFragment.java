@@ -115,7 +115,7 @@ public class SearchFragment extends BaseFragment implements View.OnClickListener
 
     @Override
     public void getData() {
-        if(data == null) {
+        if(data == null || data.size() == 0) {
             current_dialog = new ProgressDialog(getActivity());
             current_dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             current_dialog.setCancelable(false);

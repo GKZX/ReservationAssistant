@@ -1,8 +1,6 @@
 package com.gkzxhn.xjyyzs.app;
 
-import android.app.ActivityManager;
 import android.app.Application;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
