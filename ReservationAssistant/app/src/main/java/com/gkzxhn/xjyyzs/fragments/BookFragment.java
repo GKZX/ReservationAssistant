@@ -1,22 +1,40 @@
 package com.gkzxhn.xjyyzs.fragments;
 
-import android.graphics.drawable.Drawable;
+import android.os.Handler;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
-import android.widget.RelativeLayout;
 import android.widget.Spinner;
-
 
 import com.gkzxhn.xjyyzs.R;
 import com.gkzxhn.xjyyzs.base.BaseFragment;
+import com.gkzxhn.xjyyzs.requests.ApiService;
+import com.gkzxhn.xjyyzs.requests.Constant;
+import com.gkzxhn.xjyyzs.requests.bean.Apply;
 import com.gkzxhn.xjyyzs.utils.DateUtils;
+import com.gkzxhn.xjyyzs.utils.Log;
+import com.gkzxhn.xjyyzs.utils.SPUtil;
+import com.gkzxhn.xjyyzs.utils.StringUtils;
+import com.gkzxhn.xjyyzs.view.dialog.SweetAlertDialog;
+import com.google.gson.Gson;
+
+import java.io.IOException;
+import java.text.ParseException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
+import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
+import retrofit2.converter.gson.GsonConverterFactory;
+import rx.Observer;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * author:huangzhengneng
@@ -27,14 +45,18 @@ import butterknife.ButterKnife;
 public class BookFragment extends BaseFragment {
 
     private static final String[] DATE_LIST = DateUtils.afterNDay(30).toArray(new String[DateUtils.afterNDay(30).size()]);// 时间选择;
+    private static final String TAG = "BookFragment";
 
     @BindView(R.id.et_name) EditText et_name;
     @BindView(R.id.et_ic_card_number) EditText et_ic_card_number;
     @BindView(R.id.sp_date) Spinner sp_date;
     @BindView(R.id.bt_remote_meeting) Button bt_remote_meeting;
-    @BindView(R.id.bt_fact_meeting) Button bt_fact_meeting;
 
     private ArrayAdapter<String> date_adapter;// 预约日期适配器
+    private String name;
+    private String uuid;
+    private String apply_date;
+    private SweetAlertDialog apply_dialog;
 
     @Override
     protected View initView() {
@@ -47,5 +69,138 @@ public class BookFragment extends BaseFragment {
     protected void initData() {
         date_adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_dropdown_item_1line, DATE_LIST);
         sp_date.setAdapter(date_adapter);
+    }
+
+    @OnClick(R.id.bt_remote_meeting)
+    public void onClick(){
+        if(!checkEditText()){
+            showToastMsgShort("请填写完整信息");
+        }else try {
+            if(!StringUtils.IDCardValidate(uuid).equals("")){
+                showToastMsgShort("身份证号不合法");
+            }else {
+                apply();
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+            showToastMsgShort("身份证号不合法");
+        }
+    }
+
+    /**
+     * 申请
+     */
+    private void apply() {
+        initAndShowDialog();
+        Apply apply = getBean();
+        String apply_json = new Gson().toJson(apply);
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(Constant.URL_HEAD).addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create()).build();
+        ApiService apiService = retrofit.create(ApiService.class);
+        RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), apply_json);
+        apiService.apply((String) SPUtil.get(getActivity(), "token", ""), body).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<ResponseBody>() {
+            @Override public void onCompleted() {}
+
+            @Override public void onError(Throwable e) {
+                Log.e(TAG, "apply failed : " + e.getMessage());
+                showApplyFailedDialog("请稍后再试");
+            }
+
+            @Override
+            public void onNext(ResponseBody responseBody) {
+                try {
+                    String result = responseBody.string();
+                    Log.i(TAG, "apply success : " + result);
+                    // {"msg":"申请提交成功"}
+                    showApplySuccessDialog();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    showApplyFailedDialog("异常");
+                }
+            }
+        });
+    }
+
+    /**
+     * 申请成功
+     */
+    private void showApplySuccessDialog() {
+        apply_dialog.getProgressHelper().setBarColor(R.color.success_stroke_color);
+        apply_dialog.setTitleText("申请成功").setConfirmText("确定").changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
+        apply_dialog.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+            @Override
+            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                sweetAlertDialog.dismiss();
+            }
+        });
+        delayDismissDialog();
+    }
+
+    /**
+     * 若用户没有手动点确定  延迟两秒自动dismiss
+     */
+    private void delayDismissDialog() {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if(apply_dialog.isShowing()){
+                    apply_dialog.dismiss();
+                }
+            }
+        }, 2000);
+    }
+
+    /**
+     * 申请失败对话框
+     */
+    private void showApplyFailedDialog(String titleText) {
+        apply_dialog.getProgressHelper().setBarColor(R.color.error_stroke_color);
+        apply_dialog.setTitleText("申请失败，" + titleText).setConfirmText("确定").changeAlertType(SweetAlertDialog.ERROR_TYPE);
+        apply_dialog.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+            @Override
+            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                sweetAlertDialog.dismiss();
+            }
+        });
+        delayDismissDialog();
+    }
+
+    /**
+     * 初始化并且显示对话框
+     */
+    private void initAndShowDialog() {
+        apply_dialog = new SweetAlertDialog(getActivity(), SweetAlertDialog.PROGRESS_TYPE);
+        apply_dialog.setTitleText("正在提交...").setCancelable(false);
+        apply_dialog.show();
+    }
+
+    /**
+     * 获取实体类
+     * @return
+     */
+    private Apply getBean() {
+        Apply apply = new Apply();
+        Apply.ApplyBean bean = apply.new ApplyBean();
+        bean.setUuid(uuid);
+        bean.setOrgCode((String) SPUtil.get(getActivity(), "organizationCode", ""));
+        bean.setApplyDate(apply_date);
+        apply.setApply(bean);
+        return apply;
+    }
+
+    /**
+     * 检查输入框
+     * @return
+     */
+    private boolean checkEditText() {
+        name = et_name.getText().toString().trim();
+        uuid = et_ic_card_number.getText().toString().trim();
+        apply_date = DATE_LIST[sp_date.getSelectedItemPosition()];
+        if(TextUtils.isEmpty(name) || TextUtils.isEmpty(uuid) || TextUtils.isEmpty(apply_date)){
+            return false;
+        }
+        return true;
     }
 }

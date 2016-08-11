@@ -116,6 +116,7 @@ public class SearchFragment extends BaseFragment implements View.OnClickListener
     @Override
     public void getData() {
         if(data == null || data.size() == 0) {
+            Log.i(TAG, "go to get data");
             current_dialog = new ProgressDialog(getActivity());
             current_dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             current_dialog.setCancelable(false);
@@ -148,6 +149,7 @@ public class SearchFragment extends BaseFragment implements View.OnClickListener
 
                     @Override
                     public void onNext(ApplyResult result) {
+                        Log.i(TAG, "get data success");
                         data = new ArrayList<>();
                         data.clear();
                         data = result.getApplies();

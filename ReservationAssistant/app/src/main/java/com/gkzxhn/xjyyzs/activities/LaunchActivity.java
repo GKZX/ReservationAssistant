@@ -56,13 +56,11 @@ public class LaunchActivity extends BaseActivity {
         alphaAnimation.setInterpolator(new LinearInterpolator());
         rl_splash.startAnimation(alphaAnimation);
         alphaAnimation.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
+            @Override public void onAnimationStart(Animation animation) {
                 Log.i(TAG, "launch animation start");
             }
 
-            @Override
-            public void onAnimationEnd(Animation animation) {
+            @Override public void onAnimationEnd(Animation animation) {
                 //  动画结束进入登录页或者主页
                 String username = (String) SPUtil.get(LaunchActivity.this, "userid", "");
                 String password = (String) SPUtil.get(LaunchActivity.this, "token", "");

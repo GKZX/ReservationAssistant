@@ -35,6 +35,7 @@
                 android:src="@drawable/back"
                 android:background="@color/transparent"
                 android:layout_marginLeft="20dp"
+                android:layout_centerVertical="true"
                 android:visibility="gone"/>
         </RelativeLayout>
     </android.support.v7.widget.Toolbar>

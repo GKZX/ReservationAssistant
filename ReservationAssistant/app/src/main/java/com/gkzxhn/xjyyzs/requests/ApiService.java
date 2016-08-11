@@ -58,4 +58,16 @@ public interface ApiService {
             @Body RequestBody body
     );
 
+    /**
+     * 预约申请
+     * @param token
+     * @param body
+     * @return
+     */
+    @POST("applies")
+    Observable<ResponseBody> apply(
+            @Header("Authorization") String token,
+            @Body RequestBody body
+    );
+
 }
