@@ -20,7 +20,10 @@ import com.netease.nimlib.sdk.StatusBarNotificationConfig;
 import com.netease.nimlib.sdk.StatusCode;
 import com.netease.nimlib.sdk.auth.AuthServiceObserver;
 import com.netease.nimlib.sdk.auth.LoginInfo;
+import com.netease.nimlib.sdk.msg.MsgService;
+import com.netease.nimlib.sdk.msg.MsgServiceObserve;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
+import com.netease.nimlib.sdk.msg.model.CustomNotification;
 import com.netease.nimlib.sdk.uinfo.UserInfoProvider;
 
 /**
@@ -33,6 +36,7 @@ import com.netease.nimlib.sdk.uinfo.UserInfoProvider;
 public class MyApp extends Application {
 
     private static final String TAG = "";
+    private boolean register = false;
 
     @Override
     public void onCreate() {
@@ -44,24 +48,53 @@ public class MyApp extends Application {
                 // 云信sdk初始化
                 NIMClient.init(MyApp.this, loginInfo(), Options());
 
-                if(SystemUtil.inMainProcess(MyApp.this)) {
+                if (SystemUtil.inMainProcess(MyApp.this)) {
                     // 监督在线状态
-                    NIMClient.getService(AuthServiceObserver.class).observeOnlineStatus(new Observer<StatusCode>() {
-                        @Override
-                        public void onEvent(StatusCode statusCode) {
-                            Log.i(TAG, "User status changed to: " + statusCode);
-                            if (statusCode.wontAutoLogin()) {
-                                // 被踢出、账号被禁用、密码错误等情况，自动登录失败，需要返回到登录界面进行重新登录操作
-                                SPUtil.put(getApplicationContext(), "relogin", "true");
-                                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                startActivity(intent);
-                            }
-                        }
-                    }, true);
+                    observeOnlineStatus();
+                    observeCustomNotification();
                 }
             }
         }.run();
+    }
+
+    /**
+     * 监听系统通知
+     */
+    private void observeCustomNotification() {
+        NIMClient.getService(MsgServiceObserve.class).observeCustomNotification(new Observer<CustomNotification>() {
+            @Override
+            public void onEvent(CustomNotification customNotification) {
+                Log.i(TAG, "custom notification ApnsText : " + customNotification.getApnsText());
+                Log.i(TAG, "custom notification Content : " + customNotification.getContent());
+                Log.i(TAG, "custom notification FromAccount : " + customNotification.getFromAccount());
+                Log.i(TAG, "custom notification SessionId : " + customNotification.getSessionId());
+                Log.i(TAG, "custom notification Time : " + customNotification.getTime());
+                Log.i(TAG, "custom notification SessionType : " + customNotification.getSessionType());
+                Log.i(TAG, "custom notification PushPayload : " + customNotification.getPushPayload().size());
+                Log.i(TAG, "custom notification enableUnreadCount : " + customNotification.getConfig().enableUnreadCount);
+                Log.i(TAG, "custom notification enablePush : " + customNotification.getConfig().enablePush);
+                Log.i(TAG, "custom notification enablePushNick : " + customNotification.getConfig().enablePushNick);
+            }
+        }, true);
+    }
+
+    /**
+     * 观察在线状态
+     */
+    private void observeOnlineStatus() {
+        NIMClient.getService(AuthServiceObserver.class).observeOnlineStatus(new Observer<StatusCode>() {
+            @Override
+            public void onEvent(StatusCode statusCode) {
+                Log.i(TAG, "User status changed to: " + statusCode);
+                if (statusCode.wontAutoLogin()) {
+                    // 被踢出、账号被禁用、密码错误等情况，自动登录失败，需要返回到登录界面进行重新登录操作
+                    SPUtil.put(getApplicationContext(), "relogin", "true");
+                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                }
+            }
+        }, true);
     }
 
     /**

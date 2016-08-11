@@ -3,11 +3,9 @@ package com.gkzxhn.xjyyzs.activities;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,7 +19,6 @@ import com.gkzxhn.xjyyzs.R;
 import com.gkzxhn.xjyyzs.base.BaseActivity;
 import com.gkzxhn.xjyyzs.base.BaseFragment;
 import com.gkzxhn.xjyyzs.fragments.HomeFragment;
-import com.gkzxhn.xjyyzs.fragments.MineFragment;
 import com.gkzxhn.xjyyzs.fragments.MsgFragment;
 import com.gkzxhn.xjyyzs.utils.DensityUtil;
 import com.gkzxhn.xjyyzs.utils.Log;
@@ -49,13 +46,11 @@ public class MainActivity extends BaseActivity {
     @BindView(R.id.rg_main_tabs) RadioGroup rg_main_tabs;
     @BindView(R.id.rb_main_home) RadioButton rb_main_home;
     @BindView(R.id.rb_main_msg) RadioButton rb_main_msg;
-//    @BindView(R.id.rb_main_mine) RadioButton rb_main_mine;
     private List<BaseFragment> fragments = new ArrayList<>();
     private FragmentManager manager;
     private FragmentTransaction transaction = null;
     private HomeFragment homeFragment = null;
     private MsgFragment msgFragment = null;
-    private MineFragment mineFragment = null;
 
     private long mExitTime;//add by hzn 退出按键时间间隔
 
@@ -71,9 +66,6 @@ public class MainActivity extends BaseActivity {
         Drawable[] drawables2 = rb_main_msg.getCompoundDrawables();
         drawables2[1].setBounds(0, DensityUtil.dip2px(getApplicationContext(), 5), 60, 75);
         rb_main_msg.setCompoundDrawables(drawables2[0], drawables2[1], drawables2[2], drawables2[3]);
-//        Drawable[] drawables3 = rb_main_mine.getCompoundDrawables();
-//        drawables3[1].setBounds(0, DensityUtil.dip2px(getApplicationContext(), 5), 60, 75);
-//        rb_main_mine.setCompoundDrawables(drawables3[0], drawables3[1], drawables3[2], drawables3[3]);
         return view;
     }
 
@@ -81,8 +73,6 @@ public class MainActivity extends BaseActivity {
     protected void initData() {
         setSupportActionBar(tool_bar);
         setTitleText("主页");
-//        setLogoutVisibility(View.VISIBLE);
-//        setLogoutClickedListener();
         initFragment();
         checkOnlineStatus();// 检查云信id在线状态
         rg_main_tabs.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -97,25 +87,9 @@ public class MainActivity extends BaseActivity {
                         switchFragment(1);
                         setTitleText("消息");
                         break;
-//                    case R.id.rb_main_mine:// mine
-//                        switchFragment(2);
-//                        setTitleText("我的");
-//                        break;
                 }
             }
         });
-    }
-
-    /**
-     * 设置注销点击事件
-     */
-    private void setLogoutClickedListener() {
-//        bt_logout.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                showLogoutDialog();
-//            }
-//        });
     }
 
     /**
@@ -202,14 +176,7 @@ public class MainActivity extends BaseActivity {
             fragments.add(msgFragment);
         }
         transaction.add(R.id.fl_container, msgFragment);
-//        if(mineFragment == null) {
-//            mineFragment = new MineFragment();
-//            fragments.add(mineFragment);
-//        }
-//        transaction.add(R.id.fl_container, mineFragment);
-        transaction.show(homeFragment).hide(msgFragment)
-//                .hide(mineFragment)
-        ;
+        transaction.show(homeFragment).hide(msgFragment);
         transaction.commitAllowingStateLoss();
     }
 
