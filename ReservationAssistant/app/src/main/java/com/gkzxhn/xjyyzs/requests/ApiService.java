@@ -41,7 +41,7 @@ public interface ApiService {
      */
     @GET("applies")
     Observable<ApplyResult> getCurrentDayData(
-            @Header("Authorization") String token,
+//            @Header("Authorization") String token,
             @Query("orgCode") String orgCode
     );
 

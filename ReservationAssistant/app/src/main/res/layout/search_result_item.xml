@@ -30,7 +30,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/tv_mid"
-                    android:textSize="20sp"
+                    android:textSize="@dimen/search_main_text_size"
                     android:text="姓名："/>
 
                 <TextView
@@ -38,7 +38,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/tv_mid"
-                    android:textSize="20sp"
+                    android:textSize="@dimen/search_main_text_size"
                     android:text="xxx"/>
             </LinearLayout>
 
@@ -53,7 +53,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/tv_mid"
-                    android:textSize="20sp"
+                    android:textSize="@dimen/search_main_text_size"
                     android:text="身份证号："/>
 
                 <TextView
@@ -61,7 +61,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/tv_mid"
-                    android:textSize="20sp"
+                    android:textSize="@dimen/search_main_text_size"
                     android:text="xxxxxxxxxxxxxx"/>
             </LinearLayout>
         </LinearLayout>
@@ -82,7 +82,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/tv_mid"
-                    android:textSize="20sp"
+                    android:textSize="@dimen/search_main_text_size"
                     android:text="申请日期："/>
 
                 <TextView
@@ -90,7 +90,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/tv_mid"
-                    android:textSize="20sp"
+                    android:textSize="@dimen/search_main_text_size"
                     android:text="1970-01-01"/>
             </LinearLayout>
 
@@ -105,7 +105,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/tv_mid"
-                    android:textSize="20sp"
+                    android:textSize="@dimen/search_main_text_size"
                     android:text="状态："/>
 
                 <TextView
@@ -113,7 +113,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/tv_mid"
-                    android:textSize="20sp"
+                    android:textSize="@dimen/search_main_text_size"
                     android:text="未知"/>
             </LinearLayout>
         </LinearLayout>
@@ -134,7 +134,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/tv_mid"
-                    android:textSize="20sp"
+                    android:textSize="@dimen/search_main_text_size"
                     android:text="会见日期："/>
 
                 <TextView
@@ -142,7 +142,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/tv_mid"
-                    android:textSize="20sp"
+                    android:textSize="@dimen/search_main_text_size"
                     android:text="1970-01-01"/>
             </LinearLayout>
         </LinearLayout>

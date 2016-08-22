@@ -15,50 +15,50 @@
         <EditText
             android:id="@+id/old_pwd"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="@dimen/input_height"
             android:hint="原密码"
             android:paddingLeft="10dp"
             android:layout_marginTop="20dp"
             android:background="@drawable/et_shape_gray"
             android:textColor="@color/tv_mid"
-            android:textSize="20sp"
+            android:textSize="@dimen/search_small_text"
             android:inputType="textPassword"
             android:maxLength="20"/>
 
         <EditText
             android:id="@+id/new_pwd"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="@dimen/input_height"
             android:hint="新密码"
             android:paddingLeft="10dp"
             android:layout_marginTop="20dp"
             android:background="@drawable/et_shape_gray"
             android:textColor="@color/tv_mid"
-            android:textSize="20sp"
+            android:textSize="@dimen/search_small_text"
             android:inputType="textPassword"
             android:maxLength="20"/>
 
         <EditText
             android:id="@+id/confirm_new_pwd"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="@dimen/input_height"
             android:hint="确认新密码"
             android:paddingLeft="10dp"
             android:layout_marginTop="20dp"
             android:background="@drawable/et_shape_gray"
             android:textColor="@color/tv_mid"
-            android:textSize="20sp"
+            android:textSize="@dimen/search_small_text"
             android:inputType="textPassword"
             android:maxLength="20"/>
 
         <Button
             android:id="@+id/bt_ok"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="@dimen/input_height"
             android:layout_marginTop="30dp"
             android:background="@drawable/theme_bg_bt_selector"
             android:textColor="@color/white"
             android:text="确    定"
-            android:textSize="22sp"/>
+            android:textSize="@dimen/search_main_text_size"/>
     </LinearLayout>
 </RelativeLayout>

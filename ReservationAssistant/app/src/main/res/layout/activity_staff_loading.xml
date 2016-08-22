@@ -16,7 +16,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="请输入工作人员信息"
-            android:textSize="18sp"
+            android:textSize="@dimen/note_text_size"
             android:textColor="@color/tv_gray"
             android:layout_marginLeft="20dp"
             android:layout_marginTop="20dp"/>
@@ -24,36 +24,36 @@
         <EditText
             android:id="@+id/et_username"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="@dimen/input_height"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:layout_marginTop="20dp"
             android:background="@drawable/et_shape_search"
             android:hint="账号"
-            android:singleLine="true"
+            android:maxLines="1"
             android:paddingLeft="10dp"
-            android:textSize="22sp"
+            android:textSize="@dimen/search_main_text_size"
             android:textColor="@color/tv_bg" />
 
         <EditText
             android:id="@+id/et_password"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="@dimen/input_height"
             android:layout_marginRight="20dp"
             android:layout_marginLeft="20dp"
             android:layout_marginTop="10dp"
             android:background="@drawable/et_shape_search"
             android:hint="密码"
-            android:singleLine="true"
+            android:maxLines="1"
             android:inputType="textPassword"
             android:paddingLeft="10dp"
-            android:textSize="22sp"
+            android:textSize="@dimen/search_main_text_size"
             android:textColor="@color/tv_bg"/>
 
         <Button
             android:id="@+id/btn_login"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="@dimen/input_height"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:background="@drawable/theme_bg_bt_selector"
@@ -61,7 +61,7 @@
             android:textColor="@color/white"
             android:layout_marginTop="20dp"
             android:gravity="center"
-            android:textSize="24sp"/>
+            android:textSize="@dimen/search_main_text_size"/>
     </LinearLayout>
 </RelativeLayout>
 

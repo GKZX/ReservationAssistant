@@ -2,7 +2,6 @@ package com.gkzxhn.xjyyzs.activities;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -33,6 +32,7 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 /**
+ * created by huangzhengneng on 2016.8.10
  * 设置工作人员手机号码
  */
 public class SetWorkerPhoneActivity extends BaseActivity {

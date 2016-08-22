@@ -106,8 +106,13 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
                     @Override public void onCompleted() {}
 
                     @Override public void onError(Throwable e) {
-                        Log.e(TAG, "login failed : " + e.getMessage());
-                        showLoginFailed();
+                        String error_msg = e.getMessage();
+                        Log.e(TAG, "login failed : " + error_msg);
+                        if(error_msg.contains("404")){
+                            showLoginFailed("账号不存在");
+                        }else {
+                            showLoginFailed("登录失败，请稍后再试！");
+                        }
                     }
 
                     @Override
@@ -169,10 +174,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
 
     /**
      * 登录失败
+     * @param titleText
      */
-    private void showLoginFailed() {
+    private void showLoginFailed(String titleText) {
         loginDialog.getProgressHelper().setBarColor(R.color.error_stroke_color);
-        loginDialog.setTitleText("登录失败，请稍后再试！")
+        loginDialog.setTitleText(titleText)
                 .setConfirmText("确定")
                 .changeAlertType(SweetAlertDialog.ERROR_TYPE);
         loginDialog.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
