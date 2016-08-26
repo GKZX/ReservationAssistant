@@ -11,7 +11,6 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
-
 import com.gkzxhn.xjyyzs.R;
 import com.gkzxhn.xjyyzs.adapter.SearchResultAdapter;
 import com.gkzxhn.xjyyzs.base.BaseFragment;
@@ -21,15 +20,19 @@ import com.gkzxhn.xjyyzs.requests.Constant;
 import com.gkzxhn.xjyyzs.requests.bean.ApplyResult;
 import com.gkzxhn.xjyyzs.utils.Log;
 import com.gkzxhn.xjyyzs.utils.SPUtil;
-import com.gkzxhn.xjyyzs.utils.ToastUtil;
 import com.gkzxhn.xjyyzs.view.decoration.DividerItemDecoration;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import okhttp3.Interceptor;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -132,11 +135,22 @@ public class SearchFragment extends BaseFragment implements View.OnClickListener
      * 获取当天数据
      */
     private void getCurrentData() {
+        OkHttpClient client = new OkHttpClient.Builder()
+                .addInterceptor(new Interceptor() {
+                    @Override
+                    public Response intercept(Chain chain) throws IOException {
+                        Request request = chain.request()
+                                .newBuilder()
+                                .addHeader("Authorization", (String) SPUtil.get(getActivity(), "token", ""))
+                                .build();
+                        return chain.proceed(request);
+                    }
+                }).build();
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(Constant.URL_HEAD).addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create()).build();
+                .addConverterFactory(GsonConverterFactory.create()).client(client).build();
         ApiService apiService = retrofit.create(ApiService.class);
-        apiService.getCurrentDayData((String) SPUtil.get(getActivity(), "token", ""), (String) SPUtil.get(getActivity(), "organizationCode", ""))
+        apiService.getCurrentDayData((String) SPUtil.get(getActivity(), "organizationCode", ""))
                 .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<ApplyResult>() {
                     @Override public void onCompleted() {}
@@ -153,8 +167,6 @@ public class SearchFragment extends BaseFragment implements View.OnClickListener
                         data = new ArrayList<>();
                         data.clear();
                         data = result.getApplies();
-                        List<ApplyResult.AppliesBean> beanList = data;
-                        data.addAll(beanList);
                         for (ApplyResult.AppliesBean bean : data){
                             Log.i(TAG, bean.toString());
                         }

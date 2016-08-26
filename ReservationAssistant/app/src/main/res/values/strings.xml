@@ -17,4 +17,5 @@
     <string name="dialog_cancel">Cancel</string>
     <string name="LOADING">Loading...</string>
     <string name="default_progressbar">Default Progressbar:</string>
+    <string name="setting_worker_phone_text">设置工作人员联系方式：</string>
 </resources>

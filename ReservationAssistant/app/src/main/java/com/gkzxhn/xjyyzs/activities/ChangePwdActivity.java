@@ -2,6 +2,7 @@ package com.gkzxhn.xjyyzs.activities;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -182,12 +183,18 @@ public class ChangePwdActivity extends BaseActivity {
      */
     private void showChangeSuccess() {
         dialog.getProgressHelper().setBarColor(R.color.success_stroke_color);
-        dialog.setTitleText("修改成功").setConfirmText("确定").changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.setTitleText("修改成功，请重新登录").setConfirmText("确定").changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
         dialog.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
             @Override
             public void onClick(SweetAlertDialog sweetAlertDialog) {
                 saveNewPassword();
                 sweetAlertDialog.dismiss();
+                SPUtil.clear(ChangePwdActivity.this);
+                Intent intent = new Intent(ChangePwdActivity.this, LoginActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK  | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
                 ChangePwdActivity.this.finish();
             }
         });

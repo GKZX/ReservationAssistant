@@ -23,20 +23,20 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="请填写相关信息"
-                android:textSize="16sp"
+                android:textSize="@dimen/note_text_size"
                 android:textColor="@color/tv_mid"
                 android:id="@+id/textView"/>
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
+                android:layout_height="@dimen/book_item_height"
                 android:layout_marginTop="10dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="姓名："
-                    android:textSize="20sp"
+                    android:textSize="@dimen/book_main_text_size"
                     android:layout_alignParentBottom="true"
                     android:layout_marginBottom="10dp"
                     android:textColor="@color/tv_mid"/>
@@ -48,7 +48,7 @@
                     android:layout_alignParentRight="true"
                     android:layout_marginLeft="100dp"
                     android:textColor="@color/tv_bg"
-                    android:textSize="20sp"
+                    android:textSize="@dimen/book_main_text_size"
                     android:background="@null"
                     android:gravity="right"
                     android:layout_centerVertical="true"
@@ -57,13 +57,13 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="60dp">
+                android:layout_height="@dimen/book_item_height">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="身份证号："
-                    android:textSize="20sp"
+                    android:textSize="@dimen/book_main_text_size"
                     android:layout_alignParentBottom="true"
                     android:layout_marginBottom="10dp"
                     android:textColor="@color/tv_mid"/>
@@ -75,7 +75,7 @@
                     android:layout_alignParentRight="true"
                     android:layout_marginLeft="100dp"
                     android:textColor="@color/tv_bg"
-                    android:textSize="20sp"
+                    android:textSize="@dimen/book_main_text_size"
                     android:layout_centerVertical="true"
                     android:gravity="right"
                     android:background="@null"
@@ -84,35 +84,35 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
+                android:layout_height="@dimen/book_item_height"
                 android:layout_marginTop="10dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="申请探监日期："
-                    android:textSize="20sp"
+                    android:textSize="@dimen/book_main_text_size"
                     android:textColor="@color/tv_mid"
                     android:layout_marginTop="20dp"/>
 
                 <Spinner
                     android:id="@+id/sp_date"
-                    android:layout_width="200dp"
+                    android:layout_width="@dimen/book_date_width"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:textColor="@color/tv_bg"
-                    android:textSize="20sp"/>
+                    android:textSize="@dimen/book_main_text_size"/>
             </RelativeLayout>
         </LinearLayout>
 
         <Button
             android:id="@+id/bt_remote_meeting"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="@dimen/book_item_height"
             android:text="申    请"
             android:textColor="@color/white"
-            android:textSize="20sp"
+            android:textSize="@dimen/book_main_text_size"
             android:background="@drawable/theme_bg_bt_selector"
             android:layout_marginTop="30dp"/>
     </LinearLayout>

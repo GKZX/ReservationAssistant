@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:id="@+id/ll_search_by_status"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="@dimen/search_item_height"
         android:gravity="center_vertical"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp"
+        android:paddingLeft="@dimen/search_padding"
+        android:paddingRight="@dimen/search_padding"
+        android:layout_marginTop="10dp"
         android:orientation="horizontal">
 
         <TextView
@@ -17,7 +19,7 @@
             android:layout_height="wrap_content"
             android:text="按状态："
             android:textColor="@color/tv_bg"
-            android:textSize="22sp"/>
+            android:textSize="@dimen/search_main_text_size"/>
 
         <RadioGroup
             android:id="@+id/rg_status"
@@ -31,7 +33,7 @@
                 android:layout_height="wrap_content"
                 android:text="已通过"
                 android:textColor="@color/tv_green"
-                android:textSize="20sp"/>
+                android:textSize="@dimen/search_small_text"/>
 
             <RadioButton
                 android:id="@+id/rb_refused"
@@ -39,7 +41,7 @@
                 android:layout_height="wrap_content"
                 android:text="未通过"
                 android:textColor="@color/tv_mid"
-                android:textSize="20sp"
+                android:textSize="@dimen/search_small_text"
                 android:checked="false"
                 android:layout_marginLeft="20dp"/>
         </RadioGroup>
@@ -54,20 +56,22 @@
                 android:layout_height="wrap_content"
                 android:text="查询"
                 android:background="@drawable/theme_bg_bt_selector"
-                android:textSize="22sp"
+                android:textSize="@dimen/search_small_text"
                 android:textColor="@color/white"
-                android:layout_marginLeft="20dp"
-                android:layout_alignParentRight="true"/>
+                android:layout_alignParentTop="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true" />
         </RelativeLayout>
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/ll_search_by_time"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="@dimen/search_item_height"
         android:gravity="center_vertical"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp"
+        android:paddingLeft="@dimen/search_padding"
+        android:paddingRight="@dimen/search_padding"
+        android:layout_marginTop="10dp"
         android:orientation="horizontal"
         android:layout_below="@+id/ll_search_by_status">
 
@@ -76,7 +80,8 @@
             android:layout_height="wrap_content"
             android:text="按时间："
             android:textColor="@color/tv_bg"
-            android:textSize="22sp"/>
+            android:textSize="@dimen/search_main_text_size"
+            android:id="@+id/textView2" />
 
         <TextView
             android:id="@+id/tv_start_date"
@@ -84,7 +89,7 @@
             android:layout_height="wrap_content"
             android:text="2016/7/22"
             android:textColor="@color/theme"
-            android:textSize="22sp"
+            android:textSize="@dimen/search_small_text"
             android:layout_marginLeft="10dp"/>
 
         <TextView
@@ -100,7 +105,7 @@
             android:layout_height="wrap_content"
             android:text="2016/7/23"
             android:textColor="@color/theme"
-            android:textSize="22sp"
+            android:textSize="@dimen/search_small_text"
             android:layout_marginLeft="10dp"/>
 
         <RelativeLayout
@@ -113,9 +118,9 @@
                 android:layout_height="wrap_content"
                 android:text="查询"
                 android:background="@drawable/theme_bg_bt_selector"
-                android:textSize="22sp"
+                android:textSize="@dimen/search_small_text"
                 android:textColor="@color/white"
-                android:layout_marginLeft="20dp"
+                android:layout_marginLeft="@dimen/search_padding"
                 android:layout_alignParentRight="true"/>
         </RelativeLayout>
     </LinearLayout>
@@ -132,7 +137,7 @@
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="@dimen/search_padding"
         android:layout_below="@+id/view"
         android:padding="10dp"/>
 </RelativeLayout>
