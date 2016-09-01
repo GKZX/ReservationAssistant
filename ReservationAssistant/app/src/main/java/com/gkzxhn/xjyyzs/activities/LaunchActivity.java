@@ -40,6 +40,7 @@ public class LaunchActivity extends BaseActivity {
 
     @Override
     protected void initData() {
+        Log.d(TAG, "user token : " + SPUtil.get(this, "token", ""));
         removeTitleBar();
         // 设置版本号
         tv_version.setText("V " + SystemUtil.getVersionName(this));

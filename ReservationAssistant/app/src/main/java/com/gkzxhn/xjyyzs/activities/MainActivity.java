@@ -128,10 +128,7 @@ public class MainActivity extends BaseActivity {
         StatusCode code = NIMClient.getStatus();
         Log.i(TAG, code.name());
         if(code == StatusCode.KICKOUT){
-            // ToDo 弹出提示框  重新登录
-        }
-        String isReLogin = (String) SPUtil.get(MainActivity.this, "relogin", "false");
-        if(isReLogin.equals("true")){
+            //  弹出提示框  重新登录
             showReLoginDialog();
         }
     }
@@ -151,7 +148,6 @@ public class MainActivity extends BaseActivity {
                 Intent intent = new Intent(MainActivity.this, LoginActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
-                SPUtil.put(getApplicationContext(), "relogin", false);
                 NIMClient.getService(AuthService.class).logout();
             }
         });

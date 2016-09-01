@@ -41,7 +41,7 @@ public class HomeFragment extends BaseFragment {
         tl_home_opt.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override public void onTabSelected(TabLayout.Tab tab) {
                 if(tab.getPosition() == 1){
-                    searchFragment.getData();
+                    searchFragment.getData(0);
                 }
                 vp_home_opt.setCurrentItem(tab.getPosition());
             }

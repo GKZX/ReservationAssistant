@@ -37,6 +37,7 @@ public class StringUtils {
      * @throws ParseException
      */
     public static String IDCardValidate(String IDStr) throws ParseException {
+        String lowerCaseIdStr = IDStr.toLowerCase();
         String errorInfo = "";// 记录错误信息
         String[] ValCodeArr = { "1", "0", "x", "9", "8", "7", "6", "5", "4",
                 "3", "2" };
@@ -44,16 +45,16 @@ public class StringUtils {
                 "9", "10", "5", "8", "4", "2" };
         String Ai = "";
         // 号码的长度 15位或18位
-        if (IDStr.length() != 15 && IDStr.length() != 18) {
+        if (lowerCaseIdStr.length() != 15 && lowerCaseIdStr.length() != 18) {
             errorInfo = "身份证号码长度应该为15位或18位。";
             return errorInfo;
         }
 
         // 数字 除最后一位都为数字
-        if (IDStr.length() == 18) {
-            Ai = IDStr.substring(0, 17);
-        } else if (IDStr.length() == 15) {
-            Ai = IDStr.substring(0, 6) + "19" + IDStr.substring(6, 15);
+        if (lowerCaseIdStr.length() == 18) {
+            Ai = lowerCaseIdStr.substring(0, 17);
+        } else if (lowerCaseIdStr.length() == 15) {
+            Ai = lowerCaseIdStr.substring(0, 6) + "19" + lowerCaseIdStr.substring(6, 15);
         }
         if (isNumeric(Ai) == false) {
             errorInfo = "身份证15位号码都应为数字 ; 18位号码除最后一位外，都应为数字。";
@@ -103,8 +104,8 @@ public class StringUtils {
         String strVerifyCode = ValCodeArr[modValue];
         Ai = Ai + strVerifyCode;
 
-        if (IDStr.length() == 18) {
-            if (Ai.equals(IDStr) == false) {
+        if (lowerCaseIdStr.length() == 18) {
+            if (Ai.equals(lowerCaseIdStr) == false) {
                 errorInfo = "身份证无效，不是合法的身份证号码";
                 return errorInfo;
             }
@@ -189,4 +190,20 @@ public class StringUtils {
         return flag;
     }
 
+    /**
+     * 把中文状态转换为大写的英文
+     * @param status
+     * @return
+     */
+    public static String getUpCaseStatus(String status){
+        String upCaseStatus = "";
+        if(status.equals("未处理")){
+            status = "PENDING";
+        }else if(status.equals("已通过")){
+            status = "PASSED";
+        }else if(status.equals("已拒绝")){
+            status = "DENIED";
+        }
+        return status;
+    }
 }

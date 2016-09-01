@@ -8,10 +8,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-
 import com.gkzxhn.xjyyzs.R;
 import com.gkzxhn.xjyyzs.requests.bean.ApplyResult;
-import com.gkzxhn.xjyyzs.utils.DateUtils;
+import com.gkzxhn.xjyyzs.utils.Log;
 
 import java.util.List;
 
@@ -27,6 +26,7 @@ import butterknife.ButterKnife;
 
 public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapter.MyViewHolder> {
 
+    private final String TAG = "SearchResultAdapter";
     private Context context;
     private List<ApplyResult.AppliesBean> list;
 
@@ -44,10 +44,11 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        holder.tv_id_card_number.setText(list.get(position).getApplicant());
-        holder.tv_apply_date.setText(list.get(position).getApplyDate());
-        holder.tv_apply_status.setText(list.get(position).getIsPass());
-        holder.tv_meeting_date.setText(DateUtils.formatDate("yyyy-MM-dd", list.get(position).getMeetingTime()));
+        holder.tv_id_card_number.setText(list.get(position).getUuid());
+        holder.tv_apply_date.setText(list.get(position).getApply().getApplyDate());
+        holder.tv_apply_status.setText(list.get(position).getApply().getFeedback().getIsPass());
+        Log.i(TAG, list.get(position).getApply().getFeedback().getIsPass() + "---");
+        holder.tv_meeting_date.setText(list.get(position).getApply().getFeedback().getMeetingTime());
         holder.tv_apply_name.setText(list.get(position).getName());
         holder.card_view.setOnClickListener(new View.OnClickListener() {
             @Override

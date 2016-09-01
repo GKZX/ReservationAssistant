@@ -5,6 +5,27 @@ package com.gkzxhn.xjyyzs.requests.bean;
  * email:943852572@qq.com
  * date: 2016/8/8.
  * function:登录结果
+ *
+ *
+ * {
+ *      "user":
+ *          {
+ *              "userid":"aks001",
+ *              "token":"57bfb9c5982852140025fdab",
+ *              "name":"郭刚",
+ *              "phone":"",
+ *              "cloudMsg":
+ *                      {
+ *                          "token":"123456",
+ *                          "cloudID":"xjtest1"
+ *                      },
+ *              "orgnization":
+ *                  {
+ *                      "title":"英巴格社区居委会",
+ *                      "code":"0997001"
+ *                   }
+ *          }
+ * }
  */
 
 public class LoginResult {

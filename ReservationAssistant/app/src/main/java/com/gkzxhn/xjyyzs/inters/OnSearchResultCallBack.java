@@ -9,5 +9,5 @@ package com.gkzxhn.xjyyzs.inters;
 
 public interface OnSearchResultCallBack {
 
-    public void getData();
+    public void getData(int type);
 }

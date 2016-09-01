@@ -104,12 +104,19 @@ public class BookFragment extends BaseFragment {
             @Override public void onCompleted() {}
 
             @Override public void onError(Throwable e) {
-                Log.e(TAG, "apply failed : " + e.getMessage());
-                showApplyFailedDialog("请稍后再试");
+                String error = e.getMessage();
+                Log.e(TAG, "apply failed : " + error);
+                // 400  404
+                if(error.contains("400")){
+                    showApplyFailedDialog("已申请过该日，请勿重复申请");
+                }else if(error.contains("404")){
+                    showApplyFailedDialog("抱歉，没有权限");
+                }else {
+                    showApplyFailedDialog("申请失败，请稍后再试");
+                }
             }
 
-            @Override
-            public void onNext(ResponseBody responseBody) {
+            @Override public void onNext(ResponseBody responseBody) {
                 try {
                     String result = responseBody.string();
                     Log.i(TAG, "apply success : " + result);
@@ -157,7 +164,7 @@ public class BookFragment extends BaseFragment {
      */
     private void showApplyFailedDialog(String titleText) {
         apply_dialog.getProgressHelper().setBarColor(R.color.error_stroke_color);
-        apply_dialog.setTitleText("申请失败，" + titleText).setConfirmText("确定").changeAlertType(SweetAlertDialog.ERROR_TYPE);
+        apply_dialog.setTitleText(titleText).setConfirmText("确定").changeAlertType(SweetAlertDialog.ERROR_TYPE);
         apply_dialog.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
             @Override
             public void onClick(SweetAlertDialog sweetAlertDialog) {

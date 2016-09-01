@@ -1,143 +1,164 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<android.support.v4.widget.SwipeRefreshLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/srl_refresh"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
-    <LinearLayout
-        android:id="@+id/ll_search_by_status"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/search_item_height"
-        android:gravity="center_vertical"
-        android:paddingLeft="@dimen/search_padding"
-        android:paddingRight="@dimen/search_padding"
-        android:layout_marginTop="10dp"
-        android:orientation="horizontal">
+        android:layout_height="match_parent">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="按状态："
-            android:textColor="@color/tv_bg"
-            android:textSize="@dimen/search_main_text_size"/>
-
-        <RadioGroup
-            android:id="@+id/rg_status"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <LinearLayout
+            android:id="@+id/ll_search_by_status"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/search_item_height"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/search_padding"
+            android:paddingRight="@dimen/search_padding"
+            android:layout_marginTop="10dp"
             android:orientation="horizontal">
 
-            <RadioButton
-                android:id="@+id/rb_passed"
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="已通过"
-                android:textColor="@color/tv_green"
-                android:textSize="@dimen/search_small_text"/>
+                android:text="按状态:"
+                android:textColor="@color/tv_bg"
+                android:textSize="@dimen/search_main_text_size"/>
 
-            <RadioButton
-                android:id="@+id/rb_refused"
+            <RadioGroup
+                android:id="@+id/rg_status"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="未通过"
-                android:textColor="@color/tv_mid"
-                android:textSize="@dimen/search_small_text"
-                android:checked="false"
-                android:layout_marginLeft="20dp"/>
-        </RadioGroup>
+                android:orientation="horizontal">
 
-        <RelativeLayout
+                <RadioButton
+                    android:id="@+id/rb_passed"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="已通过"
+                    android:textColor="@color/tv_green"
+                    android:textSize="@dimen/search_small_text"/>
+
+                <RadioButton
+                    android:id="@+id/rb_refused"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="未通过"
+                    android:textColor="@color/tv_mid"
+                    android:textSize="@dimen/search_small_text"
+                    android:checked="false"
+                    android:layout_marginLeft="10dp"/>
+            </RadioGroup>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <Button
+                    android:id="@+id/bt_search_by_status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="查询"
+                    android:background="@drawable/theme_bg_bt_selector"
+                    android:textSize="@dimen/search_small_text"
+                    android:textColor="@color/white"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true" />
+            </RelativeLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_search_by_time"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="@dimen/search_item_height"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/search_padding"
+            android:paddingRight="@dimen/search_padding"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal"
+            android:layout_below="@+id/ll_search_by_status">
 
-            <Button
-                android:id="@+id/bt_search_by_status"
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="查询"
-                android:background="@drawable/theme_bg_bt_selector"
+                android:text="按时间:"
+                android:textColor="@color/tv_bg"
+                android:textSize="@dimen/search_main_text_size"
+                android:id="@+id/textView2" />
+
+            <TextView
+                android:id="@+id/tv_start_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="xxxx/x/xx"
+                android:textColor="@color/theme"
                 android:textSize="@dimen/search_small_text"
-                android:textColor="@color/white"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true" />
-        </RelativeLayout>
-    </LinearLayout>
+                android:padding="2dp"
+                android:background="@drawable/tv_bg"
+                android:layout_marginLeft="5dp"/>
 
-    <LinearLayout
-        android:id="@+id/ll_search_by_time"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/search_item_height"
-        android:gravity="center_vertical"
-        android:paddingLeft="@dimen/search_padding"
-        android:paddingRight="@dimen/search_padding"
-        android:layout_marginTop="10dp"
-        android:orientation="horizontal"
-        android:layout_below="@+id/ll_search_by_status">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=" -- "
+                android:textColor="@color/tv_bg"
+                android:textSize="22sp"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="按时间："
-            android:textColor="@color/tv_bg"
-            android:textSize="@dimen/search_main_text_size"
-            android:id="@+id/textView2" />
+            <TextView
+                android:id="@+id/tv_end_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="xxxx/x/xx"
+                android:textColor="@color/theme"
+                android:textSize="@dimen/search_small_text"
+                android:padding="2dp"
+                android:background="@drawable/tv_bg"
+                android:layout_marginLeft="5dp"/>
 
-        <TextView
-            android:id="@+id/tv_start_date"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="2016/7/22"
-            android:textColor="@color/theme"
-            android:textSize="@dimen/search_small_text"
-            android:layout_marginLeft="10dp"/>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="  --  "
-            android:textColor="@color/tv_bg"
-            android:textSize="22sp"/>
+                <Button
+                    android:id="@+id/bt_search_by_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="查询"
+                    android:background="@drawable/theme_bg_bt_selector"
+                    android:textSize="@dimen/search_small_text"
+                    android:textColor="@color/white"
+                    android:layout_marginLeft="@dimen/search_padding"
+                    android:layout_alignParentRight="true"/>
+            </RelativeLayout>
+        </LinearLayout>
 
-        <TextView
-            android:id="@+id/tv_end_date"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="2016/7/23"
-            android:textColor="@color/theme"
-            android:textSize="@dimen/search_small_text"
-            android:layout_marginLeft="10dp"/>
-
-        <RelativeLayout
+        <View
+            android:id="@+id/view"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="1px"
+            android:background="@color/et_hint"
+            android:layout_below="@+id/ll_search_by_time"
+            android:layout_marginTop="5dp"/>
 
-            <Button
-                android:id="@+id/bt_search_by_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="查询"
-                android:background="@drawable/theme_bg_bt_selector"
-                android:textSize="@dimen/search_small_text"
-                android:textColor="@color/white"
-                android:layout_marginLeft="@dimen/search_padding"
-                android:layout_alignParentRight="true"/>
-        </RelativeLayout>
-    </LinearLayout>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:layout_below="@+id/view"
+            android:overScrollMode="never"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"/>
 
-    <View
-        android:id="@+id/view"
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="@color/et_hint"
-        android:layout_below="@+id/ll_search_by_time"
-        android:layout_marginTop="5dp"/>
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/search_padding"
-        android:layout_below="@+id/view"
-        android:padding="10dp"/>
-</RelativeLayout>
+        <TextView
+            android:id="@+id/tv_no_result"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/view"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:text="没有数据"
+            android:visibility="gone"/>
+    </RelativeLayout>
+</android.support.v4.widget.SwipeRefreshLayout>

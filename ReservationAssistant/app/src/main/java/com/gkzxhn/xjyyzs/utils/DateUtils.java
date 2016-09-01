@@ -1,6 +1,7 @@
 package com.gkzxhn.xjyyzs.utils;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -47,5 +48,39 @@ public class DateUtils {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(format);
         Date date = new Date(ms);
         return simpleDateFormat.format(date);
+    }
+
+    /**
+     * 反格式化  返回毫秒值
+     * @param format 日期格式
+     * @param date 日期字符串
+     * @return
+     */
+    public static long reFormatDate(String format, String date){
+        SimpleDateFormat dateFormat = new SimpleDateFormat(format);
+        long ms = 0;
+        try {
+           ms = dateFormat.parse(date).getTime();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return ms;
+    }
+
+    /**
+     * 日期格式化  从xxxx/x/x 到xxxx-x(0x)-x(0x)
+     * @param date
+     * @return
+     */
+    public static String dateFormat(String date){
+        String newDate = date.replace("/", "-");
+        String[] dates = newDate.split("-");
+        if(dates[1].length() == 1){
+            dates[1] = "0" + dates[1];
+        }
+        if(dates[2].length() == 1){
+            dates[2] = "0" + dates[2];
+        }
+        return dates[0] + "-" + dates[1] + "-" + dates[2];
     }
 }

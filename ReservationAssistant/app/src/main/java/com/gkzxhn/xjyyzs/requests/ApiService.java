@@ -3,6 +3,7 @@ package com.gkzxhn.xjyyzs.requests;
 
 import com.gkzxhn.xjyyzs.requests.bean.ApplyResult;
 import com.gkzxhn.xjyyzs.requests.bean.LoginResult;
+import com.gkzxhn.xjyyzs.requests.bean.SearchResultBean;
 
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
@@ -41,7 +42,7 @@ public interface ApiService {
      */
     @GET("applies")
     Observable<ApplyResult> getCurrentDayData(
-//            @Header("Authorization") String token,
+            @Header("Authorization") String token,
             @Query("orgCode") String orgCode
     );
 
@@ -70,4 +71,19 @@ public interface ApiService {
             @Body RequestBody body
     );
 
+    /**
+     * 按时间段查询
+     * @param token
+     * @param start_time
+     * @param end_time
+     * @param orgCode
+     * @return
+     */
+    @GET("search")
+    Observable<SearchResultBean> searchByTime(
+            @Header("Authorization") String token,
+            @Query("start") String start_time,
+            @Query("end") String end_time,
+            @Query("orgCode") String orgCode
+    );
 }
