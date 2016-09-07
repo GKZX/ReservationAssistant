@@ -25,6 +25,7 @@ public class HomeFragment extends BaseFragment {
 
     private SearchFragment searchFragment;
     private BookFragment bookFragment;
+    private MsgFragment msgFragment;
 
     @Override
     protected View initView() {
@@ -59,8 +60,10 @@ public class HomeFragment extends BaseFragment {
         HomeOptAdapter adapter = new HomeOptAdapter(getActivity().getSupportFragmentManager());
         searchFragment = new SearchFragment();
         bookFragment = new BookFragment();
+        msgFragment = new MsgFragment();
         adapter.addFragment(bookFragment, "预约");
         adapter.addFragment(searchFragment, "查询");
+        adapter.addFragment(msgFragment, "消息");
         vp_home_opt.setAdapter(adapter);
     }
 }

@@ -9,7 +9,7 @@ package com.gkzxhn.xjyyzs.utils;
 public class Log {
 
     public static boolean isDebug = true;// 是否需要打印Log，在application的onCreate方法里初始化
-    private static final String TAG = "GKPrison";// 默认TAG
+    private static final String TAG = "ReservationAssistant";// 默认TAG
 
     private Log(){
 

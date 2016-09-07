@@ -10,8 +10,7 @@ import android.widget.EditText;
 
 import com.gkzxhn.xjyyzs.R;
 import com.gkzxhn.xjyyzs.base.BaseActivity;
-import com.gkzxhn.xjyyzs.requests.ApiService;
-import com.gkzxhn.xjyyzs.requests.Constant;
+import com.gkzxhn.xjyyzs.requests.methods.RequestMethods;
 import com.gkzxhn.xjyyzs.utils.Log;
 import com.gkzxhn.xjyyzs.utils.SPUtil;
 import com.gkzxhn.xjyyzs.view.dialog.SweetAlertDialog;
@@ -24,12 +23,7 @@ import butterknife.OnClick;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
-import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
-import retrofit2.converter.gson.GsonConverterFactory;
-import rx.Observer;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
+import rx.Subscriber;
 
 /**
  * created by huangzhengneng on 2016.8.10
@@ -151,16 +145,10 @@ public class ChangePwdActivity extends BaseActivity {
      */
     private void commitData() {
         String pwd = "{\"user\":{\"newPassword\":\"" + newText + "\"}}";
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(Constant.URL_HEAD).addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create()).build();
-        ApiService changePwd = retrofit.create(ApiService.class);
         RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), pwd);
-        changePwd.changePwd((String) SPUtil.get(this, "token", ""), (String) SPUtil.get(this, "token", ""), body)
-                .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<ResponseBody>() {
+        RequestMethods.setNumber((String) SPUtil.get(this, "token", "")
+                , body, new Subscriber<ResponseBody>() {
                     @Override public void onCompleted() {}
-
                     @Override public void onError(Throwable e) {
                         Log.e(TAG, "change password failed : " + e.getMessage());
                         showChangeFailed();

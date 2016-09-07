@@ -9,8 +9,7 @@ import android.widget.EditText;
 
 import com.gkzxhn.xjyyzs.R;
 import com.gkzxhn.xjyyzs.base.BaseActivity;
-import com.gkzxhn.xjyyzs.requests.ApiService;
-import com.gkzxhn.xjyyzs.requests.Constant;
+import com.gkzxhn.xjyyzs.requests.methods.RequestMethods;
 import com.gkzxhn.xjyyzs.utils.Log;
 import com.gkzxhn.xjyyzs.utils.SPUtil;
 import com.gkzxhn.xjyyzs.utils.StringUtils;
@@ -24,12 +23,7 @@ import butterknife.OnClick;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
-import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
-import retrofit2.converter.gson.GsonConverterFactory;
-import rx.Observer;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
+import rx.Subscriber;
 
 /**
  * created by huangzhengneng on 2016.8.10
@@ -125,16 +119,10 @@ public class SetWorkerPhoneActivity extends BaseActivity {
      */
     private void commitData() {
         String pwd = "{\"user\":{\"phone\":\"" + phone + "\"}}";
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(Constant.URL_HEAD).addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create()).build();
-        ApiService changePwd = retrofit.create(ApiService.class);
         RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), pwd);
-        changePwd.changePwd((String) SPUtil.get(this, "token", ""), (String) SPUtil.get(this, "token", ""), body)
-                .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<ResponseBody>() {
+        RequestMethods.setNumber((String) SPUtil.get(this, "token", "")
+                , body, new Subscriber<ResponseBody>() {
                     @Override public void onCompleted() {}
-
                     @Override public void onError(Throwable e) {
                         Log.e(TAG, "set worker phone failed : " + e.getMessage());
                         showChangeFailed();
@@ -157,7 +145,8 @@ public class SetWorkerPhoneActivity extends BaseActivity {
      */
     private void showChangeSuccess() {
         dialog.getProgressHelper().setBarColor(R.color.success_stroke_color);
-        dialog.setTitleText("修改成功").setConfirmText("确定").changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
+        dialog.setTitleText("修改成功").setConfirmText("确定")
+                .changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
         dialog.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
             @Override
             public void onClick(SweetAlertDialog sweetAlertDialog) {
@@ -180,7 +169,8 @@ public class SetWorkerPhoneActivity extends BaseActivity {
      */
     private void showChangeFailed() {
         dialog.getProgressHelper().setBarColor(R.color.error_stroke_color);
-        dialog.setTitleText("修改失败，请稍后再试").setConfirmText("确定").changeAlertType(SweetAlertDialog.ERROR_TYPE);
+        dialog.setTitleText("修改失败，请稍后再试").setConfirmText("确定")
+                .changeAlertType(SweetAlertDialog.ERROR_TYPE);
         dialog.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
             @Override
             public void onClick(SweetAlertDialog sweetAlertDialog) {
@@ -193,7 +183,8 @@ public class SetWorkerPhoneActivity extends BaseActivity {
      * 初始化并且显示对话框
      */
     private void initAndShowDialog() {
-        dialog = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE).setTitleText("正在提交...");
+        dialog = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE)
+                .setTitleText("正在提交...");
         dialog.setCancelable(false);
         dialog.show();
     }

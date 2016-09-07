@@ -19,10 +19,10 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
 
     <permission
-        android:name="com.example.chenyu.ywtforpad.permission.RECEIVE_MSG"
+        android:name="com.gkzxhn.xjyyzs.permission.RECEIVE_MSG"
         android:protectionLevel="signature"/>
 
-    <uses-permission android:name="com.example.chenyu.ywtforpad.permission.RECEIVE_MSG"/>
+    <uses-permission android:name="com.gkzxhn.xjyyzs.permission.RECEIVE_MSG"/>
 
     <application
         android:name=".app.MyApp"

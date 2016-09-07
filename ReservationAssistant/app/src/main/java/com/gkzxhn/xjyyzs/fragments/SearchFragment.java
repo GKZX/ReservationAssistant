@@ -28,18 +28,12 @@ import com.gkzxhn.xjyyzs.utils.SPUtil;
 import com.gkzxhn.xjyyzs.utils.StringUtils;
 import com.gkzxhn.xjyyzs.view.decoration.DividerItemDecoration;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import okhttp3.Interceptor;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
-import okhttp3.ResponseBody;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -47,7 +41,6 @@ import rx.Observable;
 import rx.Observer;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
 /**
@@ -236,22 +229,25 @@ public class SearchFragment extends BaseFragment implements View.OnClickListener
 
             @Override
             public void onNext(ApplyResult.AppliesBean appliesBean) {
-                Log.i(TAG, "onNext() add " + appliesBean.getApply().getFeedback().getIsPass() + appliesBean.getApply().getFeedback().getMeetingTime());
+                Log.i(TAG, "onNext() add ");
                 searchData.add(appliesBean);
             }
         });
     }
 
     @NonNull
-    private ApplyResult.AppliesBean.ApplyBean getApplyBean(SearchResultBean.AppliesBean.ApplyBean bean) {
-        ApplyResult.AppliesBean.ApplyBean.FeedbackBean feedbackBean = new ApplyResult.AppliesBean.ApplyBean.FeedbackBean();
+    private ApplyResult.AppliesBean.ApplyBean getApplyBean(
+            SearchResultBean.AppliesBean.ApplyBean bean) {
+        ApplyResult.AppliesBean.ApplyBean.FeedbackBean feedbackBean =
+                new ApplyResult.AppliesBean.ApplyBean.FeedbackBean();
         feedbackBean.setContent(bean.getFeedback().getContent());
         feedbackBean.setFrom(bean.getFeedback().getFrom());
         feedbackBean.setIsPass(StringUtils.getUpCaseStatus(bean.getFeedback().getIsPass()));
         feedbackBean.setMeetingTime(bean.getFeedback().getMeetingTime());
         feedbackBean.setPrison(bean.getFeedback().getPrison());
         feedbackBean.setSfs(bean.getFeedback().getSfs());
-        return new ApplyResult.AppliesBean.ApplyBean(bean.getApplyDate(), bean.get_id(), feedbackBean);
+        return new ApplyResult.AppliesBean.ApplyBean(
+                bean.getApplyDate(), bean.get_id(), feedbackBean);
     }
 
     /**
@@ -289,7 +285,9 @@ public class SearchFragment extends BaseFragment implements View.OnClickListener
         if(recycler_view.getAdapter() == null || type == 1) {
             Log.i(TAG, "go to get data");
             initShowProgressDialog();
-            getCurrentData();
+//            getCurrentData();
+            String date = DateUtils.formatDate("yyyy-MM-dd", System.currentTimeMillis());
+            getSearchResult(date, date);
         }
     }
 

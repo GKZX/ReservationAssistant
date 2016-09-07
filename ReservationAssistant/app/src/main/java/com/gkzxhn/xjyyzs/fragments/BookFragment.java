@@ -10,9 +10,8 @@ import android.widget.Spinner;
 
 import com.gkzxhn.xjyyzs.R;
 import com.gkzxhn.xjyyzs.base.BaseFragment;
-import com.gkzxhn.xjyyzs.requests.ApiService;
-import com.gkzxhn.xjyyzs.requests.Constant;
 import com.gkzxhn.xjyyzs.requests.bean.Apply;
+import com.gkzxhn.xjyyzs.requests.methods.RequestMethods;
 import com.gkzxhn.xjyyzs.utils.DateUtils;
 import com.gkzxhn.xjyyzs.utils.Log;
 import com.gkzxhn.xjyyzs.utils.SPUtil;
@@ -29,12 +28,7 @@ import butterknife.OnClick;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
-import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
-import retrofit2.converter.gson.GsonConverterFactory;
-import rx.Observer;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
+import rx.Subscriber;
 
 /**
  * author:huangzhengneng
@@ -67,7 +61,8 @@ public class BookFragment extends BaseFragment {
 
     @Override
     protected void initData() {
-        date_adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_dropdown_item_1line, DATE_LIST);
+        date_adapter = new ArrayAdapter<>(getActivity(),
+                android.R.layout.simple_dropdown_item_1line, DATE_LIST);
         sp_date.setAdapter(date_adapter);
     }
 
@@ -79,7 +74,7 @@ public class BookFragment extends BaseFragment {
             if(!StringUtils.IDCardValidate(uuid).equals("")){
                 showToastMsgShort("身份证号不合法");
             }else {
-                apply();
+                apply();// 申请
             }
         } catch (ParseException e) {
             e.printStackTrace();
@@ -91,22 +86,13 @@ public class BookFragment extends BaseFragment {
      * 申请
      */
     private void apply() {
-        initAndShowDialog();
-        Apply apply = getBean();
-        String apply_json = new Gson().toJson(apply);
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(Constant.URL_HEAD).addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create()).build();
-        ApiService apiService = retrofit.create(ApiService.class);
-        RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), apply_json);
-        apiService.apply((String) SPUtil.get(getActivity(), "token", ""), body).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<ResponseBody>() {
+        initAndShowDialog();// 进度条对话框
+        RequestMethods.bookMeeting((String) SPUtil.get(getActivity(), "token", ""),
+                getRequestBody(), new Subscriber<ResponseBody>() {
             @Override public void onCompleted() {}
-
             @Override public void onError(Throwable e) {
                 String error = e.getMessage();
                 Log.e(TAG, "apply failed : " + error);
-                // 400  404
                 if(error.contains("400")){
                     showApplyFailedDialog("已申请过该日，请勿重复申请");
                 }else if(error.contains("404")){
@@ -120,8 +106,7 @@ public class BookFragment extends BaseFragment {
                 try {
                     String result = responseBody.string();
                     Log.i(TAG, "apply success : " + result);
-                    // {"msg":"申请提交成功"}
-                    showApplySuccessDialog();
+                    showApplySuccessDialog();// {"msg":"申请提交成功"}
                 } catch (IOException e) {
                     e.printStackTrace();
                     showApplyFailedDialog("异常");
@@ -135,7 +120,8 @@ public class BookFragment extends BaseFragment {
      */
     private void showApplySuccessDialog() {
         apply_dialog.getProgressHelper().setBarColor(R.color.success_stroke_color);
-        apply_dialog.setTitleText("申请成功").setConfirmText("确定").changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
+        apply_dialog.setTitleText("申请成功").setConfirmText("确定")
+                .changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
         apply_dialog.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
             @Override
             public void onClick(SweetAlertDialog sweetAlertDialog) {
@@ -164,7 +150,8 @@ public class BookFragment extends BaseFragment {
      */
     private void showApplyFailedDialog(String titleText) {
         apply_dialog.getProgressHelper().setBarColor(R.color.error_stroke_color);
-        apply_dialog.setTitleText(titleText).setConfirmText("确定").changeAlertType(SweetAlertDialog.ERROR_TYPE);
+        apply_dialog.setTitleText(titleText).setConfirmText("确定")
+                .changeAlertType(SweetAlertDialog.ERROR_TYPE);
         apply_dialog.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
             @Override
             public void onClick(SweetAlertDialog sweetAlertDialog) {
@@ -178,23 +165,26 @@ public class BookFragment extends BaseFragment {
      * 初始化并且显示对话框
      */
     private void initAndShowDialog() {
-        apply_dialog = new SweetAlertDialog(getActivity(), SweetAlertDialog.PROGRESS_TYPE);
+        apply_dialog = new SweetAlertDialog(getActivity(),
+                SweetAlertDialog.PROGRESS_TYPE);
         apply_dialog.setTitleText("正在提交...").setCancelable(false);
         apply_dialog.show();
     }
 
     /**
-     * 获取实体类
+     * 获取请求实体类
      * @return
      */
-    private Apply getBean() {
+    private RequestBody getRequestBody() {
         Apply apply = new Apply();
         Apply.ApplyBean bean = apply.new ApplyBean();
         bean.setUuid(uuid);
         bean.setOrgCode((String) SPUtil.get(getActivity(), "organizationCode", ""));
         bean.setApplyDate(apply_date);
         apply.setApply(bean);
-        return apply;
+        String apply_json = new Gson().toJson(apply);
+        return RequestBody.create(MediaType.
+                parse("application/json; charset=utf-8"),  apply_json);
     }
 
     /**

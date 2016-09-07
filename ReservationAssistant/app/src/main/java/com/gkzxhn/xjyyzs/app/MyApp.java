@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.os.Environment;
 import android.text.TextUtils;
 
+import com.gkzxhn.xjyyzs.BuildConfig;
 import com.gkzxhn.xjyyzs.R;
 import com.gkzxhn.xjyyzs.activities.MainActivity;
 import com.gkzxhn.xjyyzs.utils.DensityUtil;
@@ -40,6 +41,9 @@ public class MyApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        setLogToggle();
+
         new Runnable(){
             @Override
             public void run() {
@@ -53,6 +57,13 @@ public class MyApp extends Application {
                 }
             }
         }.run();
+    }
+
+    /**
+     * 设置log开关
+     */
+    private void setLogToggle() {
+        Log.isDebug = BuildConfig.DEBUG;// debug模式下才输入日志
     }
 
     /**

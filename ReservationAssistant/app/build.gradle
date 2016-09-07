@@ -17,6 +17,12 @@ android {
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+
+        debug {
+            versionNameSuffix "-debug"
+            minifyEnabled false
+            shrinkResources false
+        }
     }
 }
 

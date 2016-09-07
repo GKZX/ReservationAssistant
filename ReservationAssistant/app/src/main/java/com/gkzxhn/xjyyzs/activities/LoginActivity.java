@@ -2,6 +2,7 @@ package com.gkzxhn.xjyyzs.activities;
 
 import android.content.Intent;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -13,6 +14,7 @@ import com.gkzxhn.xjyyzs.requests.ApiService;
 import com.gkzxhn.xjyyzs.requests.Constant;
 import com.gkzxhn.xjyyzs.requests.bean.LoginInfo;
 import com.gkzxhn.xjyyzs.requests.bean.LoginResult;
+import com.gkzxhn.xjyyzs.requests.methods.RequestMethods;
 import com.gkzxhn.xjyyzs.service.LoginNimService;
 import com.gkzxhn.xjyyzs.utils.Log;
 import com.gkzxhn.xjyyzs.utils.SPUtil;
@@ -28,6 +30,7 @@ import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import rx.Observer;
+import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
@@ -68,15 +71,12 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
                 username = et_username.getText().toString().trim();
                 password = et_password.getText().toString().trim();
                 if(TextUtils.isEmpty(username) || TextUtils.isEmpty(password)){
-                    ToastUtil.showShortToast(this, "用户名或密码为空");
+                    showToastShortMsg("用户名或密码为空");
                 }else if(password.length() < 6){
-                    ToastUtil.showShortToast(this, "密码不能少于六位");
+                    showToastShortMsg("密码不能少于六位");
                 }else {
-                    // 登录
-                    doLogin();
+                    doLogin();// 登录
                 }
-                break;
-            default:
                 break;
         }
     }
@@ -85,44 +85,56 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
      * 登录
      */
     private void doLogin() {
-        loginDialog = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE)
-            .setTitleText("正在登录...");
-        loginDialog.setCancelable(false);
-        loginDialog.show();
+        initAndShowDialog();// 显示进度条对话框
+        RequestMethods.login(getRequestBody(), new Subscriber<LoginResult>() {
+            @Override public void onCompleted() {}
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(Constant.URL_HEAD).addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create()).build();
-        ApiService login = retrofit.create(ApiService.class);
+            @Override public void onError(Throwable e) {
+                String error_msg = e.getMessage();
+                Log.e(TAG, "login failed : " + error_msg);
+                if(error_msg.contains("404")){
+                    showLoginFailed("账号不存在");
+                }else if(error_msg.contains("500")){
+                    showLoginFailed("服务器错误");
+                }else {
+                    showLoginFailed("登录失败，请稍后再试！");
+                }
+            }
+
+            @Override
+            public void onNext(LoginResult result) {
+                Log.i(TAG, "login success : " + result.toString());
+                saveUserInfo(result);// save
+                loginNim();// 登录云信
+                showLoginSuccess();// 登录成功
+            }
+        });
+    }
+
+    /**
+     * 获取请求实体
+     * @return
+     */
+    @NonNull
+    private RequestBody getRequestBody() {
         LoginInfo info = new LoginInfo();
         LoginInfo.LoginBean bean = info.new LoginBean();
         bean.setUserid(username);
         bean.setPassword(password);
         info.setSession(bean);
         Log.i(TAG, "login info : " + info.toString());
-        RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), new Gson().toJson(info));
-        login.login(body).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<LoginResult>() {
-                    @Override public void onCompleted() {}
+        return RequestBody.create(MediaType.
+                parse("application/json; charset=utf-8"), new Gson().toJson(info));
+    }
 
-                    @Override public void onError(Throwable e) {
-                        String error_msg = e.getMessage();
-                        Log.e(TAG, "login failed : " + error_msg);
-                        if(error_msg.contains("404")){
-                            showLoginFailed("账号不存在");
-                        }else {
-                            showLoginFailed("登录失败，请稍后再试！");
-                        }
-                    }
-
-                    @Override
-                    public void onNext(LoginResult result) {
-                        Log.i(TAG, "login success : " + result.toString());
-                        saveUserInfo(result);// save
-                        loginNim();// 登录云信
-                        showLoginSuccess();// 登录成功
-                    }
-                });
+    /**
+     * 初始化并且显示进度条对话框
+     */
+    private void initAndShowDialog() {
+        loginDialog = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE)
+            .setTitleText("正在登录...");
+        loginDialog.setCancelable(false);
+        loginDialog.show();
     }
 
     /**
@@ -145,7 +157,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
      */
     private void showLoginSuccess() {
         loginDialog.getProgressHelper().setBarColor(R.color.success_stroke_color);
-        loginDialog.setTitleText("登录成功").setConfirmText("确定").changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
+        loginDialog.setTitleText("登录成功").setConfirmText("确定").
+                changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {

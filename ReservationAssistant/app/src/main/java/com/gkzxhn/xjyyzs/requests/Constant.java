@@ -9,6 +9,6 @@ package com.gkzxhn.xjyyzs.requests;
 
 public class Constant {
 
-    public static final String URL_HEAD = "http://10.93.1.201:3000/api/v1/";
+    public static final String URL_HEAD = "http://103.37.158.17:3000/api/v1/";
 
 }

@@ -3,32 +3,23 @@ package com.gkzxhn.xjyyzs.activities;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.gkzxhn.xjyyzs.R;
 import com.gkzxhn.xjyyzs.base.BaseActivity;
-import com.gkzxhn.xjyyzs.base.BaseFragment;
 import com.gkzxhn.xjyyzs.fragments.HomeFragment;
-import com.gkzxhn.xjyyzs.fragments.MsgFragment;
-import com.gkzxhn.xjyyzs.utils.DensityUtil;
 import com.gkzxhn.xjyyzs.utils.Log;
 import com.gkzxhn.xjyyzs.utils.SPUtil;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.StatusCode;
 import com.netease.nimlib.sdk.auth.AuthService;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -43,14 +34,9 @@ public class MainActivity extends BaseActivity {
 
     private static final String TAG = "MainActivity";
     @BindView(R.id.fl_container) FrameLayout fl_container;
-    @BindView(R.id.rg_main_tabs) RadioGroup rg_main_tabs;
-    @BindView(R.id.rb_main_home) RadioButton rb_main_home;
-    @BindView(R.id.rb_main_msg) RadioButton rb_main_msg;
-    private List<BaseFragment> fragments = new ArrayList<>();
     private FragmentManager manager;
     private FragmentTransaction transaction = null;
     private HomeFragment homeFragment = null;
-    private MsgFragment msgFragment = null;
 
     private long mExitTime;//add by hzn 退出按键时间间隔
 
@@ -60,36 +46,15 @@ public class MainActivity extends BaseActivity {
     public View initView() {
         View view = View.inflate(this, R.layout.activity_main, null);
         ButterKnife.bind(this, view);
-        Drawable[] drawables = rb_main_home.getCompoundDrawables();
-        drawables[1].setBounds(0, DensityUtil.dip2px(getApplicationContext(), 5), 60, 75);
-        rb_main_home.setCompoundDrawables(drawables[0], drawables[1], drawables[2], drawables[3]);
-        Drawable[] drawables2 = rb_main_msg.getCompoundDrawables();
-        drawables2[1].setBounds(0, DensityUtil.dip2px(getApplicationContext(), 5), 60, 75);
-        rb_main_msg.setCompoundDrawables(drawables2[0], drawables2[1], drawables2[2], drawables2[3]);
         return view;
     }
 
     @Override
     protected void initData() {
         setSupportActionBar(tool_bar);
-        setTitleText("主页");
+        setTitleText("预约助手");
         initFragment();
         checkOnlineStatus();// 检查云信id在线状态
-        rg_main_tabs.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                switch (checkedId){
-                    case R.id.rb_main_home: // home
-                        switchFragment(0);
-                        setTitleText("首页");
-                        break;
-                    case R.id.rb_main_msg:// msg
-                        switchFragment(1);
-                        setTitleText("消息");
-                        break;
-                }
-            }
-        });
     }
 
     /**
@@ -159,36 +124,10 @@ public class MainActivity extends BaseActivity {
      * 初始化fragment
      */
     private void initFragment() {
-        fragments.clear();
         manager = getSupportFragmentManager();
         transaction = manager.beginTransaction();
-        if(homeFragment == null) {
-            homeFragment = new HomeFragment();
-            fragments.add(homeFragment);
-        }
-        transaction.add(R.id.fl_container, homeFragment);
-        if(msgFragment == null) {
-            msgFragment = new MsgFragment();
-            fragments.add(msgFragment);
-        }
-        transaction.add(R.id.fl_container, msgFragment);
-        transaction.show(homeFragment).hide(msgFragment);
-        transaction.commitAllowingStateLoss();
-    }
-
-    /**
-     * 切换fragment
-     * @param index
-     */
-    private void switchFragment(int index){
-        transaction = manager.beginTransaction();
-        for (int i = 0; i < fragments.size(); i++) {
-            if(index == i) {
-                transaction.show(fragments.get(index));
-            }else {
-                transaction.hide(fragments.get(i));
-            }
-        }
+        homeFragment = new HomeFragment();
+        transaction.replace(R.id.fl_container, homeFragment);
         transaction.commit();
     }
 
