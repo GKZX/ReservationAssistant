@@ -5,7 +5,7 @@
     <dimen name="last_meeting_time">20sp</dimen>
     <dimen name="meeting_info_tv_size">20sp</dimen>
     <dimen name="replay_bt_size">20sp</dimen>
-    <dimen name="tv_cancel_size">24sp</dimen>
+    <dimen name="tv_cancel_size">18sp</dimen>
     <dimen name="text_size_10">10sp</dimen>
     <dimen name="main_tab_height">60dp</dimen>
     <dimen name="agreement_tv_space">5dp</dimen>
