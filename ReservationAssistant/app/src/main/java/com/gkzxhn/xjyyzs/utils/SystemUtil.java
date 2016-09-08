@@ -4,46 +4,17 @@ import android.app.ActivityManager;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.content.res.Configuration;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.telephony.TelephonyManager;
 import android.text.TextUtils;
-import android.util.Log;
+import android.util.*;
+
+import com.gkzxhn.xjyyzs.BuildConfig;
 
 /**
  * Created by zhengneng on 2015/12/18.
  */
 public class SystemUtil {
 
-    /**
-     * 获取当前进程名
-     * @param context
-     * @return 进程名
-     */
-    public static String getProcessName(Context context) {
-        String processName = null;
-        // ActivityManager
-        ActivityManager am = ((ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE));
-        while (true) {
-            for (ActivityManager.RunningAppProcessInfo info : am.getRunningAppProcesses()) {
-                if (info.pid == android.os.Process.myPid()) {
-                    processName = info.processName;
-                    break;
-                }
-            }
-            // go home
-            if (!TextUtils.isEmpty(processName)) {
-                return processName;
-            }
-            // take a rest and again
-            try {
-                Thread.sleep(100L);
-            } catch (InterruptedException ex) {
-                ex.printStackTrace();
-            }
-        }
-    }
+    private static final String TAG = "SystemUtil";
 
     /**
      * 得到versionCode
@@ -80,69 +51,6 @@ public class SystemUtil {
     }
 
     /**
-     * 获取当前网络状态
-     * @param context
-     * @return
-     */
-    public static String GetNetworkType(Context context) {
-        String strNetworkType = "";
-        NetworkInfo networkInfo = ((ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo();
-        if (networkInfo != null && networkInfo.isConnected()) {
-            if (networkInfo.getType() == ConnectivityManager.TYPE_WIFI) {
-                strNetworkType = "WIFI";
-            } else if (networkInfo.getType() == ConnectivityManager.TYPE_MOBILE) {
-                String _strSubTypeName = networkInfo.getSubtypeName();
-                Log.e("cocos2d-x", "Network getSubtypeName : " + _strSubTypeName);
-                // TD-SCDMA   networkType is 17
-                int networkType = networkInfo.getSubtype();
-                switch (networkType) {
-                    case TelephonyManager.NETWORK_TYPE_GPRS:
-                    case TelephonyManager.NETWORK_TYPE_EDGE:
-                    case TelephonyManager.NETWORK_TYPE_CDMA:
-                    case TelephonyManager.NETWORK_TYPE_1xRTT:
-                    case TelephonyManager.NETWORK_TYPE_IDEN: //api<8 : replace by 11
-                        strNetworkType = "2G";
-                        break;
-                    case TelephonyManager.NETWORK_TYPE_UMTS:
-                    case TelephonyManager.NETWORK_TYPE_EVDO_0:
-                    case TelephonyManager.NETWORK_TYPE_EVDO_A:
-                    case TelephonyManager.NETWORK_TYPE_HSDPA:
-                    case TelephonyManager.NETWORK_TYPE_HSUPA:
-                    case TelephonyManager.NETWORK_TYPE_HSPA:
-                    case TelephonyManager.NETWORK_TYPE_EVDO_B: //api<9 : replace by 14
-                    case TelephonyManager.NETWORK_TYPE_EHRPD:  //api<11 : replace by 12
-                    case TelephonyManager.NETWORK_TYPE_HSPAP:  //api<13 : replace by 15
-                        strNetworkType = "3G";
-                        break;
-                    case TelephonyManager.NETWORK_TYPE_LTE:    //api<11 : replace by 13
-                        strNetworkType = "4G";
-                        break;
-                    default:
-                        // http://baike.baidu.com/item/TD-SCDMA 中国移动 联通 电信 三种3G制式
-                        if (_strSubTypeName.equalsIgnoreCase("TD-SCDMA") || _strSubTypeName.equalsIgnoreCase("WCDMA") || _strSubTypeName.equalsIgnoreCase("CDMA2000")) {
-                            strNetworkType = "3G";
-                        } else {
-                            strNetworkType = _strSubTypeName;
-                        }
-                        break;
-                }
-                Log.e("cocos2d-x", "Network getSubtype : " + Integer.valueOf(networkType).toString());
-            }
-        }
-        Log.e("cocos2d-x", "Network Type : " + strNetworkType);
-        return strNetworkType;
-    }
-
-    /**
-     * 判断当前设备是手机还是平板，代码来自 Google I/O App for Android
-     * @param context
-     * @return 平板返回 True，手机返回 False
-     */
-    public static boolean isTablet(Context context) {
-        return (context.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) >= Configuration.SCREENLAYOUT_SIZE_LARGE;
-    }
-
-    /**
      * 是否在主线程
      * @param context
      * @return
@@ -160,10 +68,8 @@ public class SystemUtil {
      */
     public static final String getSystemProcessName(Context context) {
         String processName = null;
-
         // ActivityManager
         ActivityManager am = ((ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE));
-
         while (true) {
             for (ActivityManager.RunningAppProcessInfo info : am.getRunningAppProcesses()) {
                 if (info.pid == android.os.Process.myPid()) {
@@ -171,12 +77,10 @@ public class SystemUtil {
                     break;
                 }
             }
-
             // go home
             if (!TextUtils.isEmpty(processName)) {
                 return processName;
             }
-
             // take a rest and again
             try {
                 Thread.sleep(100L);
@@ -184,5 +88,22 @@ public class SystemUtil {
                 ex.printStackTrace();
             }
         }
+    }
+
+    /**
+     * 获取应用包信息
+     * @param path
+     * @param context
+     * @return
+     */
+    public static PackageInfo getApkInfo(String path, Context context){
+        Log.d(TAG, "apk download file : " + path);
+        PackageManager pm = context.getPackageManager();
+        PackageInfo info = pm.getPackageArchiveInfo(path,
+                PackageManager.GET_ACTIVITIES);
+        if(info != null){
+            return info;
+        }
+        return null;
     }
 }

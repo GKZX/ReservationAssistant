@@ -100,12 +100,20 @@
             android:name="com.netease.cosine.target.receiver"
             android:value="com.netease.nimlib.service.NimReceiver"/>
 
-        <activity android:name=".activities.ChangePwdActivity"
+        <activity
+            android:name=".activities.ChangePwdActivity"
             android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".activities.SetWorkerPhoneActivity"
+        <activity
+            android:name=".activities.SetWorkerPhoneActivity"
             android:screenOrientation="portrait">
         </activity>
+
+        <receiver
+            android:name=".receiver.ApkInstallerReceiver"
+            android:enabled="true"
+            android:exported="true">
+        </receiver>
     </application>
 
 </manifest>

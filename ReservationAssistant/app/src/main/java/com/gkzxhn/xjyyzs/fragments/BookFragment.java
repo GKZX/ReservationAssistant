@@ -97,7 +97,9 @@ public class BookFragment extends BaseFragment {
                     showApplyFailedDialog("已申请过该日，请勿重复申请");
                 }else if(error.contains("404")){
                     showApplyFailedDialog("抱歉，没有权限");
-                }else {
+                }else if(error.contains("500")){
+                    showApplyFailedDialog("服务器错误");
+                }else{
                     showApplyFailedDialog("申请失败，请稍后再试");
                 }
             }

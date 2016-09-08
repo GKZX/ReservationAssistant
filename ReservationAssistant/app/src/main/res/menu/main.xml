@@ -13,6 +13,11 @@
         app:showAsAction="never"/>
 
     <item
+        android:id="@+id/update"
+        android:title="检查更新"
+        app:showAsAction="never"/>
+
+    <item
         android:id="@+id/logout"
         android:title="注销"
         app:showAsAction="never"/>

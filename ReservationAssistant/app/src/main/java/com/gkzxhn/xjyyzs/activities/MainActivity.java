@@ -169,7 +169,16 @@ public class MainActivity extends BaseActivity {
         }else if(id == R.id.change_phone){
             Intent intent = new Intent(this, SetWorkerPhoneActivity.class);
             startActivity(intent);
+        }else if(id == R.id.update){
+            checkUpdate();// 检查更新
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * 检查更新
+     */
+    private void checkUpdate() {
+        showToastShortMsg("正在检查...");
     }
 }
