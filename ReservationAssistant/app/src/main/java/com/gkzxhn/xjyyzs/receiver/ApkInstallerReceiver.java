@@ -21,7 +21,7 @@ public class ApkInstallerReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         if(intent.getAction().equals(DownloadManager.ACTION_DOWNLOAD_COMPLETE)){
             //下载完成
-            Log.d(TAG, "new version apk download completed");
+            Log.d(TAG, "new version apk checkHasDownloadNewApk completed");
             long downloadId = (long) SPUtil.get(context, KEY_DOWNLOAD_ID, -1L);
             DownloadManager dm = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
             Uri uri = dm.getUriForDownloadedFile(downloadId);
@@ -32,7 +32,7 @@ public class ApkInstallerReceiver extends BroadcastReceiver {
                 install.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(install);
             }else {
-                Log.e(TAG, "download error");
+                Log.e(TAG, "checkHasDownloadNewApk error");
             }
         }
     }

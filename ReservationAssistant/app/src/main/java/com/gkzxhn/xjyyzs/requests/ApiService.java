@@ -4,6 +4,7 @@ package com.gkzxhn.xjyyzs.requests;
 import com.gkzxhn.xjyyzs.requests.bean.ApplyResult;
 import com.gkzxhn.xjyyzs.requests.bean.LoginResult;
 import com.gkzxhn.xjyyzs.requests.bean.SearchResultBean;
+import com.gkzxhn.xjyyzs.requests.bean.UpdateInfo;
 
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
@@ -86,4 +87,11 @@ public interface ApiService {
             @Query("end") String end_time,
             @Query("orgCode") String orgCode
     );
+
+    /**
+     * 更新检查
+     * @return
+     */
+    @GET("xjp/file/versionContent")
+    Observable<UpdateInfo> updateCheck();
 }

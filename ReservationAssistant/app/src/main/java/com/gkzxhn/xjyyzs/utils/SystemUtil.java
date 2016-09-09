@@ -4,10 +4,9 @@ import android.app.ActivityManager;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.text.TextUtils;
-import android.util.*;
-
-import com.gkzxhn.xjyyzs.BuildConfig;
 
 /**
  * Created by zhengneng on 2015/12/18.
@@ -97,7 +96,7 @@ public class SystemUtil {
      * @return
      */
     public static PackageInfo getApkInfo(String path, Context context){
-        Log.d(TAG, "apk download file : " + path);
+        Log.d(TAG, "apk checkHasDownloadNewApk file : " + path);
         PackageManager pm = context.getPackageManager();
         PackageInfo info = pm.getPackageArchiveInfo(path,
                 PackageManager.GET_ACTIVITIES);
@@ -106,4 +105,47 @@ public class SystemUtil {
         }
         return null;
     }
+
+    /**
+     * 网络是否可用
+     * @return
+     */
+    public static boolean isNetworkAvailable(Context context){
+        ConnectivityManager connectivityManager = (ConnectivityManager)context
+                .getSystemService(context.CONNECTIVITY_SERVICE);
+        if (connectivityManager != null) {
+            NetworkInfo info = connectivityManager.getActiveNetworkInfo();
+            if (info != null && info.isConnected()) {
+                // 当前网络是连接的
+                if (info.getState() == NetworkInfo.State.CONNECTED) {
+                    // 当前所连接的网络可用
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 网络是否是wifi链接
+     * @return
+     */
+    public static boolean isWifiContected(Context context){
+        ConnectivityManager connectivityManager = (ConnectivityManager)context
+                .getSystemService(context.CONNECTIVITY_SERVICE);
+        if (connectivityManager != null) {
+            NetworkInfo info = connectivityManager.getActiveNetworkInfo();
+            if (info != null && info.isConnected()) {
+                // 当前网络是连接的
+                if (info.getState() == NetworkInfo.State.CONNECTED) {
+                    // 当前所连接的网络可用
+                    if(info.getType() == ConnectivityManager.TYPE_WIFI) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
 }

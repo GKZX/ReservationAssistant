@@ -18,4 +18,5 @@
     <string name="LOADING">Loading...</string>
     <string name="default_progressbar">Default Progressbar:</string>
     <string name="setting_worker_phone_text">设置工作人员联系方式：</string>
+    <string name="wifi_reminder">当前处于非WIFI网络环境，如果继续下载可能会产生高额流量费，继续下载吗？</string>
 </resources>

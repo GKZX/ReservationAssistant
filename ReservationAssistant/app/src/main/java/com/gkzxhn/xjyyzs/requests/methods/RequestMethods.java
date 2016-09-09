@@ -3,6 +3,7 @@ package com.gkzxhn.xjyyzs.requests.methods;
 import com.gkzxhn.xjyyzs.requests.ApiService;
 import com.gkzxhn.xjyyzs.requests.Constant;
 import com.gkzxhn.xjyyzs.requests.bean.LoginResult;
+import com.gkzxhn.xjyyzs.requests.bean.UpdateInfo;
 
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
@@ -33,8 +34,8 @@ public class RequestMethods {
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
-        ApiService login = retrofit.create(ApiService.class);
-        login
+        ApiService apiService = retrofit.create(ApiService.class);
+        apiService
                 .login(body)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
@@ -75,9 +76,28 @@ public class RequestMethods {
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
-        ApiService changePwd = retrofit.create(ApiService.class);
-        changePwd
+        ApiService apiService = retrofit.create(ApiService.class);
+        apiService
                 .changePwd(token, token, body)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+    }
+
+    /**
+     * 检查更新
+     * @param subscriber
+     */
+    public static void checkUpdate(Subscriber<UpdateInfo> subscriber){
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://103.37.158.17:8080/")
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        ApiService apiService = retrofit.create(ApiService.class);
+        apiService
+                .updateCheck()
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

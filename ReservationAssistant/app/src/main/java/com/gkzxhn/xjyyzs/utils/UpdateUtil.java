@@ -20,16 +20,29 @@ public class UpdateUtil {
 
     private DownloadManager dm;// 下载管理者
     private Context context;// 上下文
+    private static UpdateUtil instance;
     private static final String KEY_DOWNLOAD_ID = "downloadId"; // downloadid保存key
     private static final String TAG = UpdateUtil.class.getSimpleName();
 
     /**
-     * 构造私有 通过getInstance获取实例
+     * 通过getInstance获取实例
      * @param context
      */
-    public UpdateUtil(Context context){
+    private UpdateUtil(Context context){
         dm = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
         this.context = context;
+    }
+
+    /**
+     * 获取实例
+     * @param context
+     * @return
+     */
+    public static UpdateUtil getInstance(Context context){
+        if (instance == null){
+            instance = new UpdateUtil(context);
+        }
+        return instance;
     }
 
     /**
@@ -37,7 +50,7 @@ public class UpdateUtil {
      * @param url  下载文件的url
      * @param title 通知栏标题
      * @param description 描述
-     * @return download id  唯一的id
+     * @return checkHasDownloadNewApk id  唯一的id
      */
     private long startDownload(String url, String title, String description){
         DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
@@ -107,11 +120,9 @@ public class UpdateUtil {
     }
 
     /**
-     * 下载
-     * @param url
-     * @param title
+     * 检查是否有已下载好的新版本apk
      */
-    private void download(String url, String title){
+    public void checkHasDownloadNewApk(){
         long downloadId = (long) SPUtil.get(context, KEY_DOWNLOAD_ID, -1L);
         if (downloadId != -1L){
             int status = getDownloadStatus(downloadId);
@@ -120,19 +131,15 @@ public class UpdateUtil {
                 if(uri != null){
                     if(compare(SystemUtil.getApkInfo(uri.getPath(), context))){
                         startInstall(uri);
-                        return;
                     } else {
                         dm.remove(downloadId);
                     }
                 }
-//                start(url, title);
-            }else if(status == DownloadManager.STATUS_FAILED){
-                start(url, title);
-            }else {
+            } else {
                 Log.i(TAG, "apk is already downloading");
             }
         }else {
-            start(url, title);
+            Log.i(TAG, "sp has no checkHasDownloadNewApk id");
         }
     }
 
@@ -141,10 +148,10 @@ public class UpdateUtil {
      * @param url
      * @param title
      */
-    private void start(String url, String title) {
+    public void start(String url, String title) {
         long downloadId = startDownload(url, title, "下载完成后点击打开");
         SPUtil.put(context, KEY_DOWNLOAD_ID, downloadId);
-        Log.d(TAG, "apk start download :" + downloadId);
+        Log.d(TAG, "apk start checkHasDownloadNewApk :" + downloadId);
     }
 
     /**

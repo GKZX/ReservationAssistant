@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -15,14 +16,20 @@ import android.widget.Toast;
 import com.gkzxhn.xjyyzs.R;
 import com.gkzxhn.xjyyzs.base.BaseActivity;
 import com.gkzxhn.xjyyzs.fragments.HomeFragment;
+import com.gkzxhn.xjyyzs.requests.Constant;
+import com.gkzxhn.xjyyzs.requests.bean.UpdateInfo;
+import com.gkzxhn.xjyyzs.requests.methods.RequestMethods;
 import com.gkzxhn.xjyyzs.utils.Log;
 import com.gkzxhn.xjyyzs.utils.SPUtil;
+import com.gkzxhn.xjyyzs.utils.SystemUtil;
+import com.gkzxhn.xjyyzs.utils.UpdateUtil;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.StatusCode;
 import com.netease.nimlib.sdk.auth.AuthService;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import rx.Subscriber;
 
 /**
  * author:huangzhengneng
@@ -158,6 +165,11 @@ public class MainActivity extends BaseActivity {
     }
 
     @Override
+    public MenuInflater getMenuInflater() {
+        return super.getMenuInflater();
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
@@ -170,7 +182,11 @@ public class MainActivity extends BaseActivity {
             Intent intent = new Intent(this, SetWorkerPhoneActivity.class);
             startActivity(intent);
         }else if(id == R.id.update){
-            checkUpdate();// 检查更新
+            if(SystemUtil.isNetworkAvailable(this)) {
+                checkUpdate();// 检查更新
+            }else {
+                showToastShortMsg("网络不可用");
+            }
         }
         return super.onOptionsItemSelected(item);
     }
@@ -180,5 +196,78 @@ public class MainActivity extends BaseActivity {
      */
     private void checkUpdate() {
         showToastShortMsg("正在检查...");
+        RequestMethods.checkUpdate(new Subscriber<UpdateInfo>() {
+            @Override public void onCompleted() {}
+
+            @Override public void onError(Throwable e) {
+                Log.e(TAG, "check update failed :" + e.getMessage());
+                showToastShortMsg("服务器错误");
+            }
+
+            @Override public void onNext(UpdateInfo updateInfo) {
+                if(updateInfo.getVersionCode() > SystemUtil.getVersionCode(MainActivity.this)){
+                    showUpdateDialog(updateInfo.getContent());
+                }else {
+                    showToastShortMsg("当前已是最新版本");
+                }
+            }
+        });
+    }
+
+    /**
+     * 显示更新提示对话框
+     * @param content 新版本内容简要
+     */
+    private void showUpdateDialog(String content) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("有新版本");
+        builder.setMessage(content);
+        builder.setPositiveButton("马上更新", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                if(!SystemUtil.isWifiContected(MainActivity.this)){
+                    showNotWifiReminder();// 不是wifi提示
+                }else {
+                    downLoadNewApk();
+                }
+            }
+        }).setNegativeButton("以后再说", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builder.create().show();
+    }
+
+    /**
+     * 下载新版本
+     */
+    private void downLoadNewApk() {
+        UpdateUtil.getInstance(this).
+                start(Constant.NEW_APK,
+                        getResources().getString(R.string.app_name) + "新版本");
+    }
+
+    /**
+     * 提示不是wifi是否继续下载
+     */
+    private void showNotWifiReminder() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("温馨提示");
+        builder.setMessage(R.string.wifi_reminder);
+        builder.setPositiveButton("继续", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                downLoadNewApk();
+            }
+        }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builder.create().show();
     }
 }
