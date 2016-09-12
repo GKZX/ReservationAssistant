@@ -1,9 +1,15 @@
 package com.gkzxhn.xjyyzs.requests.methods;
 
+import android.content.Context;
+
 import com.gkzxhn.xjyyzs.requests.ApiService;
 import com.gkzxhn.xjyyzs.requests.Constant;
 import com.gkzxhn.xjyyzs.requests.bean.LoginResult;
+import com.gkzxhn.xjyyzs.requests.bean.SearchResultBean;
 import com.gkzxhn.xjyyzs.requests.bean.UpdateInfo;
+import com.gkzxhn.xjyyzs.utils.SPUtil;
+
+import java.util.Map;
 
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
@@ -98,6 +104,30 @@ public class RequestMethods {
         ApiService apiService = retrofit.create(ApiService.class);
         apiService
                 .updateCheck()
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+    }
+
+    /**
+     * 获取查询结果
+     * @param context
+     * @param map
+     * @param subscriber
+     */
+    public static void getSearchResult(Context context, Map<String, String>
+            map, Subscriber<SearchResultBean> subscriber){
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(Constant.URL_HEAD)
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        ApiService searchByTime = retrofit.create(ApiService.class);
+        String token  = SPUtil.get(context, "token", "") + "";
+        String orgCode = SPUtil.get(context, "organizationCode", "") + "";
+        searchByTime
+                .searchByTime(token, map, orgCode)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

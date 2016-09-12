@@ -6,6 +6,8 @@ import com.gkzxhn.xjyyzs.requests.bean.LoginResult;
 import com.gkzxhn.xjyyzs.requests.bean.SearchResultBean;
 import com.gkzxhn.xjyyzs.requests.bean.UpdateInfo;
 
+import java.util.Map;
+
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.http.Body;
@@ -15,6 +17,7 @@ import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
+import retrofit2.http.QueryMap;
 import rx.Observable;
 
 /**
@@ -75,16 +78,14 @@ public interface ApiService {
     /**
      * 按时间段查询
      * @param token
-     * @param start_time
-     * @param end_time
+     * @param map
      * @param orgCode
      * @return
      */
     @GET("search")
     Observable<SearchResultBean> searchByTime(
             @Header("Authorization") String token,
-            @Query("start") String start_time,
-            @Query("end") String end_time,
+            @QueryMap Map<String, String> map,
             @Query("orgCode") String orgCode
     );
 

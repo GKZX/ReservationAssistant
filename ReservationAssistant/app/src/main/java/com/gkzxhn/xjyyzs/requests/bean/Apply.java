@@ -29,7 +29,16 @@ public class Apply {
     public class ApplyBean {
         private String orgCode;
         private String uuid;
+        private String phone;
         private String applyDate;
+
+        public String getPhone() {
+            return phone;
+        }
+
+        public void setPhone(String phone) {
+            this.phone = phone;
+        }
 
         public String getOrgCode() {
             return orgCode;

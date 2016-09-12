@@ -14,6 +14,7 @@ import com.gkzxhn.xjyyzs.requests.bean.Apply;
 import com.gkzxhn.xjyyzs.requests.methods.RequestMethods;
 import com.gkzxhn.xjyyzs.utils.DateUtils;
 import com.gkzxhn.xjyyzs.utils.Log;
+import com.gkzxhn.xjyyzs.utils.PhoneNumberUtil;
 import com.gkzxhn.xjyyzs.utils.SPUtil;
 import com.gkzxhn.xjyyzs.utils.StringUtils;
 import com.gkzxhn.xjyyzs.view.dialog.SweetAlertDialog;
@@ -45,12 +46,14 @@ public class BookFragment extends BaseFragment {
     @BindView(R.id.et_ic_card_number) EditText et_ic_card_number;
     @BindView(R.id.sp_date) Spinner sp_date;
     @BindView(R.id.bt_remote_meeting) Button bt_remote_meeting;
+    @BindView(R.id.et_phone) EditText et_phone;
 
     private ArrayAdapter<String> date_adapter;// 预约日期适配器
-    private String name;
-    private String uuid;
-    private String apply_date;
-    private SweetAlertDialog apply_dialog;
+    private String name;// 姓名
+    private String phone; // 电话号码
+    private String uuid; // 身份证
+    private String apply_date; // 申请日期
+    private SweetAlertDialog apply_dialog; // 进度条对话框
 
     @Override
     protected View initView() {
@@ -71,7 +74,11 @@ public class BookFragment extends BaseFragment {
         if(!checkEditText()){
             showToastMsgShort("请填写完整信息");
         }else try {
-            if(!StringUtils.IDCardValidate(uuid).equals("")){
+            PhoneNumberUtil.PhoneType type = PhoneNumberUtil.checkNumber(phone).getType();
+            if(type == PhoneNumberUtil.PhoneType.INVALIDPHONE){
+                // 不是手机或者固话
+                showToastMsgShort("电话号码不合法");
+            }else if(!StringUtils.IDCardValidate(uuid).equals("")){
                 showToastMsgShort("身份证号不合法");
             }else {
                 apply();// 申请
@@ -180,6 +187,7 @@ public class BookFragment extends BaseFragment {
     private RequestBody getRequestBody() {
         Apply apply = new Apply();
         Apply.ApplyBean bean = apply.new ApplyBean();
+        bean.setPhone(phone);
         bean.setUuid(uuid);
         bean.setOrgCode((String) SPUtil.get(getActivity(), "organizationCode", ""));
         bean.setApplyDate(apply_date);
@@ -195,9 +203,11 @@ public class BookFragment extends BaseFragment {
      */
     private boolean checkEditText() {
         name = et_name.getText().toString().trim();
+        phone = et_phone.getText().toString().trim();
         uuid = et_ic_card_number.getText().toString().trim();
         apply_date = DATE_LIST[sp_date.getSelectedItemPosition()];
-        if(TextUtils.isEmpty(name) || TextUtils.isEmpty(uuid) || TextUtils.isEmpty(apply_date)){
+        if(TextUtils.isEmpty(name) || TextUtils.isEmpty(phone) ||
+                TextUtils.isEmpty(uuid) || TextUtils.isEmpty(apply_date)){
             return false;
         }
         return true;

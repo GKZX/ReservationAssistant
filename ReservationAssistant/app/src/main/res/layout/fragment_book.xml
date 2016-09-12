@@ -5,7 +5,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:background="@color/white"
         android:focusable="true"
         android:focusableInTouchMode="true"
@@ -84,8 +84,36 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
+                android:layout_height="@dimen/book_item_height">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="电话号码："
+                    android:textSize="@dimen/book_main_text_size"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginBottom="10dp"
+                    android:textColor="@color/tv_mid"/>
+
+                <EditText
+                    android:id="@+id/et_phone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginLeft="100dp"
+                    android:textColor="@color/tv_bg"
+                    android:textSize="@dimen/book_main_text_size"
+                    android:layout_centerVertical="true"
+                    android:gravity="right"
+                    android:background="@null"
+                    android:hint="请输入电话号码"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
                 android:layout_height="@dimen/book_item_height"
-                android:layout_marginTop="10dp">
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="5dp">
 
                 <TextView
                     android:layout_width="wrap_content"

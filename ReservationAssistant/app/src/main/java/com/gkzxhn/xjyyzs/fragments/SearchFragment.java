@@ -17,31 +17,24 @@ import com.gkzxhn.xjyyzs.R;
 import com.gkzxhn.xjyyzs.adapter.SearchResultAdapter;
 import com.gkzxhn.xjyyzs.base.BaseFragment;
 import com.gkzxhn.xjyyzs.inters.OnSearchResultCallBack;
-import com.gkzxhn.xjyyzs.requests.ApiService;
-import com.gkzxhn.xjyyzs.requests.Constant;
 import com.gkzxhn.xjyyzs.requests.bean.ApplyResult;
 import com.gkzxhn.xjyyzs.requests.bean.SearchResultBean;
-import com.gkzxhn.xjyyzs.requests.methods.GetCurrentDayListMethod;
+import com.gkzxhn.xjyyzs.requests.methods.RequestMethods;
 import com.gkzxhn.xjyyzs.utils.DateUtils;
 import com.gkzxhn.xjyyzs.utils.Log;
-import com.gkzxhn.xjyyzs.utils.SPUtil;
 import com.gkzxhn.xjyyzs.utils.StringUtils;
 import com.gkzxhn.xjyyzs.view.decoration.DividerItemDecoration;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
-import retrofit2.converter.gson.GsonConverterFactory;
 import rx.Observable;
-import rx.Observer;
 import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 /**
  * author:huangzhengneng
@@ -89,7 +82,7 @@ public class SearchFragment extends BaseFragment implements View.OnClickListener
         tv_end_date.setOnClickListener(this);
         bt_search_by_status.setOnClickListener(this);
         bt_search_by_time.setOnClickListener(this);
-        recycler_view.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recycler_view.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         recycler_view.addItemDecoration(new DividerItemDecoration(getActivity(),
                 DividerItemDecoration.VERTICAL_LIST));
         recycler_view.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -121,7 +114,12 @@ public class SearchFragment extends BaseFragment implements View.OnClickListener
                 showDatePicker(tv_end_date);
                 break;
             case R.id.bt_search_by_status:
-                showToastMsgShort("状态筛选");
+                if (!rb_passed.isChecked() && !rb_refused.isChecked()){
+                    showToastMsgShort("请选择查询状态");
+                    return;
+                }
+                String date = DateUtils.formatDate("yyyy-MM-dd", System.currentTimeMillis());
+                getSearchResult(date, date);
                 break;
             case R.id.bt_search_by_time:
                 String start_time = DateUtils.dateFormat(tv_start_date.getText().toString());
@@ -145,33 +143,43 @@ public class SearchFragment extends BaseFragment implements View.OnClickListener
      */
     private void getSearchResult(String start_time, String end_time) {
         initShowProgressDialog();
-        final Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(Constant.URL_HEAD).addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create()).build();
-        ApiService searchByTime = retrofit.create(ApiService.class);
-        String token  = SPUtil.get(getActivity(), "token", "") + "";
-        String orgCode = SPUtil.get(getActivity(), "organizationCode", "") + "";
-        searchByTime.searchByTime(token, start_time, end_time, orgCode).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<SearchResultBean>() {
-            @Override public void onCompleted() {}
+        RequestMethods.getSearchResult(getActivity(), getRequestParameters(start_time, end_time),
+                new Subscriber<SearchResultBean>() {
+                    @Override public void onCompleted() {}
 
-            @Override public void onError(Throwable e) {
-                Log.e(TAG, "search by time failed : " + e.getMessage());
-                showGetFailed("查询失败，请稍后再试！");
-            }
+                    @Override public void onError(Throwable e) {
+                        showGetFailed("查询失败，请稍后再试！");
+                    }
 
-            @Override
-            public void onNext(SearchResultBean result) {
-                Log.i(TAG, result.getApplies().size() + "");
-                if(result.getApplies().size() > 0){
-                    processDate(result);// 矫正数据
-                    Log.i(TAG, result.getApplies().get(0).getApply().get(0).getFeedback().getIsPass() + "111111");
-                }else {
-                    showGetFailed("没有数据");
-                    tv_no_result.setText(View.VISIBLE);
-                }
-            }
-        });
+                    @Override
+                    public void onNext(SearchResultBean result) {
+                        if(result.getApplies().size() > 0){
+                            processDate(result);// 矫正数据
+                        }else {
+                            showGetFailed("没有数据");
+                            tv_no_result.setText(View.VISIBLE);
+                        }
+                    }
+                });
+    }
+
+    /**
+     * 获取请求参数map
+     * @param startTime
+     * @param endTime
+     * @return
+     */
+    private Map<String, String> getRequestParameters(
+            String startTime, String endTime) {
+        Map<String, String> map = new HashMap<>();
+        map.put("start", startTime);
+        map.put("end", endTime);
+        if(rb_refused.isChecked()){
+            map.put("isPassed", "false");
+        }else {
+            map.put("isPassed", "true");
+        }
+        return map;
     }
 
     /**
@@ -181,60 +189,62 @@ public class SearchFragment extends BaseFragment implements View.OnClickListener
     private void processDate(SearchResultBean result) {
         searchData = new ArrayList<>();
         List<SearchResultBean.AppliesBean> beanList = result.getApplies();
-        Observable observable = Observable.from(beanList)
-                .lift(new Observable.Operator<ApplyResult.AppliesBean, SearchResultBean.AppliesBean>() {
+        Observable.from(beanList).lift(new Observable.Operator<ApplyResult.AppliesBean, SearchResultBean.AppliesBean>() {
                     @Override
                     public Subscriber<? super SearchResultBean.AppliesBean> call(final Subscriber<? super ApplyResult.AppliesBean> subscriber) {
-                        return new Subscriber< SearchResultBean.AppliesBean>(){
-
-                            @Override
-                            public void onCompleted() {
-                                Log.i(TAG, "lift  onCompleted()");
-                                subscriber.onCompleted();
-                            }
-
-                            @Override
-                            public void onError(Throwable e) {
-                                Log.i(TAG, "lift  onError()");
-                                subscriber.onError(e);
-                            }
-
-                            @Override
-                            public void onNext(SearchResultBean.AppliesBean appliesBean) {
-                                Log.i(TAG, "lift  onNext() ---> " + appliesBean.getApply().size());
-                                for (SearchResultBean.AppliesBean.ApplyBean bean : appliesBean.getApply()){
-                                    ApplyResult.AppliesBean.ApplyBean applyBean = getApplyBean(bean);
-                                    subscriber.onNext(new ApplyResult.AppliesBean(appliesBean.getName(), appliesBean.getUuid(), applyBean));
-                                }
-                            }
-                        };
+                        return getAppliesBeanSubscriber(subscriber);
                     }
-                });
-        observable.subscribe(new Subscriber<ApplyResult.AppliesBean>() {
-            @Override
-            public void onCompleted() {
-                Log.i(TAG, "外层循环完毕 ---> " + searchData.size());
-                setDataList(searchData);
-                showGetSuccess();
-                for (ApplyResult.AppliesBean bean : searchData){
-                    Log.i(TAG, bean.toString());
-                }
+                }).subscribe(new Subscriber<ApplyResult.AppliesBean>() {
+            @Override public void onCompleted() {
+                setDataList(searchData); // 设置列表数据
+                showGetSuccess(); // 获取成功
             }
 
-            @Override
-            public void onError(Throwable e) {
-                Log.i(TAG, "onError() ---> " + e.getMessage());
+            @Override public void onError(Throwable e) {
                 showGetFailed("查询失败，请稍后再试");
             }
 
-            @Override
-            public void onNext(ApplyResult.AppliesBean appliesBean) {
-                Log.i(TAG, "onNext() add ");
+            @Override public void onNext(ApplyResult.AppliesBean appliesBean) {
                 searchData.add(appliesBean);
             }
         });
     }
 
+    /**
+     * 获取转换后的数据
+     *      将原来的ApplyResult.AppliesBean转换为SearchResultBean.AppliesBean形式
+     * @param subscriber
+     * @return
+     */
+    @NonNull
+    private Subscriber<SearchResultBean.AppliesBean> getAppliesBeanSubscriber(
+            final Subscriber<? super ApplyResult.AppliesBean> subscriber) {
+        return new Subscriber< SearchResultBean.AppliesBean>(){
+            @Override public void onCompleted() {
+                subscriber.onCompleted();
+            }
+
+            @Override public void onError(Throwable e) {
+                subscriber.onError(e);
+            }
+
+            @Override public void onNext(SearchResultBean.AppliesBean appliesBean) {
+                for (SearchResultBean.AppliesBean.ApplyBean bean : appliesBean.getApply()){
+                    ApplyResult.AppliesBean.ApplyBean applyBean = getApplyBean(bean);
+                    subscriber.onNext(new ApplyResult.AppliesBean(appliesBean.getName(),
+                            appliesBean.getUuid(), applyBean));
+                }
+            }
+        };
+    }
+
+    /**
+     * 第二步转换数据格式
+     *      将SearchResultBean.AppliesBean.ApplyBean转换为ApplyResult.AppliesBean.ApplyBean
+     *      传到最终subscribe的onNext中消费
+     * @param bean
+     * @return
+     */
     @NonNull
     private ApplyResult.AppliesBean.ApplyBean getApplyBean(
             SearchResultBean.AppliesBean.ApplyBean bean) {
@@ -285,36 +295,9 @@ public class SearchFragment extends BaseFragment implements View.OnClickListener
         if(recycler_view.getAdapter() == null || type == 1) {
             Log.i(TAG, "go to get data");
             initShowProgressDialog();
-//            getCurrentData();
             String date = DateUtils.formatDate("yyyy-MM-dd", System.currentTimeMillis());
             getSearchResult(date, date);
         }
-    }
-
-    /**
-     * 获取当天数据
-     */
-    private void getCurrentData() {
-        GetCurrentDayListMethod.getInstance().getCurrentDayList(new Subscriber<ApplyResult>() {
-            @Override public void onCompleted() {}
-            @Override
-            public void onError(Throwable e) {
-                Log.e(TAG, "get current day data failed : " + e.getMessage());
-                showGetFailed("加载失败，请稍后再试！");// 获取失败
-            }
-
-            @Override
-            public void onNext(ApplyResult result) {
-                data = new ArrayList<>();
-                data.addAll(result.getApplies());
-                Log.i(TAG, "get data success : " + data.size());
-                for (ApplyResult.AppliesBean bean : data){
-                    Log.i(TAG, bean.toString());
-                }
-                setDataList(data);
-                showGetSuccess();
-            }
-        }, (String) SPUtil.get(getActivity(), "token", ""), (String) SPUtil.get(getActivity(), "organizationCode", ""));
     }
 
     /**
@@ -345,7 +328,6 @@ public class SearchFragment extends BaseFragment implements View.OnClickListener
     private void showGetSuccess() {
         if(current_dialog.isShowing())
             current_dialog.dismiss();
-//        showToastMsgShort("加载成功");
     }
 
     /**
