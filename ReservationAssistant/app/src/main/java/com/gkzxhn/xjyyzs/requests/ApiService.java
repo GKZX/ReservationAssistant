@@ -1,7 +1,5 @@
 package com.gkzxhn.xjyyzs.requests;
 
-
-import com.gkzxhn.xjyyzs.requests.bean.ApplyResult;
 import com.gkzxhn.xjyyzs.requests.bean.LoginResult;
 import com.gkzxhn.xjyyzs.requests.bean.SearchResultBean;
 import com.gkzxhn.xjyyzs.requests.bean.UpdateInfo;
@@ -37,17 +35,6 @@ public interface ApiService {
     @POST("login")
     Observable<LoginResult> login(
             @Body RequestBody body
-    );
-
-    /**
-     * 获取当天申请结果列表
-     * @param orgCode
-     * @return
-     */
-    @GET("applies")
-    Observable<ApplyResult> getCurrentDayData(
-            @Header("Authorization") String token,
-            @Query("orgCode") String orgCode
     );
 
     /**
