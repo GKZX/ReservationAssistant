@@ -10,12 +10,12 @@ package com.gkzxhn.xjyyzs.requests;
 public class Constant {
 
     public static final String URL_HEAD = "http://" +
-//            "103.37.158.17:3000" +
-            "10.93.1.101:3000" +
+            "103.37.158.17:3000" +
+//            "10.93.1.101:3000" +
             "/api/v1/";
     public static final String NEW_APK = "http://" +
-//            "103.37.158.17:8080" +
-            "10.93.1.102:9090" +
+            "103.37.158.17:8080" +
+//            "10.93.1.102:9090" +
             "/xjp/file/downloadFile";
 
 }

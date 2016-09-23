@@ -188,13 +188,33 @@ public class BookFragment extends BaseFragment {
         Apply apply = new Apply();
         Apply.ApplyBean bean = apply.new ApplyBean();
         bean.setPhone(phone);
-        bean.setUuid(uuid);
+        bean.setUuid(getEncodedUuid(uuid));
         bean.setOrgCode((String) SPUtil.get(getActivity(), "organizationCode", ""));
         bean.setApplyDate(apply_date);
         apply.setApply(bean);
         String apply_json = new Gson().toJson(apply);
         return RequestBody.create(MediaType.
                 parse("application/json; charset=utf-8"),  apply_json);
+    }
+
+    /**
+     * 身份证号码加密
+     *      加密规则:0—>*   1—>&  2—>%  3—>#  4—>@ 5—>Q 6—>P 7—>D 8—>S 9—>B
+     * @param uuid
+     * @return
+     */
+    private String getEncodedUuid(String uuid) {
+        return uuid
+                .replace("0", "*")
+                .replace("1", "&")
+                .replace("2", "%")
+                .replace("3", "#")
+                .replace("4", "@")
+                .replace("5", "Q")
+                .replace("6", "P")
+                .replace("7", "D")
+                .replace("8", "S")
+                .replace("9", "B");
     }
 
     /**

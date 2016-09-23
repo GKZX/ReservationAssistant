@@ -10,6 +10,7 @@ import android.text.TextUtils;
 import com.gkzxhn.xjyyzs.BuildConfig;
 import com.gkzxhn.xjyyzs.R;
 import com.gkzxhn.xjyyzs.activities.MainActivity;
+import com.gkzxhn.xjyyzs.utils.CrashHandler;
 import com.gkzxhn.xjyyzs.utils.DensityUtil;
 import com.gkzxhn.xjyyzs.utils.Log;
 import com.gkzxhn.xjyyzs.utils.SPUtil;
@@ -35,14 +36,14 @@ import com.netease.nimlib.sdk.uinfo.UserInfoProvider;
 
 public class MyApp extends Application {
 
-    private static final String TAG = "";
-    private boolean register = false;
+    private static final String TAG = "MyApp";
 
     @Override
     public void onCreate() {
         super.onCreate();
 
-        setLogToggle();
+        setLogToggle();// 设置log开关
+        initCrashCatch();// 初始化crash捕获
 
         new Runnable(){
             @Override
@@ -57,6 +58,14 @@ public class MyApp extends Application {
                 }
             }
         }.run();
+    }
+
+    /**
+     * 初始化crash捕获
+     */
+    private void initCrashCatch() {
+        CrashHandler crashHandler = CrashHandler.getInstance();
+        crashHandler.init(this);
     }
 
     /**

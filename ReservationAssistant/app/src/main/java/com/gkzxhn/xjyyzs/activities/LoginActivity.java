@@ -10,15 +10,12 @@ import android.widget.EditText;
 
 import com.gkzxhn.xjyyzs.R;
 import com.gkzxhn.xjyyzs.base.BaseActivity;
-import com.gkzxhn.xjyyzs.requests.ApiService;
-import com.gkzxhn.xjyyzs.requests.Constant;
 import com.gkzxhn.xjyyzs.requests.bean.LoginInfo;
 import com.gkzxhn.xjyyzs.requests.bean.LoginResult;
 import com.gkzxhn.xjyyzs.requests.methods.RequestMethods;
 import com.gkzxhn.xjyyzs.service.LoginNimService;
 import com.gkzxhn.xjyyzs.utils.Log;
 import com.gkzxhn.xjyyzs.utils.SPUtil;
-import com.gkzxhn.xjyyzs.utils.ToastUtil;
 import com.gkzxhn.xjyyzs.view.dialog.SweetAlertDialog;
 import com.google.gson.Gson;
 
@@ -26,13 +23,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
-import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
-import retrofit2.converter.gson.GsonConverterFactory;
-import rx.Observer;
 import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 /**
  * author:huangzhengneng
@@ -93,9 +84,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
                 String error_msg = e.getMessage();
                 Log.e(TAG, "login failed : " + error_msg);
                 if(error_msg.contains("404")){
-                    showLoginFailed("账号不存在");
+                    showLoginFailed("用户名或密码错误");
                 }else if(error_msg.contains("500")){
                     showLoginFailed("服务器错误");
+                }else if(error_msg.contains("400")){
+                    showLoginFailed("用户名或密码错误");
                 }else {
                     showLoginFailed("登录失败，请稍后再试！");
                 }
