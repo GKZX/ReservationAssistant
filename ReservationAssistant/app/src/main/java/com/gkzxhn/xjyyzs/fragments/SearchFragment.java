@@ -148,7 +148,8 @@ public class SearchFragment extends BaseFragment implements View.OnClickListener
                     @Override public void onCompleted() {}
 
                     @Override public void onError(Throwable e) {
-                        showGetFailed("查询失败，请稍后再试！");
+                        Log.e(TAG, "getSearchResult --> onError : " + e.getMessage());
+                        showGetFailed("查询失败！");
                     }
 
                     @Override
@@ -157,7 +158,8 @@ public class SearchFragment extends BaseFragment implements View.OnClickListener
                             processDate(result);// 矫正数据
                         }else {
                             showGetFailed("没有数据");
-                            tv_no_result.setText(View.VISIBLE);
+                            tv_no_result.setVisibility(View.VISIBLE);
+                            recycler_view.setVisibility(View.GONE);
                         }
                     }
                 });
@@ -175,9 +177,9 @@ public class SearchFragment extends BaseFragment implements View.OnClickListener
         map.put("start", startTime);
         map.put("end", endTime);
         if(rb_refused.isChecked()){
-            map.put("isPassed", "false");
+            map.put("isPassed", "DENIED");
         }else {
-            map.put("isPassed", "true");
+            map.put("isPassed", "PASSED");
         }
         return map;
     }
@@ -196,16 +198,22 @@ public class SearchFragment extends BaseFragment implements View.OnClickListener
                     }
                 }).subscribe(new Subscriber<ApplyResult.AppliesBean>() {
             @Override public void onCompleted() {
-                setDataList(searchData); // 设置列表数据
+                if(searchData != null)
+                    setDataList(searchData); // 设置列表数据
                 showGetSuccess(); // 获取成功
             }
 
             @Override public void onError(Throwable e) {
+                Log.e(TAG, "processDate --> onError : " + e.getMessage());
                 showGetFailed("查询失败，请稍后再试");
             }
 
             @Override public void onNext(ApplyResult.AppliesBean appliesBean) {
-                searchData.add(appliesBean);
+                if(appliesBean != null) {
+                    searchData.add(appliesBean);
+                }else {
+                    Log.e(TAG, "processDate --> onNext : appliesBean is Null");
+                }
             }
         });
     }
@@ -225,14 +233,20 @@ public class SearchFragment extends BaseFragment implements View.OnClickListener
             }
 
             @Override public void onError(Throwable e) {
+                Log.e(TAG, "getAppliesBeanSubscriber --> onError : " + e.getMessage());
                 subscriber.onError(e);
             }
 
             @Override public void onNext(SearchResultBean.AppliesBean appliesBean) {
-                for (SearchResultBean.AppliesBean.ApplyBean bean : appliesBean.getApply()){
-                    ApplyResult.AppliesBean.ApplyBean applyBean = getApplyBean(bean);
-                    subscriber.onNext(new ApplyResult.AppliesBean(appliesBean.getName(),
-                            appliesBean.getUuid(), applyBean));
+                if(appliesBean.getApplication() != null && appliesBean.getApplication().size() > 0) {
+                    for (SearchResultBean.AppliesBean.ApplyBean bean : appliesBean.getApplication()) {
+                        ApplyResult.AppliesBean.ApplyBean applyBean = getApplyBean(bean);
+                        subscriber.onNext(new ApplyResult.AppliesBean(appliesBean.getName(),
+                                appliesBean.getUuid(), appliesBean.getPhone(), applyBean));
+                    }
+                }else {
+                    subscriber.onNext(null);
+                    Log.e(TAG, "getAppliesBeanSubscriber --> onNext : appliesBean is Null");
                 }
             }
         };
@@ -304,6 +318,7 @@ public class SearchFragment extends BaseFragment implements View.OnClickListener
      * 设置列表数据
      */
     private void setDataList(List<ApplyResult.AppliesBean> list) {
+        Log.i("setDataList:==" + list.size());
         if(list.size() > 0) {
             tv_no_result.setVisibility(View.GONE);
             adapter = new SearchResultAdapter(getActivity(), list);
@@ -314,6 +329,7 @@ public class SearchFragment extends BaseFragment implements View.OnClickListener
                 recycler_view.setVisibility(View.GONE);
             }
             tv_no_result.setVisibility(View.VISIBLE);
+            showToastMsgShort("没有数据");
         }
 
         if(srl_refresh.isRefreshing()){
@@ -336,6 +352,8 @@ public class SearchFragment extends BaseFragment implements View.OnClickListener
     private void showGetFailed(String titleText) {
         if(current_dialog.isShowing())
             current_dialog.dismiss();
+        if(srl_refresh.isRefreshing())
+            srl_refresh.setRefreshing(false);
         showToastMsgLong(titleText);
     }
 }

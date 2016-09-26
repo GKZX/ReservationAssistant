@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.gkzxhn.xjyyzs.R;
 import com.gkzxhn.xjyyzs.requests.bean.ApplyResult;
-import com.gkzxhn.xjyyzs.utils.Log;
+import com.gkzxhn.xjyyzs.utils.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,12 +46,12 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        holder.tv_id_card_number.setText(list.get(position).getUuid());
-        holder.tv_apply_date.setText(list.get(position).getApply().getApplyDate());
-        holder.tv_apply_status.setText(list.get(position).getApply().getFeedback().getIsPass());
-        Log.i(TAG, list.get(position).getApply().getFeedback().getIsPass() + "---");
-        holder.tv_meeting_date.setText(list.get(position).getApply().getFeedback().getMeetingTime());
+        holder.tv_id_card_number.setText(StringUtils.decryptUuid(list.get(position).getUuid()));
+        holder.tv_apply_date.setText(list.get(position).getApplication().getApplyDate());
+        holder.tv_apply_status.setText(list.get(position).getApplication().getFeedback().getIsPass());
+        holder.tv_meeting_date.setText(list.get(position).getApplication().getFeedback().getMeetingTime());
         holder.tv_apply_name.setText(list.get(position).getName());
+        holder.tv_phone.setText(list.get(position).getPhone());
         holder.card_view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -73,6 +73,7 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
         @BindView(R.id.tv_apply_date) TextView tv_apply_date;
         @BindView(R.id.tv_apply_status) TextView tv_apply_status;
         @BindView(R.id.tv_meeting_date) TextView tv_meeting_date;
+        @BindView(R.id.tv_phone) TextView tv_phone;
 
         public MyViewHolder(View itemView) {
             super(itemView);

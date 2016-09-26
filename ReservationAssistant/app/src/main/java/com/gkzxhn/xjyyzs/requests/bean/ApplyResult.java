@@ -13,7 +13,8 @@ import java.util.List;
                 {
                     "name": "肖君",
                     "uuid": "432503199003240835",
-                    "apply": {
+                    "phone":"xxxxxxx"
+                    "application": {
                             "applyDate": "2016-09-06",
                             "_id": "57c55689a51fb41400d4e454",
                             "feedback": {
@@ -37,7 +38,8 @@ public class ApplyResult {
     /**
      * name : 肖君
      * uuid : 432503199003240835
-     * apply : {"applyDate":"2016-09-06","_id":"57c55689a51fb41400d4e454","feedback":{"meetingTime":"10:00","sfs":"s0997003","prison":"第三监狱","content":"预约会见成功","isPass":"PASSED","from":"M"}}
+     * phone: xxxxxxx
+     * application : {"applyDate":"2016-09-06","_id":"57c55689a51fb41400d4e454","feedback":{"meetingTime":"10:00","sfs":"s0997003","prison":"第三监狱","content":"预约会见成功","isPass":"PASSED","from":"M"}}
      */
 
     private List<AppliesBean> applies;
@@ -52,21 +54,31 @@ public class ApplyResult {
 
     public static class AppliesBean {
 
-        public AppliesBean(String name, String uuid, ApplyBean apply) {
+        public AppliesBean(String name, String uuid, String phone, ApplyBean application) {
             this.name = name;
             this.uuid = uuid;
-            this.apply = apply;
+            this.application = application;
+            this.phone = phone;
         }
 
         private String name;
         private String uuid;
+        private String phone;
         /**
          * applyDate : 2016-09-06
          * _id : 57c55689a51fb41400d4e454
          * feedback : {"meetingTime":"10:00","sfs":"s0997003","prison":"第三监狱","content":"预约会见成功","isPass":"PASSED","from":"M"}
          */
 
-        private ApplyBean apply;
+        private ApplyBean application;
+
+        public String getPhone() {
+            return phone;
+        }
+
+        public void setPhone(String phone) {
+            this.phone = phone;
+        }
 
         public String getName() {
             return name;
@@ -84,12 +96,12 @@ public class ApplyResult {
             this.uuid = uuid;
         }
 
-        public ApplyBean getApply() {
-            return apply;
+        public ApplyBean getApplication() {
+            return application;
         }
 
-        public void setApply(ApplyBean apply) {
-            this.apply = apply;
+        public void setApplication(ApplyBean application) {
+            this.application = application;
         }
 
         public static class ApplyBean {
@@ -242,7 +254,8 @@ public class ApplyResult {
             return "AppliesBean{" +
                     "name='" + name + '\'' +
                     ", uuid='" + uuid + '\'' +
-                    ", apply=" + apply.toString() +
+                    ", phone='" + phone + '\'' +
+                    ", application=" + application +
                     '}';
         }
     }

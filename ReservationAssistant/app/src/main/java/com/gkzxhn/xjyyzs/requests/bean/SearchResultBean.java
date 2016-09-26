@@ -8,27 +8,48 @@ import java.util.List;
  * date: 2016/9/1.
  * description:搜索结果实体
  * {
-    "applies": [
-                {
-                "apply": [
-                        {
-                             "_id": "57c55689a51fb41400d4e454",
-                             "applyDate": "2016-09-06",
-                             "feedback": {
-                                        "content": "预约会见成功",
-                                        "from": "M",
-                                        "isPass": "PASSED",
-                                        "meetingTime": "10:00",
-                                        "prison": "第三监狱",
-                                        "sfs": "s0997003"
+ "applies": [
+     {
+     "name": "黄正能",
+     "uuid": "@#*@S%&BB@*@*D#P&S",
+     "phone": "18774810958",
+     "application": [
+                     {
+                     "applyDate": "2016-09-27",
+                     "_id": "57e8685f2b03640001687585",
+                     "feedback": {
+                             "meetingTime": "10:00",
+                             "sfs": "s0997003",
+                             "prison": "第一监狱",
+                             "content": "预约会见成功",
+                             "isPass": "PASSED",
+                             "from": "M"
                              }
-                         }
-                          ],
-                "name": "肖君",
-                "uuid": "432503199003240835"
-                }
+                     }
+                ]
+     },
+     {
+     "name": "黄正能",
+     "uuid": "@#*@S%&BB@*@*D#P&S",
+     "phone": "18774810958",
+     "application": [
+                     {
+                     "applyDate": "2016-09-27",
+                     "_id": "57e8685f2b03640001687585",
+                     "feedback": {
+                             "meetingTime": "10:00",
+                             "sfs": "s0997003",
+                             "prison": "第一监狱",
+                             "content": "预约会见成功",
+                             "isPass": "PASSED",
+                             "from": "M"
+                             }
+                     }
                 ]
      }
+ ]
+ }
+
 
  */
 
@@ -36,9 +57,10 @@ public class SearchResultBean {
 
 
     /**
-     * apply : [{"_id":"57c55689a51fb41400d4e454","applyDate":"2016-09-06","feedback":{"content":"预约会见成功","from":"M","isPass":"PASSED","meetingTime":"10:00","prison":"第三监狱","sfs":"s0997003"}}]
-     * name : 肖君
-     * uuid : 432503199003240835
+     * application : [{"_id":"57c55689a51fb41400d4e454","applyDate":"2016-09-06","feedback":{"content":"预约会见成功","from":"M","isPass":"PASSED","meetingTime":"10:00","prison":"第三监狱","sfs":"s0997003"}}]
+     * name : 黄正能
+     * uuid : @#*@S%&BB@*@*D#P&S
+     * phone:18774810958
      */
 
     private List<AppliesBean> applies;
@@ -60,7 +82,24 @@ public class SearchResultBean {
          * feedback : {"content":"预约会见成功","from":"M","isPass":"PASSED","meetingTime":"10:00","prison":"第三监狱","sfs":"s0997003"}
          */
 
-        private List<ApplyBean> apply;
+        private List<ApplyBean> application;
+        private String phone;
+
+        public String getPhone() {
+            return phone;
+        }
+
+        public void setPhone(String phone) {
+            this.phone = phone;
+        }
+
+        public List<ApplyBean> getApplication() {
+            return application;
+        }
+
+        public void setApplication(List<ApplyBean> application) {
+            this.application = application;
+        }
 
         public String getName() {
             return name;
@@ -76,14 +115,6 @@ public class SearchResultBean {
 
         public void setUuid(String uuid) {
             this.uuid = uuid;
-        }
-
-        public List<ApplyBean> getApply() {
-            return apply;
-        }
-
-        public void setApply(List<ApplyBean> apply) {
-            this.apply = apply;
         }
 
         public static class ApplyBean {
@@ -216,7 +247,8 @@ public class SearchResultBean {
             return "AppliesBean{" +
                     "name='" + name + '\'' +
                     ", uuid='" + uuid + '\'' +
-                    ", apply=" + apply.size() +
+                    ", application.size()=" + application.size() +
+                    ", phone='" + phone + '\'' +
                     '}';
         }
     }

@@ -206,4 +206,16 @@ public class StringUtils {
         }
         return status;
     }
+
+    /**
+     * 身份证号解密
+     *  0-->*   1-->&  2-->%  3-->#  4-->@ 5-->Q 6-->P 7-->D 8-->S 9-->B
+     * @param uuid  服务端返回的已加密身份证号码
+     * @return
+     */
+    public static String decryptUuid(String uuid){
+        return uuid.replace("*", "0").replace("&", "1").replace("%", "2").replace("#", "3")
+                .replace("@", "4").replace("Q", "5").replace("P", "6").replace("D", "7")
+                .replace("S", "8").replace("B", "9");
+    }
 }
