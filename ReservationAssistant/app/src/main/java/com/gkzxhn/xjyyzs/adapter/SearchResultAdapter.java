@@ -12,7 +12,6 @@ import com.gkzxhn.xjyyzs.R;
 import com.gkzxhn.xjyyzs.requests.bean.ApplyResult;
 import com.gkzxhn.xjyyzs.utils.StringUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -33,8 +32,7 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
 
     public SearchResultAdapter(Context context, List<ApplyResult.AppliesBean> beanList){
         this.context = context;
-        list = new ArrayList<>();
-        this.list.addAll(beanList);
+        list = beanList;
     }
 
     @Override

@@ -1,10 +1,14 @@
 package com.gkzxhn.xjyyzs.app;
 
 import android.app.Application;
+import android.app.Notification;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Environment;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.text.TextUtils;
 
 import com.gkzxhn.xjyyzs.BuildConfig;
@@ -82,16 +86,20 @@ public class MyApp extends Application {
         NIMClient.getService(MsgServiceObserve.class).observeCustomNotification(new Observer<CustomNotification>() {
             @Override
             public void onEvent(CustomNotification customNotification) {
-                Log.i(TAG, "custom notification ApnsText : " + customNotification.getApnsText());
-                Log.i(TAG, "custom notification Content : " + customNotification.getContent());
-                Log.i(TAG, "custom notification FromAccount : " + customNotification.getFromAccount());
-                Log.i(TAG, "custom notification SessionId : " + customNotification.getSessionId());
-                Log.i(TAG, "custom notification Time : " + customNotification.getTime());
-                Log.i(TAG, "custom notification SessionType : " + customNotification.getSessionType());
-                Log.i(TAG, "custom notification PushPayload : " + customNotification.getPushPayload().size());
-                Log.i(TAG, "custom notification enableUnreadCount : " + customNotification.getConfig().enableUnreadCount);
-                Log.i(TAG, "custom notification enablePush : " + customNotification.getConfig().enablePush);
-                Log.i(TAG, "custom notification enablePushNick : " + customNotification.getConfig().enablePushNick);
+                Log.i(TAG, "custom notification Content : " + customNotification.getContent());// custom notification Content : {'name':'hello, ketty'}
+                Log.i(TAG, "custom notification FromAccount : " + customNotification.getFromAccount());//custom notification FromAccount : 99999999
+                Log.i(TAG, "custom notification SessionId : " + customNotification.getSessionId());//custom notification SessionId : 99999999
+                Log.i(TAG, "custom notification Time : " + customNotification.getTime());//custom notification Time : 1475118947077
+                Log.i(TAG, "custom notification SessionType : " + customNotification.getSessionType());//custom notification SessionType : P2P
+                NotificationCompat.Builder builder = new NotificationCompat.Builder(MyApp.this)
+                        .setSmallIcon(R.mipmap.ic_launcher)
+                        .setContentTitle("有新消息啦")
+                        .setContentText(customNotification.getContent())
+                        .setContentIntent(PendingIntent.getActivity(MyApp.this, 0, new Intent(), 0));
+                NotificationManagerCompat managerCompat = NotificationManagerCompat.from(MyApp.this);
+                Notification notification = builder.build();
+                notification.defaults |= Notification.DEFAULT_SOUND;
+                managerCompat.notify(0, notification);
             }
         }, true);
     }

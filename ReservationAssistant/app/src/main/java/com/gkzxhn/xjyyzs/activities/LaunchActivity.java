@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import com.gkzxhn.xjyyzs.R;
 import com.gkzxhn.xjyyzs.base.BaseActivity;
-import com.gkzxhn.xjyyzs.requests.Constant;
+import com.gkzxhn.xjyyzs.service.LoginNimService;
 import com.gkzxhn.xjyyzs.utils.Log;
 import com.gkzxhn.xjyyzs.utils.SPUtil;
 import com.gkzxhn.xjyyzs.utils.SystemUtil;
@@ -49,6 +49,16 @@ public class LaunchActivity extends BaseActivity {
         // playLaunchAnimation
         playLaunchAnimation();
         UpdateUtil.getInstance(this).checkHasDownloadNewApk(); // 检查是否有下载好的新版本apk
+        if(!TextUtils.isEmpty((CharSequence) SPUtil.get(this, "userid", "")))
+            loginNim();// 登录云信
+    }
+
+    /**
+     * 登录云信
+     */
+    private void loginNim() {
+        Intent intent = new Intent(LaunchActivity.this, LoginNimService.class);
+        startService(intent);
     }
 
     /**

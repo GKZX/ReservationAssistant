@@ -40,7 +40,8 @@ public class LoginNimService extends IntentService {
     private void loginNim() {
         String cloudId = (String) SPUtil.get(this, "cloudId", "");
         String cloudToken = (String) SPUtil.get(this, "cloudToken", "");
-        LoginInfo info = new LoginInfo(cloudId, cloudToken);
+        LoginInfo info = new LoginInfo("aks001", "123456");
+        Log.i(info.getAccount() + "--" + info.getToken());
         RequestCallback callback = new RequestCallback() {
             @Override
             public void onSuccess(Object param) {
@@ -57,6 +58,8 @@ public class LoginNimService extends IntentService {
                 Log.e(TAG, "login nim exception, description : " + exception.getMessage());
             }
         };
-        NIMClient.getService(AuthService.class).login(info).setCallback(callback);
+//        if(!TextUtils.isEmpty(cloudId) && !TextUtils.isEmpty(cloudToken)) {
+            NIMClient.getService(AuthService.class).login(info).setCallback(callback);
+//        }
     }
 }

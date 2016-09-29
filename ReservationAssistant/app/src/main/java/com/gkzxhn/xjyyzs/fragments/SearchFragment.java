@@ -24,6 +24,7 @@ import com.gkzxhn.xjyyzs.utils.DateUtils;
 import com.gkzxhn.xjyyzs.utils.Log;
 import com.gkzxhn.xjyyzs.utils.StringUtils;
 import com.gkzxhn.xjyyzs.view.decoration.DividerItemDecoration;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -118,15 +119,15 @@ public class SearchFragment extends BaseFragment implements View.OnClickListener
                     showToastMsgShort("请选择查询状态");
                     return;
                 }
-                String date = DateUtils.formatDate("yyyy-MM-dd", System.currentTimeMillis());
+                String date = DateUtils.formatDate("yyyy/MM/dd", System.currentTimeMillis());
                 getSearchResult(date, date);
                 break;
             case R.id.bt_search_by_time:
                 String start_time = DateUtils.dateFormat(tv_start_date.getText().toString());
                 String end_time = DateUtils.dateFormat(tv_end_date.getText().toString());
                 long thirtyDays = 1000L * 60L * 60L * 24L * 30L;
-                long endMs = DateUtils.reFormatDate("yyyy-MM-dd", end_time);
-                long startMs = DateUtils.reFormatDate("yyyy-MM-dd", start_time);
+                long endMs = DateUtils.reFormatDate("yyyy/MM/dd", end_time);
+                long startMs = DateUtils.reFormatDate("yyyy/MM/dd", start_time);
                 if(endMs - startMs > thirtyDays){
                     showToastMsgLong("日期区间不能超过30天");
                     return;
@@ -156,6 +157,8 @@ public class SearchFragment extends BaseFragment implements View.OnClickListener
                     public void onNext(SearchResultBean result) {
                         if(result.getApplies().size() > 0){
                             processDate(result);// 矫正数据
+                            String ss = new Gson().toJson(result);
+                            Log.i(ss);
                         }else {
                             showGetFailed("没有数据");
                             tv_no_result.setVisibility(View.VISIBLE);
@@ -177,9 +180,9 @@ public class SearchFragment extends BaseFragment implements View.OnClickListener
         map.put("start", startTime);
         map.put("end", endTime);
         if(rb_refused.isChecked()){
-            map.put("isPassed", "DENIED");
+            map.put("isPass", "DENIED");
         }else {
-            map.put("isPassed", "PASSED");
+            map.put("isPass", "PASSED");
         }
         return map;
     }

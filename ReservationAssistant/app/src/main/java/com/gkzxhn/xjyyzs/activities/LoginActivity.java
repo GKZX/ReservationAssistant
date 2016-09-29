@@ -105,6 +105,14 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
     }
 
     /**
+     * 登录云信
+     */
+    private void loginNim() {
+        Intent intent = new Intent(LoginActivity.this, LoginNimService.class);
+        startService(intent);
+    }
+
+    /**
      * 获取请求实体
      * @return
      */
@@ -161,13 +169,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
         }, 1000);
     }
 
-    /**
-     * 登录云信
-     */
-    private void loginNim() {
-        Intent intent = new Intent(LoginActivity.this, LoginNimService.class);
-        startService(intent);
-    }
+
 
     /**
      * 下一步 进入主页
