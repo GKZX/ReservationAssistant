@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.gkzxhn.xjyyzs.R;
+import com.gkzxhn.xjyyzs.app.AppBus;
 import com.gkzxhn.xjyyzs.base.BaseActivity;
 import com.gkzxhn.xjyyzs.fragments.HomeFragment;
 import com.gkzxhn.xjyyzs.requests.Constant;
@@ -62,6 +64,12 @@ public class MainActivity extends BaseActivity {
         setTitleText("预约助手");
         initFragment();
         checkOnlineStatus();// 检查云信id在线状态
+        String type = getIntent().getStringExtra("type");
+        if(!TextUtils.isEmpty(type) && type.equals("notification")){
+            // 由通知栏点进来  切换到msgFragment 并且通过otto通知其加载数据库数据
+            homeFragment.switchFragment(2);
+//            AppBus.getInstance().post(new SystemMsg());
+        }
     }
 
     /**
@@ -156,7 +164,14 @@ public class MainActivity extends BaseActivity {
                 logout_dialog.dismiss();
             logout_dialog = null;
         }
+        AppBus.getInstance().unregister(this);
         super.onDestroy();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        AppBus.getInstance().register(this);
     }
 
     @Override

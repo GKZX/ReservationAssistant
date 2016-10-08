@@ -40,7 +40,9 @@ public class LoginNimService extends IntentService {
     private void loginNim() {
         String cloudId = (String) SPUtil.get(this, "cloudId", "");
         String cloudToken = (String) SPUtil.get(this, "cloudToken", "");
-        LoginInfo info = new LoginInfo("aks001", "123456");
+        LoginInfo info = new LoginInfo("aks003", "123456");
+        SPUtil.put(this, "cloudId", info.getAccount());
+        SPUtil.put(this, "cloudToken", info.getToken());
         Log.i(info.getAccount() + "--" + info.getToken());
         RequestCallback callback = new RequestCallback() {
             @Override

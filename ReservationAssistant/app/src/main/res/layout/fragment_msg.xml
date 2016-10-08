@@ -9,5 +9,13 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:src="@drawable/no_sys_msg"
+        android:visibility="gone"
         android:padding="100dp"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:overScrollMode="never"
+        android:padding="10dp" />
 </RelativeLayout>

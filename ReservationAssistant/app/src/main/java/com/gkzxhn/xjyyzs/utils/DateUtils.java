@@ -83,4 +83,30 @@ public class DateUtils {
         }
         return dates[0] + "-" + dates[1] + "-" + dates[2];
     }
+
+    /**
+     * 返回时间字符串 若超过24小时则带日期  不超过24小时只返回hh:mm
+     * @param ms
+     * @return
+     */
+    public static String getTimeString(long ms){
+        long current = System.currentTimeMillis();
+        long day = 1000L * 60L * 60L * 24L;
+        long twoDay = day * 2L;
+        long threeDay = day * 3L;
+        String format = format = "HH:mm";;
+        long timeDiff = current - ms;
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(format);
+        Date date = new Date(ms);
+        if(timeDiff < twoDay){
+            return "昨天 " + simpleDateFormat.format(date);
+        }else if(timeDiff < threeDay){
+            return "前天 " + simpleDateFormat.format(date);
+        }else {
+            format = "yyyy-MM-dd HH:mm";
+        }
+        simpleDateFormat = new SimpleDateFormat(format);
+        date = new Date(ms);
+        return simpleDateFormat.format(date);
+    }
 }

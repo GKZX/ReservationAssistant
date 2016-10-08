@@ -14,7 +14,10 @@ import android.text.TextUtils;
 import com.gkzxhn.xjyyzs.BuildConfig;
 import com.gkzxhn.xjyyzs.R;
 import com.gkzxhn.xjyyzs.activities.MainActivity;
+import com.gkzxhn.xjyyzs.entities.Message;
+import com.gkzxhn.xjyyzs.entities.events.SystemMsg;
 import com.gkzxhn.xjyyzs.utils.CrashHandler;
+import com.gkzxhn.xjyyzs.utils.DBUtils;
 import com.gkzxhn.xjyyzs.utils.DensityUtil;
 import com.gkzxhn.xjyyzs.utils.Log;
 import com.gkzxhn.xjyyzs.utils.SPUtil;
@@ -41,6 +44,7 @@ import com.netease.nimlib.sdk.uinfo.UserInfoProvider;
 public class MyApp extends Application {
 
     private static final String TAG = "MyApp";
+    private int NOTIFICATION_ID = 0;
 
     @Override
     public void onCreate() {
@@ -48,6 +52,7 @@ public class MyApp extends Application {
 
         setLogToggle();// 设置log开关
         initCrashCatch();// 初始化crash捕获
+        AppBus.getInstance().register(this);
 
         new Runnable(){
             @Override
@@ -91,15 +96,28 @@ public class MyApp extends Application {
                 Log.i(TAG, "custom notification SessionId : " + customNotification.getSessionId());//custom notification SessionId : 99999999
                 Log.i(TAG, "custom notification Time : " + customNotification.getTime());//custom notification Time : 1475118947077
                 Log.i(TAG, "custom notification SessionType : " + customNotification.getSessionType());//custom notification SessionType : P2P
+                Intent intent = new Intent(MyApp.this, MainActivity.class);
+                intent.putExtra("type", "notification");
                 NotificationCompat.Builder builder = new NotificationCompat.Builder(MyApp.this)
                         .setSmallIcon(R.mipmap.ic_launcher)
                         .setContentTitle("有新消息啦")
                         .setContentText(customNotification.getContent())
-                        .setContentIntent(PendingIntent.getActivity(MyApp.this, 0, new Intent(), 0));
+                        .setContentIntent(PendingIntent.getActivity(MyApp.this, 0, intent, 0));
                 NotificationManagerCompat managerCompat = NotificationManagerCompat.from(MyApp.this);
                 Notification notification = builder.build();
                 notification.defaults |= Notification.DEFAULT_SOUND;
-                managerCompat.notify(0, notification);
+                notification.flags |= Notification.FLAG_AUTO_CANCEL;
+                managerCompat.notify(NOTIFICATION_ID, notification);
+                NOTIFICATION_ID ++;
+                Message msg = new Message();
+                msg.setId(customNotification.getTime());
+                msg.setAccount((String) SPUtil.get(MyApp.this, "cloudId", ""));
+                msg.setFromaccount(customNotification.getFromAccount());
+                msg.setTime(customNotification.getTime());
+                msg.setContent(customNotification.getContent());
+                boolean isSuccess = DBUtils.getInstance(MyApp.this).insert(msg);
+                if (isSuccess)
+                    AppBus.getInstance().post(new SystemMsg());
             }
         }, true);
     }

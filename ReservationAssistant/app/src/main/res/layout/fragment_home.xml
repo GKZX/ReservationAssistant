@@ -24,9 +24,10 @@
         android:background="@color/et_hint"
         android:layout_below="@id/tl_home_opt"/>
 
-    <android.support.v4.view.ViewPager
+    <com.gkzxhn.xjyyzs.view.NoScrollerViewPager
         android:id="@+id/vp_home_opt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:isScrollContainer="true"
         android:layout_below="@id/view"/>
 </RelativeLayout>

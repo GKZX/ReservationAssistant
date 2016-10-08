@@ -16,21 +16,21 @@ public class Apply {
      * applyDate : 2016-08-08
      */
 
-    private ApplyBean apply;
+    private ApplyBean application;
 
     public ApplyBean getApply() {
-        return apply;
+        return application;
     }
 
     public void setApply(ApplyBean apply) {
-        this.apply = apply;
+        this.application = apply;
     }
 
     public class ApplyBean {
         private String orgCode;
         private String uuid;
         private String phone;
-        private String applyDate;
+        private String fillingDate;
 
         public String getPhone() {
             return phone;
@@ -57,11 +57,11 @@ public class Apply {
         }
 
         public String getApplyDate() {
-            return applyDate;
+            return fillingDate;
         }
 
         public void setApplyDate(String applyDate) {
-            this.applyDate = applyDate;
+            this.fillingDate = applyDate;
         }
 
         @Override
@@ -69,7 +69,7 @@ public class Apply {
             return "ApplyBean{" +
                     "orgCode='" + orgCode + '\'' +
                     ", uuid='" + uuid + '\'' +
-                    ", applyDate='" + applyDate + '\'' +
+                    ", applyDate='" + fillingDate + '\'' +
                     '}';
         }
     }
@@ -77,7 +77,7 @@ public class Apply {
     @Override
     public String toString() {
         return "Apply{" +
-                "apply=" + apply.toString() +
+                "apply=" + application.toString() +
                 '}';
     }
 }

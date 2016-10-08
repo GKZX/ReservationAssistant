@@ -1,13 +1,12 @@
 package com.gkzxhn.xjyyzs.fragments;
 
 import android.support.design.widget.TabLayout;
-import android.support.v4.view.ViewPager;
 import android.view.View;
-
 
 import com.gkzxhn.xjyyzs.R;
 import com.gkzxhn.xjyyzs.adapter.HomeOptAdapter;
 import com.gkzxhn.xjyyzs.base.BaseFragment;
+import com.gkzxhn.xjyyzs.view.NoScrollerViewPager;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -21,11 +20,13 @@ import butterknife.ButterKnife;
 public class HomeFragment extends BaseFragment {
 
     @BindView(R.id.tl_home_opt) TabLayout tl_home_opt;
-    @BindView(R.id.vp_home_opt) ViewPager vp_home_opt;
+    @BindView(R.id.vp_home_opt) NoScrollerViewPager vp_home_opt;
 
     private SearchFragment searchFragment;
     private BookFragment bookFragment;
     private MsgFragment msgFragment;
+
+    private HomeOptAdapter adapter;
 
     @Override
     protected View initView() {
@@ -37,6 +38,7 @@ public class HomeFragment extends BaseFragment {
     @Override
     protected void initData() {
         initViewPager();
+        vp_home_opt.setScroller(false);
         tl_home_opt.setupWithViewPager(vp_home_opt);
         tl_home_opt.setTabMode(TabLayout.MODE_FIXED);
         tl_home_opt.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -54,16 +56,30 @@ public class HomeFragment extends BaseFragment {
     }
 
     /**
+     * 切换fragment
+     * @param position index
+     */
+    public void switchFragment(int position){
+//        if(vp_home_opt == null)
+//            initViewPager();
+//        vp_home_opt.setCurrentItem(position);
+    }
+
+    /**
      * 初始化viewpager
      */
     private void initViewPager() {
-        HomeOptAdapter adapter = new HomeOptAdapter(getActivity().getSupportFragmentManager());
-        searchFragment = new SearchFragment();
-        bookFragment = new BookFragment();
-        msgFragment = new MsgFragment();
-        adapter.addFragment(bookFragment, "预约");
-        adapter.addFragment(searchFragment, "查询");
-        adapter.addFragment(msgFragment, "消息");
-        vp_home_opt.setAdapter(adapter);
+        if(adapter == null) {
+            adapter = new HomeOptAdapter(getActivity().getSupportFragmentManager());
+            searchFragment = new SearchFragment();
+            bookFragment = new BookFragment();
+            msgFragment = new MsgFragment();
+            adapter.addFragment(bookFragment, "预约");
+            adapter.addFragment(searchFragment, "查询");
+            adapter.addFragment(msgFragment, "消息");
+            vp_home_opt.setAdapter(adapter);
+        }else {
+            adapter.notifyDataSetChanged();
+        }
     }
 }

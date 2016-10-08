@@ -10,6 +10,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.gkzxhn.xjyyzs.R;
+import com.gkzxhn.xjyyzs.app.AppManager;
 import com.gkzxhn.xjyyzs.utils.ToastUtil;
 
 
@@ -31,6 +32,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        AppManager.getInstance().addActivity(this);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         setContentView(R.layout.root_view);
         ly_title_bar = findViewById(R.id.ly_title_bar);
@@ -45,6 +47,12 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
         rl_content.addView(view);
         initData();// 初始化数据操作
+    }
+
+    @Override
+    protected void onDestroy() {
+        AppManager.getInstance().finishActivity(this);
+        super.onDestroy();
     }
 
     /**
