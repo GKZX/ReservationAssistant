@@ -1,11 +1,14 @@
 package com.gkzxhn.xjyyzs.fragments;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.support.annotation.NonNull;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -101,8 +104,8 @@ public class SearchFragment extends BaseFragment implements View.OnClickListener
      * 设置时间段查询的两个日期文本
      */
     private void setDateText() {
-        tv_start_date.setText(DateUtils.formatDate("yyyy/MM/dd", System.currentTimeMillis()));
-        tv_end_date.setText(DateUtils.formatDate("yyyy/MM/dd", System.currentTimeMillis() + 1000L * 60L * 60L * 24L * 7));
+        tv_start_date.setText(DateUtils.formatDate("yyyy-MM-dd", System.currentTimeMillis()));
+        tv_end_date.setText(DateUtils.formatDate("yyyy-MM-dd", System.currentTimeMillis() + 1000L * 60L * 60L * 24L * 7));
     }
 
     @Override
@@ -119,20 +122,28 @@ public class SearchFragment extends BaseFragment implements View.OnClickListener
                     showToastMsgShort("请选择查询状态");
                     return;
                 }
-                String date = DateUtils.formatDate("yyyy/MM/dd", System.currentTimeMillis());
-                getSearchResult(date, date);
+                String start_time1 = DateUtils.dateFormat(tv_start_date.getText().toString());
+                String end_time1 = DateUtils.dateFormat(tv_end_date.getText().toString());
+                long thirtyDays1 = 1000L * 60L * 60L * 24L * 30L;
+                long endMs1 = DateUtils.reFormatDate("yyyy-MM-dd", end_time1);
+                long startMs1 = DateUtils.reFormatDate("yyyy-MM-dd", start_time1);
+                if(endMs1 - startMs1 > thirtyDays1){
+                    showToastMsgLong("日期区间不能超过30天");
+                    return;
+                }
+                getSearchResult(0, start_time1, end_time1);
                 break;
             case R.id.bt_search_by_time:
                 String start_time = DateUtils.dateFormat(tv_start_date.getText().toString());
                 String end_time = DateUtils.dateFormat(tv_end_date.getText().toString());
                 long thirtyDays = 1000L * 60L * 60L * 24L * 30L;
-                long endMs = DateUtils.reFormatDate("yyyy/MM/dd", end_time);
-                long startMs = DateUtils.reFormatDate("yyyy/MM/dd", start_time);
+                long endMs = DateUtils.reFormatDate("yyyy-MM-dd", end_time);
+                long startMs = DateUtils.reFormatDate("yyyy-MM-dd", start_time);
                 if(endMs - startMs > thirtyDays){
                     showToastMsgLong("日期区间不能超过30天");
                     return;
                 }
-                getSearchResult(start_time, end_time);// 获取搜索结果
+                getSearchResult(1, start_time, end_time);// 获取搜索结果
                 break;
         }
     }
@@ -142,9 +153,9 @@ public class SearchFragment extends BaseFragment implements View.OnClickListener
      * @param start_time
      * @param end_time
      */
-    private void getSearchResult(String start_time, String end_time) {
+    private void getSearchResult(int type, String start_time, String end_time) {
         initShowProgressDialog();
-        RequestMethods.getSearchResult(getActivity(), getRequestParameters(start_time, end_time),
+        RequestMethods.getSearchResult(getActivity(), getRequestParameters(type, start_time, end_time),
                 new Subscriber<SearchResultBean>() {
                     @Override public void onCompleted() {}
 
@@ -161,6 +172,7 @@ public class SearchFragment extends BaseFragment implements View.OnClickListener
                             Log.i(ss);
                         }else {
                             showGetFailed("没有数据");
+                            Log.i(result.toString());
                             tv_no_result.setVisibility(View.VISIBLE);
                             recycler_view.setVisibility(View.GONE);
                         }
@@ -174,13 +186,17 @@ public class SearchFragment extends BaseFragment implements View.OnClickListener
      * @param endTime
      * @return
      */
-    private Map<String, String> getRequestParameters(
+    private Map<String, String> getRequestParameters(int type,
             String startTime, String endTime) {
         Map<String, String> map = new HashMap<>();
         map.put("start", startTime);
         map.put("end", endTime);
-        if(rb_refused.isChecked()){
-            map.put("isPass", "DENIED");
+        if(type == 0) {
+            if (rb_refused.isChecked()) {
+                map.put("isPass", "DENIED");
+            } else {
+                map.put("isPass", "PASSED");
+            }
         }else {
             map.put("isPass", "PASSED");
         }
@@ -313,7 +329,7 @@ public class SearchFragment extends BaseFragment implements View.OnClickListener
             Log.i(TAG, "go to get data");
             initShowProgressDialog();
             String date = DateUtils.formatDate("yyyy-MM-dd", System.currentTimeMillis());
-            getSearchResult(date, date);
+            getSearchResult(1, date, date);
         }
     }
 
@@ -338,6 +354,7 @@ public class SearchFragment extends BaseFragment implements View.OnClickListener
         if(srl_refresh.isRefreshing()){
             srl_refresh.setRefreshing(false);
             showToastMsgShort("刷新成功");
+
         }
     }
 
