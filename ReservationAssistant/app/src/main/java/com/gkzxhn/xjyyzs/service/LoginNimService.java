@@ -2,6 +2,7 @@ package com.gkzxhn.xjyyzs.service;
 
 import android.app.IntentService;
 import android.content.Intent;
+import android.text.TextUtils;
 
 import com.gkzxhn.xjyyzs.utils.Log;
 import com.gkzxhn.xjyyzs.utils.SPUtil;
@@ -40,9 +41,7 @@ public class LoginNimService extends IntentService {
     private void loginNim() {
         String cloudId = (String) SPUtil.get(this, "cloudId", "");
         String cloudToken = (String) SPUtil.get(this, "cloudToken", "");
-        LoginInfo info = new LoginInfo("aks003", "123456");
-        SPUtil.put(this, "cloudId", info.getAccount());
-        SPUtil.put(this, "cloudToken", info.getToken());
+        LoginInfo info = new LoginInfo(cloudId, TextUtils.isEmpty(cloudToken) ? "123456" : cloudToken);
         Log.i(info.getAccount() + "--" + info.getToken());
         RequestCallback callback = new RequestCallback() {
             @Override
@@ -60,8 +59,8 @@ public class LoginNimService extends IntentService {
                 Log.e(TAG, "login nim exception, description : " + exception.getMessage());
             }
         };
-//        if(!TextUtils.isEmpty(cloudId) && !TextUtils.isEmpty(cloudToken)) {
+        if(!TextUtils.isEmpty(cloudId) && !TextUtils.isEmpty(cloudToken)) {
             NIMClient.getService(AuthService.class).login(info).setCallback(callback);
-//        }
+        }
     }
 }

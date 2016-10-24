@@ -1,6 +1,8 @@
 package com.gkzxhn.xjyyzs.fragments;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -11,6 +13,8 @@ import com.gkzxhn.xjyyzs.adapter.MsgAdapter;
 import com.gkzxhn.xjyyzs.app.AppBus;
 import com.gkzxhn.xjyyzs.base.BaseFragment;
 import com.gkzxhn.xjyyzs.entities.Message;
+import com.gkzxhn.xjyyzs.entities.events.ClearMsg;
+import com.gkzxhn.xjyyzs.entities.events.ClearMsgResult;
 import com.gkzxhn.xjyyzs.entities.events.SystemMsg;
 import com.gkzxhn.xjyyzs.utils.DBUtils;
 import com.gkzxhn.xjyyzs.utils.Log;
@@ -46,7 +50,43 @@ public class MsgFragment extends BaseFragment {
 
     @Override
     protected void initData() {
+        recycler_view.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                clearMsg();
+                return true;
+            }
+        });
+    }
 
+    /**
+     * 清除全部消息
+     */
+    private void clearMsg() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("提示");
+        builder.setMessage("确定清除全部消息吗？");
+        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                boolean isSuccess = DBUtils.getInstance(context).deleteAll();
+                if(isSuccess){
+                    messageList.clear();
+                    recycler_view.setVisibility(View.GONE);
+                    iv_no_msg.setVisibility(View.VISIBLE);
+                    showToastMsgShort("清除成功");
+                }else {
+                    showToastMsgShort("清除失败，请稍后再试！");
+                }
+                dialog.dismiss();
+            }
+        }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builder.create().show();
     }
 
     @Override
@@ -75,7 +115,10 @@ public class MsgFragment extends BaseFragment {
      */
     @Subscribe
     public void onLoadData(SystemMsg msg){
-        ProgressDialog dialog = UIUtil.showProgressDialog(getActivity(), "", "加载中", false);
+        ProgressDialog dialog = null;
+        if(isVisible()) {
+            dialog = UIUtil.showProgressDialog(getActivity(), "", "加载中", false);
+        }
         messageList = DBUtils.getInstance(getActivity()).query();
         Log.d("query msg result list size : " + messageList.size());
         if(messageList.size() == 0){
@@ -88,6 +131,19 @@ public class MsgFragment extends BaseFragment {
             msgAdapter = new MsgAdapter(getActivity(), messageList);
             recycler_view.setAdapter(msgAdapter);
         }
-        dialog.dismiss();
+        if(isVisible() && dialog != null) {
+            dialog.dismiss();
+        }
+    }
+
+    /**
+     * 清除全部系统消息
+     * @param msg
+     */
+    @Subscribe
+    public void clearMsg(ClearMsg msg){
+        boolean isSuccess = DBUtils.getInstance(context).deleteAll();
+        AppBus.getInstance().post(new ClearMsgResult(isSuccess));
+        onLoadData(null);
     }
 }

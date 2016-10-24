@@ -13,6 +13,11 @@
         app:showAsAction="never"/>
 
     <item
+        android:id="@+id/clear_msg"
+        android:title="清空系统消息"
+        app:showAsAction="never"/>
+
+    <item
         android:id="@+id/update"
         android:title="检查更新"
         app:showAsAction="never"/>
