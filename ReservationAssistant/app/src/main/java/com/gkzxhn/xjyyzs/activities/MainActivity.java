@@ -17,6 +17,8 @@ import android.widget.Toast;
 import com.gkzxhn.xjyyzs.R;
 import com.gkzxhn.xjyyzs.app.AppBus;
 import com.gkzxhn.xjyyzs.base.BaseActivity;
+import com.gkzxhn.xjyyzs.entities.events.ClearMsg;
+import com.gkzxhn.xjyyzs.entities.events.ClearMsgResult;
 import com.gkzxhn.xjyyzs.fragments.HomeFragment;
 import com.gkzxhn.xjyyzs.requests.Constant;
 import com.gkzxhn.xjyyzs.requests.bean.UpdateInfo;
@@ -28,6 +30,7 @@ import com.gkzxhn.xjyyzs.utils.UpdateUtil;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.StatusCode;
 import com.netease.nimlib.sdk.auth.AuthService;
+import com.squareup.otto.Subscribe;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -203,8 +206,39 @@ public class MainActivity extends BaseActivity {
             }else {
                 showToastShortMsg("网络不可用");
             }
+        }else if(id == R.id.clear_msg){
+            clearMsg();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * 清除消息
+     */
+    private void clearMsg() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("确定清除所有系统消息吗？");
+        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                AppBus.getInstance().post(new ClearMsg());
+            }
+        }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builder.create().show();
+    }
+
+    @Subscribe
+    public void clearMsgReuslt(ClearMsgResult result){
+        if (result.isSuccess()){
+            showToastShortMsg("已清空");
+        }else {
+            showToastShortMsg("清除失败，请稍后再试！");
+        }
     }
 
     /**

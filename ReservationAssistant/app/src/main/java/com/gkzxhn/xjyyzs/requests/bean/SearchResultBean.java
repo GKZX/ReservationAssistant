@@ -75,14 +75,14 @@ public class SearchResultBean {
 
     public static class AppliesBean {
         private String name;
-        private String uuid;
+        private String applicant;
         /**
          * _id : 57c55689a51fb41400d4e454
          * applyDate : 2016-09-06
          * feedback : {"content":"预约会见成功","from":"M","isPass":"PASSED","meetingTime":"10:00","prison":"第三监狱","sfs":"s0997003"}
          */
 
-        private List<ApplyBean> application;
+        private List<ApplyBean> history;
         private String phone;
 
         public String getPhone() {
@@ -94,11 +94,11 @@ public class SearchResultBean {
         }
 
         public List<ApplyBean> getApplication() {
-            return application;
+            return history;
         }
 
         public void setApplication(List<ApplyBean> application) {
-            this.application = application;
+            this.history = application;
         }
 
         public String getName() {
@@ -110,16 +110,16 @@ public class SearchResultBean {
         }
 
         public String getUuid() {
-            return uuid;
+            return applicant;
         }
 
         public void setUuid(String uuid) {
-            this.uuid = uuid;
+            this.applicant = uuid;
         }
 
         public static class ApplyBean {
             private String _id;
-            private String applyDate;
+            private String fillingDate;
             /**
              * content : 预约会见成功
              * from : M
@@ -140,11 +140,11 @@ public class SearchResultBean {
             }
 
             public String getApplyDate() {
-                return applyDate;
+                return fillingDate;
             }
 
             public void setApplyDate(String applyDate) {
-                this.applyDate = applyDate;
+                this.fillingDate = applyDate;
             }
 
             public FeedbackBean getFeedback() {
@@ -236,7 +236,7 @@ public class SearchResultBean {
             public String toString() {
                 return "ApplyBean{" +
                         "_id='" + _id + '\'' +
-                        ", applyDate='" + applyDate + '\'' +
+                        ", applyDate='" + fillingDate + '\'' +
                         ", feedback=" + feedback.toString() +
                         '}';
             }
@@ -246,10 +246,17 @@ public class SearchResultBean {
         public String toString() {
             return "AppliesBean{" +
                     "name='" + name + '\'' +
-                    ", uuid='" + uuid + '\'' +
-                    ", application.size()=" + application.size() +
+                    ", uuid='" + applicant + '\'' +
+                    ", application.size()=" + history.size() +
                     ", phone='" + phone + '\'' +
                     '}';
         }
+    }
+
+    @Override
+    public String toString() {
+        return "SearchResultBean{" +
+                "applies=" + applies.size() +
+                '}';
     }
 }

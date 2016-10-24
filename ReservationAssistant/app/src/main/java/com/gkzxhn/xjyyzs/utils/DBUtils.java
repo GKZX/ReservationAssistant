@@ -101,4 +101,16 @@ public class DBUtils {
         }
         return false;
     }
+
+    /**
+     * 删除全部
+     * @return
+     */
+    public boolean deleteAll(){
+        if(msgDao != null) {
+            msgDao.deleteAll();
+            return true;
+        }
+        return false;
+    }
 }
