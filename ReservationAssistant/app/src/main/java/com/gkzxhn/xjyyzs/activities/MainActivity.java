@@ -5,7 +5,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -19,6 +18,7 @@ import com.gkzxhn.xjyyzs.app.AppBus;
 import com.gkzxhn.xjyyzs.base.BaseActivity;
 import com.gkzxhn.xjyyzs.entities.events.ClearMsg;
 import com.gkzxhn.xjyyzs.entities.events.ClearMsgResult;
+import com.gkzxhn.xjyyzs.entities.events.KickoutEvent;
 import com.gkzxhn.xjyyzs.fragments.HomeFragment;
 import com.gkzxhn.xjyyzs.requests.Constant;
 import com.gkzxhn.xjyyzs.requests.bean.UpdateInfo;
@@ -68,12 +68,6 @@ public class MainActivity extends BaseActivity {
         setTitleText("预约助手");
         initFragment();
         checkOnlineStatus();// 检查云信id在线状态
-        String type = getIntent().getStringExtra("type");
-        if(!TextUtils.isEmpty(type) && type.equals("notification")){
-            // 由通知栏点进来  切换到msgFragment 并且通过otto通知其加载数据库数据
-            homeFragment.switchFragment(2);
-//            AppBus.getInstance().post(new SystemMsg());
-        }
     }
 
     /**
@@ -121,7 +115,7 @@ public class MainActivity extends BaseActivity {
     /**
      * 显示重新登录的提示框
      */
-    private void showReLoginDialog() {
+    public void showReLoginDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("账号下线提示");
         builder.setCancelable(false);
@@ -234,6 +228,11 @@ public class MainActivity extends BaseActivity {
         }else {
             showToastShortMsg("清除失败，请稍后再试！");
         }
+    }
+
+    @Subscribe
+    public void kickout(KickoutEvent event){
+        showReLoginDialog();
     }
 
     /**

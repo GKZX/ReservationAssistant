@@ -66,7 +66,7 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
 //                ToastUtil.showShortToast(context, "别点啦...");
             }
         });
-        setItemAnim(holder.card_view, position);
+//        setItemAnim(holder.card_view, position);
     }
 
     /**

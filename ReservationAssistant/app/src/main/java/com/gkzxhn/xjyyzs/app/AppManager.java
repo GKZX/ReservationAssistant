@@ -45,6 +45,9 @@ public class AppManager {
     public Activity getCurrentActivity(){
         if (activityStack == null)
             return null;
+        if (activityStack.empty()){
+            return null;
+        }
         return activityStack.lastElement();
     }
 

@@ -7,10 +7,10 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.gkzxhn.xjyyzs.R;
@@ -46,14 +46,19 @@ import rx.Subscriber;
 public class SearchFragment extends BaseFragment implements View.OnClickListener, OnSearchResultCallBack {
 
     private static final String TAG = "SearchFragment";
+    private static final String[] STATUS = {"已通过", "未通过"};
     @BindView(R.id.srl_refresh) SwipeRefreshLayout srl_refresh;
-    @BindView(R.id.rg_status) RadioGroup rg_status;
-    @BindView(R.id.rb_passed) RadioButton rb_passed;
-    @BindView(R.id.rb_refused) RadioButton rb_refused;
-    @BindView(R.id.bt_search_by_status) Button bt_search_by_status;
+//    @BindView(R.id.rg_status) RadioGroup rg_status;
+//    @BindView(R.id.rb_passed) RadioButton rb_passed;
+//    @BindView(R.id.rb_refused) RadioButton rb_refused;
+//    @BindView(R.id.bt_search_by_status) Button bt_search_by_status;
+//    @BindView(R.id.tv_start_date) TextView tv_start_date;
+//    @BindView(R.id.tv_end_date) TextView tv_end_date;
+//    @BindView(R.id.bt_search_by_time) Button bt_search_by_time;
+    @BindView(R.id.sp_status) Spinner sp_status;
     @BindView(R.id.tv_start_date) TextView tv_start_date;
     @BindView(R.id.tv_end_date) TextView tv_end_date;
-    @BindView(R.id.bt_search_by_time) Button bt_search_by_time;
+    @BindView(R.id.bt_search) Button bt_search;
     @BindView(R.id.recycler_view) RecyclerView recycler_view;
     @BindView(R.id.tv_no_result) TextView tv_no_result;// 没有结果
 
@@ -75,14 +80,15 @@ public class SearchFragment extends BaseFragment implements View.OnClickListener
         srl_refresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                getData(1);// 下拉刷新默认获取当日数据
+//                getData(1);// 下拉刷新默认获取当日数据
+                search();
             }
         });
+        sp_status.setAdapter(new ArrayAdapter<>(getActivity(), R.layout.spinner_item, STATUS));
         setDateText();// 设置两个日期文本
         tv_start_date.setOnClickListener(this);
         tv_end_date.setOnClickListener(this);
-        bt_search_by_status.setOnClickListener(this);
-        bt_search_by_time.setOnClickListener(this);
+        bt_search.setOnClickListener(this);
         recycler_view.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         recycler_view.addItemDecoration(new DividerItemDecoration(getActivity(),
                 DividerItemDecoration.VERTICAL_LIST));
@@ -114,35 +120,26 @@ public class SearchFragment extends BaseFragment implements View.OnClickListener
             case R.id.tv_end_date:
                 showDatePicker(tv_end_date);
                 break;
-            case R.id.bt_search_by_status:
-                if (!rb_passed.isChecked() && !rb_refused.isChecked()){
-                    showToastMsgShort("请选择查询状态");
-                    return;
-                }
-                String start_time1 = DateUtils.dateFormat(tv_start_date.getText().toString());
-                String end_time1 = DateUtils.dateFormat(tv_end_date.getText().toString());
-                long thirtyDays1 = 1000L * 60L * 60L * 24L * 30L;
-                long endMs1 = DateUtils.reFormatDate("yyyy-MM-dd", end_time1);
-                long startMs1 = DateUtils.reFormatDate("yyyy-MM-dd", start_time1);
-                if(endMs1 - startMs1 > thirtyDays1){
-                    showToastMsgLong("日期区间不能超过30天");
-                    return;
-                }
-                getSearchResult(0, start_time1, end_time1);
-                break;
-            case R.id.bt_search_by_time:
-                String start_time = DateUtils.dateFormat(tv_start_date.getText().toString());
-                String end_time = DateUtils.dateFormat(tv_end_date.getText().toString());
-                long thirtyDays = 1000L * 60L * 60L * 24L * 30L;
-                long endMs = DateUtils.reFormatDate("yyyy-MM-dd", end_time);
-                long startMs = DateUtils.reFormatDate("yyyy-MM-dd", start_time);
-                if(endMs - startMs > thirtyDays){
-                    showToastMsgLong("日期区间不能超过30天");
-                    return;
-                }
-                getSearchResult(1, start_time, end_time);// 获取搜索结果
+            case R.id.bt_search:
+                search();// 查询
                 break;
         }
+    }
+
+    /**
+     * 查询
+     */
+    private void search() {
+        String start_time1 = DateUtils.dateFormat(tv_start_date.getText().toString());
+        String end_time1 = DateUtils.dateFormat(tv_end_date.getText().toString());
+        long thirtyDays1 = 1000L * 60L * 60L * 24L * 30L;
+        long endMs1 = DateUtils.reFormatDate("yyyy-MM-dd", end_time1);
+        long startMs1 = DateUtils.reFormatDate("yyyy-MM-dd", start_time1);
+        if(endMs1 - startMs1 > thirtyDays1){
+            showToastMsgLong("日期区间不能超过30天");
+            return;
+        }
+        getSearchResult(0, start_time1, end_time1);
     }
 
     /**
@@ -189,9 +186,11 @@ public class SearchFragment extends BaseFragment implements View.OnClickListener
         map.put("start", startTime);
         map.put("end", endTime);
         if(type == 0) {
-            if (rb_refused.isChecked()) {
+            if (sp_status.getSelectedItemPosition() == 1) {
                 map.put("isPass", "DENIED");
-            } else {
+            } else if (sp_status.getSelectedItemPosition() == 0){
+                map.put("isPass", "PASSED");
+            }else {
                 map.put("isPass", "PASSED");
             }
         }else {

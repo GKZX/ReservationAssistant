@@ -56,16 +56,6 @@ public class HomeFragment extends BaseFragment {
     }
 
     /**
-     * 切换fragment
-     * @param position index
-     */
-    public void switchFragment(int position){
-//        if(vp_home_opt == null)
-//            initViewPager();
-//        vp_home_opt.setCurrentItem(position);
-    }
-
-    /**
      * 初始化viewpager
      */
     private void initViewPager() {

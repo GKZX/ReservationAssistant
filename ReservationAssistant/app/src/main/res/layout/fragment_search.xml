@@ -9,128 +9,51 @@
         android:layout_height="match_parent">
 
         <LinearLayout
-            android:id="@+id/ll_search_by_status"
+            android:id="@+id/ll_search_condition"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/search_item_height"
-            android:gravity="center_vertical"
-            android:paddingLeft="@dimen/search_padding"
-            android:paddingRight="@dimen/search_padding"
-            android:layout_marginTop="10dp"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="按状态:"
-                android:textColor="@color/tv_bg"
-                android:textSize="@dimen/search_main_text_size"/>
-
-            <RadioGroup
-                android:id="@+id/rg_status"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <RadioButton
-                    android:id="@+id/rb_passed"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="已通过"
-                    android:textColor="@color/tv_green"
-                    android:textSize="@dimen/search_small_text"/>
-
-                <RadioButton
-                    android:id="@+id/rb_refused"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="未通过"
-                    android:textColor="@color/tv_mid"
-                    android:textSize="@dimen/search_small_text"
-                    android:checked="false"
-                    android:layout_marginLeft="10dp"/>
-            </RadioGroup>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <Button
-                    android:id="@+id/bt_search_by_status"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="查询"
-                    android:background="@drawable/theme_bg_bt_selector"
-                    android:textSize="@dimen/search_small_text"
-                    android:textColor="@color/white"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentEnd="true" />
-            </RelativeLayout>
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/ll_search_by_time"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/search_item_height"
-            android:gravity="center_vertical"
-            android:paddingLeft="@dimen/search_padding"
-            android:paddingRight="@dimen/search_padding"
-            android:layout_marginTop="10dp"
+            android:layout_height="50dp"
             android:orientation="horizontal"
-            android:layout_below="@+id/ll_search_by_status">
+            android:divider="@drawable/item_decoration"
+            android:showDividers="middle"
+            android:gravity="center_vertical"
+            android:layout_marginTop="5dp">
 
-            <TextView
-                android:layout_width="wrap_content"
+            <Spinner
+                android:id="@+id/sp_status"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="按时间:"
-                android:textColor="@color/tv_bg"
-                android:textSize="@dimen/search_main_text_size"
-                android:id="@+id/textView2" />
+                android:layout_weight="1.5" />
 
             <TextView
                 android:id="@+id/tv_start_date"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="xxxx/x/xx"
-                android:textColor="@color/theme"
-                android:textSize="@dimen/search_small_text"
-                android:padding="2dp"
-                android:background="@drawable/tv_bg"
-                android:layout_marginLeft="5dp"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=" -- "
-                android:textColor="@color/tv_bg"
-                android:textSize="22sp"/>
+                android:layout_weight="1.5"
+                android:text="开始日期"
+                android:textColor="@color/tv_mid"
+                android:textSize="14sp"
+                android:gravity="center"/>
 
             <TextView
                 android:id="@+id/tv_end_date"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="xxxx/x/xx"
-                android:textColor="@color/theme"
-                android:textSize="@dimen/search_small_text"
-                android:padding="2dp"
-                android:background="@drawable/tv_bg"
-                android:layout_marginLeft="5dp"/>
+                android:layout_weight="1.5"
+                android:text="结束日期"
+                android:textColor="@color/tv_mid"
+                android:textSize="14sp"
+                android:gravity="center"/>
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+            <Button
+                android:id="@+id/bt_search"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.0"
+                android:background="@drawable/theme_bg_bt_selector"
+                android:layout_margin="10dp"
+                android:text="查询"
+                android:textColor="@color/white"/>
 
-                <Button
-                    android:id="@+id/bt_search_by_time"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="查询"
-                    android:background="@drawable/theme_bg_bt_selector"
-                    android:textSize="@dimen/search_small_text"
-                    android:textColor="@color/white"
-                    android:layout_marginLeft="@dimen/search_padding"
-                    android:layout_alignParentRight="true"/>
-            </RelativeLayout>
         </LinearLayout>
 
         <View
@@ -138,7 +61,7 @@
             android:layout_width="match_parent"
             android:layout_height="1px"
             android:background="@color/et_hint"
-            android:layout_below="@+id/ll_search_by_time"
+            android:layout_below="@+id/ll_search_condition"
             android:layout_marginTop="5dp"/>
 
         <android.support.v7.widget.RecyclerView

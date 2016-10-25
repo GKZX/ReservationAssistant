@@ -1,5 +1,6 @@
 package com.gkzxhn.xjyyzs.app;
 
+import android.app.Activity;
 import android.app.Application;
 import android.app.Notification;
 import android.app.PendingIntent;
@@ -15,6 +16,7 @@ import com.gkzxhn.xjyyzs.BuildConfig;
 import com.gkzxhn.xjyyzs.R;
 import com.gkzxhn.xjyyzs.activities.MainActivity;
 import com.gkzxhn.xjyyzs.entities.Message;
+import com.gkzxhn.xjyyzs.entities.events.KickoutEvent;
 import com.gkzxhn.xjyyzs.entities.events.SystemMsg;
 import com.gkzxhn.xjyyzs.utils.CrashHandler;
 import com.gkzxhn.xjyyzs.utils.DBUtils;
@@ -131,11 +133,16 @@ public class MyApp extends Application {
             public void onEvent(StatusCode statusCode) {
                 Log.i(TAG, "User status changed to: " + statusCode);
                 if (statusCode.wontAutoLogin()) {
+                    Log.i(TAG, "User status changed to: " + statusCode);
                     // 被踢出、账号被禁用、密码错误等情况，自动登录失败，需要返回到登录界面进行重新登录操作
-                    SPUtil.put(getApplicationContext(), "relogin", "true");
-                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(intent);
+                    Activity activity = AppManager.getInstance().getCurrentActivity();
+                    if(activity != null && activity instanceof MainActivity){
+                        AppBus.getInstance().post(new KickoutEvent());
+                    }else {
+                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
+                    }
                 }
             }
         }, true);
