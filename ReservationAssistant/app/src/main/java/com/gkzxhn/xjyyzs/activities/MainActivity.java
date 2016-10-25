@@ -58,6 +58,7 @@ public class MainActivity extends BaseActivity {
     public View initView() {
         View view = View.inflate(this, R.layout.activity_main, null);
         ButterKnife.bind(this, view);
+        AppBus.getInstance().register(this);
         return view;
     }
 
@@ -169,12 +170,6 @@ public class MainActivity extends BaseActivity {
         }
         AppBus.getInstance().unregister(this);
         super.onDestroy();
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        AppBus.getInstance().register(this);
     }
 
     @Override

@@ -87,14 +87,6 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     /**
-     * 设置注销是否可见
-     * @param visibility
-     */
-//    public void setLogoutVisibility(int visibility){
-//        bt_logout.setVisibility(visibility);
-//    }
-
-    /**
      * 显示返回按钮
      */
     protected void setBackVisibility(){

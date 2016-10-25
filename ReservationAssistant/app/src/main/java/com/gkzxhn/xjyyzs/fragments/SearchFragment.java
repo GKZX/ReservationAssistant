@@ -1,14 +1,11 @@
 package com.gkzxhn.xjyyzs.fragments;
 
-import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.support.annotation.NonNull;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -325,7 +322,7 @@ public class SearchFragment extends BaseFragment implements View.OnClickListener
 
     @Override
     public void getData(int type) {// type 0 是tabLayout选中当前页 1 是下拉刷新
-        if(recycler_view.getAdapter() == null || type == 1) {
+        if((recycler_view != null && recycler_view.getAdapter() == null) || type == 1) {
             Log.i(TAG, "go to get data");
             initShowProgressDialog();
             String date = DateUtils.formatDate("yyyy-MM-dd", System.currentTimeMillis());
