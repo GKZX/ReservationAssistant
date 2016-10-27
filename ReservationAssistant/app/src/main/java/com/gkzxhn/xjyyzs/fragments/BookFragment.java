@@ -39,7 +39,8 @@ import rx.Subscriber;
  */
 public class BookFragment extends BaseFragment {
 
-    private static final String[] DATE_LIST = DateUtils.afterNDay(30).toArray(new String[DateUtils.afterNDay(30).size()]);// 时间选择;
+    private static final String[] DATE_LIST = DateUtils.afterNDay(30).
+            toArray(new String[DateUtils.afterNDay(30).size()]);// 时间选择;
     private static final String TAG = "BookFragment";
 
     @BindView(R.id.et_name) EditText et_name;
