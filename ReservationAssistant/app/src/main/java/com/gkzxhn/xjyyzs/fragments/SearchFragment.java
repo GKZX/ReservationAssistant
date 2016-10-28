@@ -3,7 +3,6 @@ package com.gkzxhn.xjyyzs.fragments;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.support.annotation.NonNull;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -47,7 +46,7 @@ public class SearchFragment extends BaseFragment implements View.OnClickListener
 
     private static final String TAG = "SearchFragment";
     private static final String[] STATUS = {"已通过", "未通过"};
-    @BindView(R.id.srl_refresh) SwipeRefreshLayout srl_refresh;
+//    @BindView(R.id.srl_refresh) SwipeRefreshLayout srl_refresh;
 //    @BindView(R.id.rg_status) RadioGroup rg_status;
 //    @BindView(R.id.rb_passed) RadioButton rb_passed;
 //    @BindView(R.id.rb_refused) RadioButton rb_refused;
@@ -76,14 +75,14 @@ public class SearchFragment extends BaseFragment implements View.OnClickListener
 
     @Override
     protected void initData() {
-        srl_refresh.setColorSchemeResources(R.color.theme);
-        srl_refresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-//                getData(1);// 下拉刷新默认获取当日数据
-                search();
-            }
-        });
+//        srl_refresh.setColorSchemeResources(R.color.theme);
+//        srl_refresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+//            @Override
+//            public void onRefresh() {
+////                getData(1);// 下拉刷新默认获取当日数据
+//                search();
+//            }
+//        });
         sp_status.setAdapter(new ArrayAdapter<>(getActivity(), R.layout.spinner_item, STATUS));
         setDateText();// 设置两个日期文本
         tv_start_date.setOnClickListener(this);
@@ -98,7 +97,7 @@ public class SearchFragment extends BaseFragment implements View.OnClickListener
                 int topRowVerticalPosition =
                         (recyclerView == null || recyclerView.getChildCount() == 0) ?
                                 0 : recyclerView.getChildAt(0).getTop();
-                srl_refresh.setEnabled(topRowVerticalPosition >= 0);// recyclerView没有滑到顶部不触发下拉刷新
+//                srl_refresh.setEnabled(topRowVerticalPosition >= 0);// recyclerView没有滑到顶部不触发下拉刷新
             }
         });
     }
@@ -137,6 +136,10 @@ public class SearchFragment extends BaseFragment implements View.OnClickListener
         long startMs1 = DateUtils.reFormatDate("yyyy-MM-dd", start_time1);
         if(endMs1 - startMs1 > thirtyDays1){
             showToastMsgLong("日期区间不能超过30天");
+            return;
+        }
+        if (endMs1 < startMs1){
+            showToastMsgLong("开始日期不能在结束日期之后");
             return;
         }
         getSearchResult(0, start_time1, end_time1);
@@ -312,7 +315,7 @@ public class SearchFragment extends BaseFragment implements View.OnClickListener
 
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                tv.setText(year + "/" + (monthOfYear + 1) + "/" + dayOfMonth);
+                tv.setText(year + "-" + (monthOfYear + 1) + "-" + dayOfMonth);
             }
         }, Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH),
                 Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
@@ -347,11 +350,11 @@ public class SearchFragment extends BaseFragment implements View.OnClickListener
             showToastMsgShort("没有数据");
         }
 
-        if(srl_refresh.isRefreshing()){
-            srl_refresh.setRefreshing(false);
-            showToastMsgShort("刷新成功");
-
-        }
+//        if(srl_refresh.isRefreshing()){
+//            srl_refresh.setRefreshing(false);
+//            showToastMsgShort("刷新成功");
+//
+//        }
     }
 
     /**
@@ -368,8 +371,8 @@ public class SearchFragment extends BaseFragment implements View.OnClickListener
     private void showGetFailed(String titleText) {
         if(current_dialog.isShowing())
             current_dialog.dismiss();
-        if(srl_refresh.isRefreshing())
-            srl_refresh.setRefreshing(false);
-        showToastMsgLong(titleText);
+//        if(srl_refresh.isRefreshing())
+//            srl_refresh.setRefreshing(false);
+        showToastMsgShort(titleText);
     }
 }

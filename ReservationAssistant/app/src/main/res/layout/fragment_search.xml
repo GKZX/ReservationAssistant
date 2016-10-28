@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.SwipeRefreshLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/srl_refresh"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<!--<android.support.v4.widget.SwipeRefreshLayout-->
+    <!---->
+    <!--android:id="@+id/srl_refresh"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent">-->
     <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -30,7 +31,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1.5"
                 android:text="开始日期"
-                android:textColor="@color/tv_mid"
+                android:textColor="@color/theme"
                 android:textSize="14sp"
                 android:gravity="center"/>
 
@@ -40,7 +41,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1.5"
                 android:text="结束日期"
-                android:textColor="@color/tv_mid"
+                android:textColor="@color/theme"
                 android:textSize="14sp"
                 android:gravity="center"/>
 
@@ -71,6 +72,7 @@
             android:padding="10dp"
             android:layout_below="@+id/view"
             android:overScrollMode="never"
+            android:scrollbars="vertical"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"/>
 
@@ -84,4 +86,4 @@
             android:text="没有数据"
             android:visibility="gone"/>
     </RelativeLayout>
-</android.support.v4.widget.SwipeRefreshLayout>
+<!--</android.support.v4.widget.SwipeRefreshLayout>-->

@@ -10,12 +10,31 @@ android {
         minSdkVersion 15
         targetSdkVersion 22
         versionCode 3
-        versionName "1.1"
+        versionName "1.1.0"
     }
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    //修改生成的apk名字
+    applicationVariants. all{ variant->
+        variant.outputs.each { output->
+            def oldFile = output.outputFile
+            def newName = '';
+            if (variant.buildType.name.equals('release')) {
+                def releaseApkName = 'yuyuezhushou-' + defaultConfig.versionName + '.apk'
+                output.outputFile = new File(oldFile.parent, releaseApkName)
+            }
+            if (variant.buildType.name.equals('beta')) {
+                newName = oldFile.name.replace(".apk", "-v" + defaultConfig.versionName + "-build" + getDate() + ".apk")
+                output.outputFile = new File(oldFile.parent, newName)
+            }
+            if (variant.buildType.name.equals('debug')) {
+
+            }
         }
     }
 }

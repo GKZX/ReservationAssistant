@@ -19,7 +19,6 @@ import com.gkzxhn.xjyyzs.entities.events.SystemMsg;
 import com.gkzxhn.xjyyzs.utils.DBUtils;
 import com.gkzxhn.xjyyzs.utils.Log;
 import com.gkzxhn.xjyyzs.utils.UIUtil;
-import com.gkzxhn.xjyyzs.view.decoration.DividerItemDecoration;
 import com.squareup.otto.Subscribe;
 
 import java.util.Collections;
@@ -40,6 +39,7 @@ public class MsgFragment extends BaseFragment {
     @BindView(R.id.recycler_view) RecyclerView recycler_view;
     private List<Message> messageList;
     private MsgAdapter msgAdapter;
+    private static final String TAG = "MsgFragment";
 
     @Override
     protected View initView() {
@@ -104,9 +104,8 @@ public class MsgFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
+        Log.i(TAG, "onResume()");
         recycler_view.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-        recycler_view.addItemDecoration(new DividerItemDecoration(getActivity(),
-                DividerItemDecoration.VERTICAL_LIST));
         onLoadData(null);
     }
 

@@ -107,6 +107,8 @@ public class BookFragment extends BaseFragment {
                     showApplyFailedDialog("抱歉，没有权限");
                 }else if(error.contains("500")){
                     showApplyFailedDialog("服务器错误");
+                }else if(error.contains("302")){
+                    showApplyFailedDialog("该日司法所会见已满");
                 }else{
                     showApplyFailedDialog("申请失败，请稍后再试");
                 }

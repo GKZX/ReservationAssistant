@@ -110,9 +110,9 @@ public class MyApp extends Application {
                 notification.defaults |= Notification.DEFAULT_SOUND;
                 notification.flags |= Notification.FLAG_AUTO_CANCEL;
                 managerCompat.notify(NOTIFICATION_ID, notification);
-                NOTIFICATION_ID ++;
+//                NOTIFICATION_ID ++;
                 Message msg = new Message();
-                msg.setId(customNotification.getTime());
+                msg.setId(System.currentTimeMillis());
                 msg.setAccount((String) SPUtil.get(MyApp.this, "cloudId", ""));
                 msg.setFromaccount(customNotification.getFromAccount());
                 msg.setTime(customNotification.getTime());
