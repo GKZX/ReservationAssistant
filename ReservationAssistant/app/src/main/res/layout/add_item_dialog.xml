@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/book_item_height">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="姓        名："
+            android:textSize="@dimen/book_main_text_size"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="10dp"
+            android:textColor="@color/tv_mid"/>
+
+        <EditText
+            android:id="@+id/et_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginLeft="100dp"
+            android:paddingTop="5dp"
+            android:textColor="@color/tv_bg"
+            android:textSize="@dimen/book_main_text_size"
+            android:gravity="center"
+            android:layout_centerVertical="true"
+            android:hint="请输入姓名"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/book_item_height">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="身份证号："
+            android:textSize="@dimen/book_main_text_size"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="10dp"
+            android:textColor="@color/tv_mid"/>
+
+        <EditText
+            android:id="@+id/et_ic_card_number"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginLeft="100dp"
+            android:paddingTop="5dp"
+            android:textColor="@color/tv_bg"
+            android:textSize="@dimen/book_main_text_size"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:hint="请输入身份证号"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/book_item_height">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="电话号码："
+            android:textSize="@dimen/book_main_text_size"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="10dp"
+            android:textColor="@color/tv_mid"/>
+
+        <EditText
+            android:id="@+id/et_phone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginLeft="100dp"
+            android:paddingTop="5dp"
+            android:textColor="@color/tv_bg"
+            android:textSize="@dimen/book_main_text_size"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:hint="请输入电话号码"/>
+    </RelativeLayout>
+</LinearLayout>

@@ -1,6 +1,7 @@
 package com.gkzxhn.xjyyzs.app;
 
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.content.Context;
 
 import java.util.Stack;
@@ -105,8 +106,8 @@ public class AppManager {
     public void ExitApp(Context context){
         try {
             finishAllActivity();
-//            ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-//            manager.restartPackage(context.getPackageName());
+            ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+            manager.restartPackage(context.getPackageName());
             System.exit(0);
         } catch (Exception e){
             e.printStackTrace();

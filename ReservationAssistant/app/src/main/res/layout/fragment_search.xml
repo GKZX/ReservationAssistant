@@ -30,7 +30,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1.5"
-                android:text="开始日期"
+                android:text="@string/start_time"
                 android:textColor="@color/theme"
                 android:textSize="14sp"
                 android:gravity="center"/>
@@ -40,7 +40,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1.5"
-                android:text="结束日期"
+                android:text="@string/end_time"
                 android:textColor="@color/theme"
                 android:textSize="14sp"
                 android:gravity="center"/>
@@ -52,7 +52,7 @@
                 android:layout_weight="1.0"
                 android:background="@drawable/theme_bg_bt_selector"
                 android:layout_margin="10dp"
-                android:text="查询"
+                android:text="@string/search"
                 android:textColor="@color/white"/>
 
         </LinearLayout>
@@ -83,7 +83,7 @@
             android:layout_below="@+id/view"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="20dp"
-            android:text="没有数据"
+            android:text="@string/no_data"
             android:visibility="gone"/>
     </RelativeLayout>
 <!--</android.support.v4.widget.SwipeRefreshLayout>-->
