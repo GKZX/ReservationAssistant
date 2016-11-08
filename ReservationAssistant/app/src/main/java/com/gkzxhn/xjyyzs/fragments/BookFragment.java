@@ -203,7 +203,7 @@ public class BookFragment extends BaseFragment {
                 showAddItemDialog();
                 break;
             case R.id.bt_remote_meeting:
-                checkText(uuid);// 检查文本
+                checkText(et_ic_card_number.getText().toString().trim());// 检查文本
                 break;
         }
     }
