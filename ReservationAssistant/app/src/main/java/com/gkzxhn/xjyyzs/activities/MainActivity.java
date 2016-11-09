@@ -3,6 +3,7 @@ package com.gkzxhn.xjyyzs.activities;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Handler;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.Menu;
@@ -23,6 +24,7 @@ import com.gkzxhn.xjyyzs.fragments.HomeFragment;
 import com.gkzxhn.xjyyzs.requests.Constant;
 import com.gkzxhn.xjyyzs.requests.bean.UpdateInfo;
 import com.gkzxhn.xjyyzs.requests.methods.RequestMethods;
+import com.gkzxhn.xjyyzs.service.LoginNimService;
 import com.gkzxhn.xjyyzs.utils.Log;
 import com.gkzxhn.xjyyzs.utils.SPUtil;
 import com.gkzxhn.xjyyzs.utils.SystemUtil;
@@ -109,7 +111,26 @@ public class MainActivity extends BaseActivity {
         if(code == StatusCode.KICKOUT){
             //  弹出提示框  重新登录
             showReLoginDialog();
+            return;
         }
+        // 延时5秒判断是否云信账号在线状态  不在线重新开启一次登录服务
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (NIMClient.getStatus() != StatusCode.LOGINED){
+                    // 云信账号未登录
+                    loginNim();
+                }
+            }
+        }, 5000);
+    }
+
+    /**
+     * 登录云信
+     */
+    private void loginNim() {
+        Intent intent = new Intent(MainActivity.this, LoginNimService.class);
+        startService(intent);
     }
 
     /**

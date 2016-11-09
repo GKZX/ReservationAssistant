@@ -1,5 +1,7 @@
 package com.gkzxhn.xjyyzs.requests.bean;
 
+import java.util.List;
+
 /**
  * author:huangzhengneng
  * email:943852572@qq.com
@@ -30,7 +32,25 @@ public class Apply {
         private String orgCode;
         private String uuid;
         private String phone;
+        private String name;
         private String fillingDate;
+        private List<Family> family;
+
+        public List<Family> getFamily() {
+            return family;
+        }
+
+        public void setFamily(List<Family> family) {
+            this.family = family;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
 
         public String getPhone() {
             return phone;
@@ -69,8 +89,51 @@ public class Apply {
             return "ApplyBean{" +
                     "orgCode='" + orgCode + '\'' +
                     ", uuid='" + uuid + '\'' +
-                    ", applyDate='" + fillingDate + '\'' +
+                    ", phone='" + phone + '\'' +
+                    ", name='" + name + '\'' +
+                    ", fillingDate='" + fillingDate + '\'' +
+                    ", family=" + family +
                     '}';
+        }
+
+        public class Family {
+
+            private String uuid;
+            private String phone;
+            private String name;
+
+            public String getUuid() {
+                return uuid;
+            }
+
+            public void setUuid(String uuid) {
+                this.uuid = uuid;
+            }
+
+            public String getPhone() {
+                return phone;
+            }
+
+            public void setPhone(String phone) {
+                this.phone = phone;
+            }
+
+            public String getName() {
+                return name;
+            }
+
+            public void setName(String name) {
+                this.name = name;
+            }
+
+            @Override
+            public String toString() {
+                return "Family{" +
+                        "uuid='" + uuid + '\'' +
+                        ", phone='" + phone + '\'' +
+                        ", name='" + name + '\'' +
+                        '}';
+            }
         }
     }
 

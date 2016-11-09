@@ -46,14 +46,6 @@ public class SearchFragment extends BaseFragment implements View.OnClickListener
 
     private static final String TAG = "SearchFragment";
     private static final String[] STATUS = {"已通过", "未通过"};
-//    @BindView(R.id.srl_refresh) SwipeRefreshLayout srl_refresh;
-//    @BindView(R.id.rg_status) RadioGroup rg_status;
-//    @BindView(R.id.rb_passed) RadioButton rb_passed;
-//    @BindView(R.id.rb_refused) RadioButton rb_refused;
-//    @BindView(R.id.bt_search_by_status) Button bt_search_by_status;
-//    @BindView(R.id.tv_start_date) TextView tv_start_date;
-//    @BindView(R.id.tv_end_date) TextView tv_end_date;
-//    @BindView(R.id.bt_search_by_time) Button bt_search_by_time;
     @BindView(R.id.sp_status) Spinner sp_status;
     @BindView(R.id.tv_start_date) TextView tv_start_date;
     @BindView(R.id.tv_end_date) TextView tv_end_date;
@@ -75,14 +67,6 @@ public class SearchFragment extends BaseFragment implements View.OnClickListener
 
     @Override
     protected void initData() {
-//        srl_refresh.setColorSchemeResources(R.color.theme);
-//        srl_refresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-//            @Override
-//            public void onRefresh() {
-////                getData(1);// 下拉刷新默认获取当日数据
-//                search();
-//            }
-//        });
         sp_status.setAdapter(new ArrayAdapter<>(getActivity(), R.layout.spinner_item, STATUS));
         setDateText();// 设置两个日期文本
         tv_start_date.setOnClickListener(this);
@@ -91,15 +75,6 @@ public class SearchFragment extends BaseFragment implements View.OnClickListener
         recycler_view.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         recycler_view.addItemDecoration(new DividerItemDecoration(getActivity(),
                 DividerItemDecoration.VERTICAL_LIST));
-        recycler_view.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                int topRowVerticalPosition =
-                        (recyclerView == null || recyclerView.getChildCount() == 0) ?
-                                0 : recyclerView.getChildAt(0).getTop();
-//                srl_refresh.setEnabled(topRowVerticalPosition >= 0);// recyclerView没有滑到顶部不触发下拉刷新
-            }
-        });
     }
 
     /**

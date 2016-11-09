@@ -3,13 +3,17 @@ package com.gkzxhn.xjyyzs.utils;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.text.TextUtils;
-import android.widget.EditText;
 
 import com.gkzxhn.xjyyzs.requests.bean.Apply;
+import com.gkzxhn.xjyyzs.requests.bean.FamilyBean;
 import com.google.gson.Gson;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
+
 
 /**
  * Author: Huang ZN
@@ -19,6 +23,8 @@ import okhttp3.RequestBody;
  */
 
 public class UIUtil {
+
+    private static final String TAG = UIUtil.class.getName();
 
     /**
      * show进队条对话框
@@ -43,16 +49,13 @@ public class UIUtil {
 
     /**
      * 检查三个输入框信息完整性
-     * @param et_name
-     * @param et_ic_card_number
-     * @param et_phone
+     * @param name
+     * @param ic_card_number
+     * @param phone
      * @return 都不为空返回true
      */
-    public static String checkInfoComplete(EditText et_name, EditText et_ic_card_number,
-                                            EditText et_phone) {
-        String name = et_name.getText().toString().trim();
-        String ic_card_number = et_ic_card_number.getText().toString().trim();
-        String phone = et_phone.getText().toString().trim();
+    public static String checkInfoComplete(String name, String ic_card_number,
+                                           String phone) {
         if (TextUtils.isEmpty(name))
             return "姓名为空";
         if (TextUtils.isEmpty(ic_card_number))
@@ -76,16 +79,29 @@ public class UIUtil {
      *
      * @return
      */
-    public static RequestBody getRequestBody(Context context, String phone, String uuid,
-                                             String apply_date) {
+    public static RequestBody getRequestBody(Context context, String name, String phone, String uuid,
+                                             String apply_date, List<FamilyBean> familyBeen) {
         Apply apply = new Apply();
         Apply.ApplyBean bean = apply.new ApplyBean();
         bean.setPhone(phone);
         bean.setUuid(StringUtils.getEncodedUuid(uuid));
+        bean.setName(name);
         bean.setOrgCode((String) SPUtil.get(context, "organizationCode", ""));
         bean.setApplyDate(apply_date);
+        List<Apply.ApplyBean.Family> list = new ArrayList<>();
+        if (familyBeen.size() > 0) {
+            for (FamilyBean bean1 : familyBeen) {
+                Apply.ApplyBean.Family family = bean.new Family();
+                family.setPhone(bean1.getPhone());
+                family.setUuid(StringUtils.getEncodedUuid(bean1.getUuid()));
+                family.setName(bean1.getName());
+                list.add(family);
+            }
+        }
+        bean.setFamily(list);
         apply.setApply(bean);
         String apply_json = new Gson().toJson(apply);
+        Log.i(TAG, "apply body : " + apply_json);
         return RequestBody.create(MediaType.
                 parse("application/json; charset=utf-8"), apply_json);
     }

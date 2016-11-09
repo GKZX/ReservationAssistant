@@ -133,17 +133,14 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
                     android:layout_marginBottom="15dp"
-                    android:text="已添加"
+                    android:text="已添加:"
                     android:textColor="@color/theme"
                     android:textSize="@dimen/note_text_size"/>
 
-                <LinearLayout
-                    android:id="@+id/ll_added_item"
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/recycler_view"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:divider="@drawable/divider"
-                    android:showDividers="middle"/>
+                    android:layout_height="wrap_content" />
             </LinearLayout>
 
             <RelativeLayout

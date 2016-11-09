@@ -1,9 +1,11 @@
 package com.gkzxhn.xjyyzs.fragments;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
-import android.os.Bundle;
 import android.os.Handler;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +20,7 @@ import android.widget.TextView;
 
 import com.gkzxhn.xjyyzs.R;
 import com.gkzxhn.xjyyzs.base.BaseFragment;
+import com.gkzxhn.xjyyzs.requests.bean.FamilyBean;
 import com.gkzxhn.xjyyzs.requests.methods.RequestMethods;
 import com.gkzxhn.xjyyzs.utils.DateUtils;
 import com.gkzxhn.xjyyzs.utils.Log;
@@ -25,10 +28,14 @@ import com.gkzxhn.xjyyzs.utils.PhoneNumberUtil;
 import com.gkzxhn.xjyyzs.utils.SPUtil;
 import com.gkzxhn.xjyyzs.utils.StringUtils;
 import com.gkzxhn.xjyyzs.utils.UIUtil;
+import com.gkzxhn.xjyyzs.view.decoration.DividerItemDecoration;
+import com.gkzxhn.xjyyzs.view.decoration.MyLinearLayoutManager;
 import com.gkzxhn.xjyyzs.view.dialog.SweetAlertDialog;
 
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -54,8 +61,8 @@ public class BookFragment extends BaseFragment {
     @BindView(R.id.bt_remote_meeting) Button bt_remote_meeting;
     @BindView(R.id.et_phone) EditText et_phone;
     @BindView(R.id.ll_added) LinearLayout ll_added;
-    @BindView(R.id.ll_added_item) LinearLayout ll_added_item;
     @BindView(R.id.add) ImageView add;
+    @BindView(R.id.recycler_view) RecyclerView recycler_view;
 
     private ArrayAdapter<String> date_adapter;// 预约日期适配器
     private String name;// 姓名
@@ -63,6 +70,8 @@ public class BookFragment extends BaseFragment {
     private String uuid; // 身份证
     private String apply_date; // 申请日期
     private SweetAlertDialog apply_dialog; // 进度条对话框
+    private List<FamilyBean> familyList = new ArrayList<>();
+    private AddBookAdapter addBookAdapter;
 
     @Override
     protected View initView() {
@@ -84,7 +93,8 @@ public class BookFragment extends BaseFragment {
     private void apply() {
         initAndShowDialog();// 进度条对话框
         RequestMethods.bookMeeting((String) SPUtil.get(getActivity(), "token", ""),
-                UIUtil.getRequestBody(getActivity(), phone, uuid, apply_date), new Subscriber<ResponseBody>() {
+                UIUtil.getRequestBody(getActivity(), name, phone, uuid, apply_date, familyList),
+                new Subscriber<ResponseBody>() {
                     @Override public void onCompleted() {}
                     @Override public void onError(Throwable e) {
                         String error = e.getMessage();
@@ -116,6 +126,20 @@ public class BookFragment extends BaseFragment {
     }
 
     /**
+     * 清空输入框以及列表数据，隐藏已添加布局
+     */
+    private void clearEditTextAndList() {
+        et_name.setText("");
+        et_ic_card_number.setText("");
+        et_phone.setText("");
+        if (addBookAdapter != null && ll_added.getVisibility() == View.VISIBLE){
+            ll_added.setVisibility(View.GONE);
+            familyList.clear();
+            addBookAdapter.removeAllItem();
+        }
+    }
+
+    /**
      * 申请成功
      */
     private void showApplySuccessDialog() {
@@ -126,6 +150,8 @@ public class BookFragment extends BaseFragment {
             @Override
             public void onClick(SweetAlertDialog sweetAlertDialog) {
                 sweetAlertDialog.dismiss();
+                // 清空输入框以及列表
+                clearEditTextAndList();
             }
         });
         delayDismissDialog();
@@ -140,6 +166,8 @@ public class BookFragment extends BaseFragment {
             public void run() {
                 if (apply_dialog.isShowing()) {
                     apply_dialog.dismiss();
+                    // 清空输入框以及列表
+                    clearEditTextAndList();
                 }
             }
         }, 2000);
@@ -188,13 +216,6 @@ public class BookFragment extends BaseFragment {
         return true;
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = super.onCreateView(inflater, container, savedInstanceState);
-        ButterKnife.bind(this, rootView);
-        return rootView;
-    }
-
     @OnClick({R.id.add, R.id.bt_remote_meeting})
     public void onClick(View view) {
         switch (view.getId()) {
@@ -235,22 +256,32 @@ public class BookFragment extends BaseFragment {
      */
     private void showAddItemDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        final View view = View.inflate(context, R.layout.add_item_dialog, null);
+        View view = View.inflate(context, R.layout.add_item_dialog, null);
         builder.setView(view);
         final EditText et_name = (EditText) view.findViewById(R.id.et_name);
         final EditText et_ic_card_number = (EditText) view.findViewById(R.id.et_ic_card_number);
         final EditText et_phone = (EditText) view.findViewById(R.id.et_phone);
-        builder.setCancelable(false);
         builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                String result = UIUtil.checkInfoComplete(et_name, et_ic_card_number, et_phone);
+                if (!checkEditText()) {
+                    showToastMsgShort("请先填写已有表单再添加");
+                    dialog.dismiss();
+                    return;
+                }
+                String name = et_name.getText().toString().trim();
+                String ic_card_number = et_ic_card_number.getText().toString().trim();
+                String phone = et_phone.getText().toString().trim();
+                if (ic_card_number.equals(uuid) || isAlreadyAdd(ic_card_number)){
+                    showToastMsgShort("该身份证已添加");
+                    dialog.dismiss();
+                    return;
+                }
+                String result = UIUtil.checkInfoComplete(name, ic_card_number, phone);
                 Log.i(TAG, "check result : " + result);
                 if (result.equals("")){
                     // check全通过  添加成功
-                    String name = et_name.getText().toString().trim();
-                    String ic_card_number = et_ic_card_number.getText().toString().trim();
-                    addItem(name, ic_card_number);
+                    setAddedUIAndData(name, ic_card_number, phone);
                     dialog.dismiss();
                 }else {
                     showToastMsgShort(result);
@@ -262,31 +293,147 @@ public class BookFragment extends BaseFragment {
                 dialog.dismiss();
             }
         });
-        builder.create().show();
+        AlertDialog dialog = builder.create();
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
     }
 
     /**
-     * 添加item
+     * 设置添加的ui和数据
      * @param name
      * @param ic_card_number
+     * @param phone
      */
-    private void addItem(String name, String ic_card_number) {
-        final View view = View.inflate(context, R.layout.add_item, null);
-        ImageView iv_delete = (ImageView) view.findViewById(R.id.iv_delete);
-        iv_delete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ll_added_item.removeView(view);
-                if (ll_added_item.getChildCount() == 0){
-                    ll_added.setVisibility(View.GONE);
+    private void setAddedUIAndData(String name, String ic_card_number, String phone) {
+        ll_added.setVisibility(View.VISIBLE);
+        if (familyList.size() < 4) {
+            FamilyBean bean = addItemToList(name, ic_card_number, phone);
+            if (addBookAdapter == null){
+                Log.i(TAG, bean.toString() + "----" + familyList.get(0).toString());
+                addBookAdapter = new AddBookAdapter(context, familyList);
+                recycler_view.setLayoutManager(new MyLinearLayoutManager(context,
+                        LinearLayoutManager.VERTICAL, false));
+                recycler_view.addItemDecoration(new DividerItemDecoration(context
+                        , LinearLayoutManager.VERTICAL));
+                recycler_view.setAdapter(addBookAdapter);
+                Log.i(TAG, addBookAdapter.getItemCount() + "");
+            }else {
+                addBookAdapter.insert(bean);
+            }
+        }else {
+            showToastMsgShort("最多添加4人");
+        }
+    }
+
+    /**
+     * 是否已经添加
+     * @param ic_card_number
+     * @return
+     */
+    private boolean isAlreadyAdd(String ic_card_number) {
+        boolean isAlreadyAdded = false;
+        if (familyList.size() > 0){
+            for (FamilyBean bean : familyList){
+                if (ic_card_number.equals(bean.getUuid())){
+                    isAlreadyAdded = true;
+                    break;
                 }
             }
-        });
-        TextView tv_name = (TextView) view.findViewById(R.id.tv_name);
-        TextView tv_id_card_number = (TextView) view.findViewById(R.id.tv_id_card_number);
-        tv_name.setText(name);
-        tv_id_card_number.setText(ic_card_number);
-        ll_added.setVisibility(View.VISIBLE);
-        ll_added_item.addView(view);
+        }
+        return isAlreadyAdded;
+    }
+
+    /**
+     * 添加item数据到集合
+     * @param name
+     * @param ic_card_number
+     * @param phone
+     */
+    private FamilyBean addItemToList(String name, String ic_card_number,
+                               String phone) {
+        FamilyBean familyBean = new FamilyBean();
+        familyBean.setName(name);
+        familyBean.setUuid(ic_card_number);
+        familyBean.setPhone(phone);
+        familyList.add(familyBean);
+        return familyBean;
+    }
+
+    public class AddBookAdapter extends RecyclerView.Adapter<AddBookAdapter.MyViewHolder> {
+
+        private static final String TAG = "AddBookAdapter";
+        private List<FamilyBean> list;
+        private Context mContext;
+
+        public AddBookAdapter(Context context, List<FamilyBean> list){
+            this.mContext = context;
+            this.list = new ArrayList<>();
+            this.list.addAll(list);
+        }
+
+        @Override
+        public AddBookAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+//            Log.i(TAG, "onCreateViewHolder()");
+            AddBookAdapter.MyViewHolder holder = new AddBookAdapter.MyViewHolder(LayoutInflater.from(mContext)
+                    .inflate(R.layout.add_item, parent, false));
+            return holder;
+        }
+
+        @Override
+        public void onBindViewHolder(final AddBookAdapter.MyViewHolder holder, int position) {
+//            Log.i(TAG, list.get(position).toString());
+            holder.tv_name.setText(list.get(position).getName());
+            holder.tv_id_card_number.setText("身份证：" + list.get(position).getUuid());
+            holder.iv_delete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    list.remove(holder.getAdapterPosition());
+                    familyList.remove(holder.getAdapterPosition());
+                    AddBookAdapter.this.notifyItemRemoved(holder.getAdapterPosition());
+                    if (familyList.size() == 0){
+                        // 删除第0个即隐藏ll_add
+                        ll_added.setVisibility(View.GONE);
+                    }
+                }
+            });
+        }
+
+        /**
+         * 添加item
+         * @param familyBean
+         */
+        public void insert(FamilyBean familyBean){
+//            Log.i(TAG, "insert book info");
+            list.add(familyBean);
+            notifyItemInserted(getItemCount());
+        }
+
+        @Override
+        public int getItemCount() {
+//            Log.i(TAG, "getItemCount() == " + list.size());
+            return list.size();
+        }
+
+        public void removeAllItem() {
+            list.clear();
+            notifyDataSetChanged();
+        }
+
+        class MyViewHolder extends RecyclerView.ViewHolder{
+
+            @BindView(R.id.iv_delete)
+            ImageView iv_delete;
+            @BindView(R.id.tv_name)
+            TextView tv_name;
+            @BindView(R.id.tv_id_card_number)
+            TextView tv_id_card_number;
+
+            public MyViewHolder(View itemView) {
+                super(itemView);
+//                Log.i("MyViewHolder", "MyViewHolder");
+                ButterKnife.bind(this, itemView);
+            }
+        }
     }
 }

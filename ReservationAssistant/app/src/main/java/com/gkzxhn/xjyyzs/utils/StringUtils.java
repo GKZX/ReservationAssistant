@@ -222,21 +222,25 @@ public class StringUtils {
     /**
      * 身份证号码加密
      * 加密规则:0—>*   1—>&  2—>%  3—>#  4—>@ 5—>Q 6—>P 7—>D 8—>S 9—>B
+     *  43061119920102554x
+     *  @#*P\u0026\u0026\u0026BB%*\u0026*%QQ@x
      *
+     *  430482199404073618
+     *  @#*@S%\u0026BB@*@*D#P\u0026S
      * @param uuid
      * @return
      */
     public static String getEncodedUuid(String uuid) {
         return uuid
-                .replace("0", "*")
-                .replace("1", "&")
-                .replace("2", "%")
-                .replace("3", "#")
-                .replace("4", "@")
-                .replace("5", "Q")
-                .replace("6", "P")
-                .replace("7", "D")
-                .replace("8", "S")
-                .replace("9", "B");
+                .replaceAll("0", "*")
+                .replaceAll("1", "&")
+                .replaceAll("2", "%")
+                .replaceAll("3", "#")
+                .replaceAll("4", "@")
+                .replaceAll("5", "Q")
+                .replaceAll("6", "P")
+                .replaceAll("7", "D")
+                .replaceAll("8", "S")
+                .replaceAll("9", "B");
     }
 }

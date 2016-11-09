@@ -44,18 +44,15 @@ public class LoginNimService extends IntentService {
         LoginInfo info = new LoginInfo(cloudId, TextUtils.isEmpty(cloudToken) ? "123456" : cloudToken);
         Log.i(info.getAccount() + "--" + info.getToken());
         RequestCallback callback = new RequestCallback() {
-            @Override
-            public void onSuccess(Object param) {
+            @Override public void onSuccess(Object param) {
                 Log.i(TAG, "login nim success");
             }
 
-            @Override
-            public void onFailed(int code) {
+            @Override public void onFailed(int code) {
                 Log.e(TAG, "login nim failed, error code : " + code);
             }
 
-            @Override
-            public void onException(Throwable exception) {
+            @Override public void onException(Throwable exception) {
                 Log.e(TAG, "login nim exception, description : " + exception.getMessage());
             }
         };
