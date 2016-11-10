@@ -1,6 +1,7 @@
 package com.gkzxhn.xjyyzs.fragments;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Handler;
@@ -33,6 +34,7 @@ import com.gkzxhn.xjyyzs.view.decoration.MyLinearLayoutManager;
 import com.gkzxhn.xjyyzs.view.dialog.SweetAlertDialog;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
@@ -72,6 +74,7 @@ public class BookFragment extends BaseFragment {
     private SweetAlertDialog apply_dialog; // 进度条对话框
     private List<FamilyBean> familyList = new ArrayList<>();
     private AddBookAdapter addBookAdapter;
+    private boolean isDisable = false;
 
     @Override
     protected View initView() {
@@ -266,7 +269,7 @@ public class BookFragment extends BaseFragment {
             public void onClick(DialogInterface dialog, int which) {
                 if (!checkEditText()) {
                     showToastMsgShort("请先填写已有表单再添加");
-                    dialog.dismiss();
+                    disableClose((Dialog) dialog);
                     return;
                 }
                 String name = et_name.getText().toString().trim();
@@ -274,7 +277,7 @@ public class BookFragment extends BaseFragment {
                 String phone = et_phone.getText().toString().trim();
                 if (ic_card_number.equals(uuid) || isAlreadyAdd(ic_card_number)){
                     showToastMsgShort("该身份证已添加");
-                    dialog.dismiss();
+                    disableClose((Dialog) dialog);
                     return;
                 }
                 String result = UIUtil.checkInfoComplete(name, ic_card_number, phone);
@@ -282,21 +285,24 @@ public class BookFragment extends BaseFragment {
                 if (result.equals("")){
                     // check全通过  添加成功
                     setAddedUIAndData(name, ic_card_number, phone);
+                    enableColse((Dialog) dialog);
                     dialog.dismiss();
                 }else {
                     showToastMsgShort(result);
+                    disableClose((Dialog) dialog);
                 }
             }
-        }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
+        });
+        builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
+                enableColse((Dialog) dialog);
             }
         });
-        AlertDialog dialog = builder.create();
-        dialog.setCancelable(false);
-        dialog.setCanceledOnTouchOutside(false);
-        dialog.show();
+        AlertDialog _dialog = builder.create();
+       _dialog.setCancelable(false);
+       _dialog.setCanceledOnTouchOutside(false);
+       _dialog.show();
     }
 
     /**
@@ -435,5 +441,31 @@ public class BookFragment extends BaseFragment {
                 ButterKnife.bind(this, itemView);
             }
         }
+    }
+
+    private void disableClose(Dialog dialog) {
+        isDisable = true;
+        try {
+            Field field = dialog.getClass().getSuperclass()
+                    .getDeclaredField("mShowing");
+            field.setAccessible(true);
+            field.set(dialog, false);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private void enableColse(Dialog dialog) {
+        isDisable = false;
+        try {
+            Field field = dialog.getClass().getSuperclass()
+                    .getDeclaredField("mShowing");
+            field.setAccessible(true);
+            field.set(dialog, true);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 }

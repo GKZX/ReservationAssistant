@@ -55,18 +55,12 @@ public class MyApp extends Application {
         setLogToggle();// 设置log开关
         initCrashCatch();// 初始化crash捕获
 
+        // 云信sdk初始化
+        NIMClient.init(MyApp.this, loginInfo(), Options());
         if (SystemUtil.inMainProcess(this)) {
-            new Runnable() {
-                @Override
-                public void run() {
-                    // 云信sdk初始化
-                    NIMClient.init(MyApp.this, loginInfo(), Options());
-
-                    // 监督在线状态
-                    observeOnlineStatus();
-                    observeCustomNotification();
-                }
-            }.run();
+            // 监督在线状态
+            observeOnlineStatus();
+            observeCustomNotification();
         }
     }
 

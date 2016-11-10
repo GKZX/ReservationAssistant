@@ -43,8 +43,8 @@ public class LoginNimService extends IntentService {
         String cloudToken = (String) SPUtil.get(this, "cloudToken", "");
         LoginInfo info = new LoginInfo(cloudId, TextUtils.isEmpty(cloudToken) ? "123456" : cloudToken);
         Log.i(info.getAccount() + "--" + info.getToken());
-        RequestCallback callback = new RequestCallback() {
-            @Override public void onSuccess(Object param) {
+        RequestCallback<LoginInfo> callback = new RequestCallback<LoginInfo>() {
+            @Override public void onSuccess(LoginInfo param) {
                 Log.i(TAG, "login nim success");
             }
 
@@ -58,6 +58,8 @@ public class LoginNimService extends IntentService {
         };
         if(!TextUtils.isEmpty(cloudId) && !TextUtils.isEmpty(cloudToken)) {
             NIMClient.getService(AuthService.class).login(info).setCallback(callback);
+        }else {
+            Log.i("cloudId or cloudToken is Empty!");
         }
     }
 }
