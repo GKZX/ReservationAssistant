@@ -35,6 +35,7 @@ import com.netease.nimlib.sdk.msg.MsgServiceObserve;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.msg.model.CustomNotification;
 import com.netease.nimlib.sdk.uinfo.UserInfoProvider;
+import com.tencent.bugly.crashreport.CrashReport;
 
 /**
  * author:huangzhengneng
@@ -68,6 +69,10 @@ public class MyApp extends Application {
      * 初始化crash捕获
      */
     private void initCrashCatch() {
+        // bugly初始化
+        CrashReport.initCrashReport(getApplicationContext(), "900059226", false);
+//        CrashReport.testJavaCrash();
+        // 本地crash日志
         CrashHandler crashHandler = CrashHandler.getInstance();
         crashHandler.init(this);
     }

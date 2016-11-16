@@ -149,3 +149,7 @@ public void *(android.view.View);
     *;
 }
 
+#bugly
+-dontwarn com.tencent.bugly.**
+-keep public class com.tencent.bugly.**{*;}
+
