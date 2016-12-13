@@ -62,9 +62,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
                 username = et_username.getText().toString().trim();
                 password = et_password.getText().toString().trim();
                 if(TextUtils.isEmpty(username) || TextUtils.isEmpty(password)){
-                    showToastShortMsg("用户名或密码为空");
+                    showToastShortMsg(getString(R.string.account_pwd_empty));
                 }else if(password.length() < 6){
-                    showToastShortMsg("密码不能少于六位");
+                    showToastShortMsg(getString(R.string.pwd_less_6));
                 }else {
                     doLogin();// 登录
                 }
@@ -83,14 +83,14 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
             @Override public void onError(Throwable e) {
                 String error_msg = e.getMessage();
                 Log.e(TAG, "login failed : " + error_msg);
-                if(error_msg.contains("404")){
-                    showLoginFailed("用户名或密码错误");
-                }else if(error_msg.contains("500")){
-                    showLoginFailed("服务器错误");
-                }else if(error_msg.contains("400")){
-                    showLoginFailed("用户名或密码错误");
+                if(error_msg.contains(getString(R.string.code_404))){
+                    showLoginFailed(getString(R.string.account_pwd_error));
+                }else if(error_msg.contains(getString(R.string.code_500))){
+                    showLoginFailed(getString(R.string.server_error));
+                }else if(error_msg.contains(getString(R.string.code_400))){
+                    showLoginFailed(getString(R.string.account_pwd_error));
                 }else {
-                    showLoginFailed("登录失败，请稍后再试！");
+                    showLoginFailed(getString(R.string.login_failed));
                 }
             }
 

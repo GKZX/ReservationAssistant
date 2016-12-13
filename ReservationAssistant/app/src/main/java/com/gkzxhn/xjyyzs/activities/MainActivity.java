@@ -208,10 +208,12 @@ public class MainActivity extends BaseActivity {
         }else if(id == R.id.change_pwd){
             Intent intent = new Intent(this, ChangePwdActivity.class);
             startActivity(intent);
-        }else if(id == R.id.change_phone){
-            Intent intent = new Intent(this, SetWorkerPhoneActivity.class);
-            startActivity(intent);
-        }else if(id == R.id.update){
+        }
+//        else if(id == R.id.change_phone){
+//            Intent intent = new Intent(this, SetWorkerPhoneActivity.class);
+//            startActivity(intent);
+//        }
+        else if(id == R.id.update){
             if(SystemUtil.isNetworkAvailable(this)) {
                 checkUpdate();// 检查更新
             }else {

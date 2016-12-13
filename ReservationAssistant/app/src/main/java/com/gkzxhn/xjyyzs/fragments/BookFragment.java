@@ -102,16 +102,17 @@ public class BookFragment extends BaseFragment {
                     @Override public void onError(Throwable e) {
                         String error = e.getMessage();
                         Log.e(TAG, "apply failed : " + error);
-                        if (error.contains("400")) {
-                            showApplyFailedDialog("已申请过该日，请勿重复申请");
-                        } else if (error.contains("404")) {
-                            showApplyFailedDialog("抱歉，没有权限");
-                        } else if (error.contains("500")) {
-                            showApplyFailedDialog("服务器错误");
-                        } else if (error.contains("302")) {
-                            showApplyFailedDialog("该日司法所会见已满");
+                        Log.e(TAG, "apply failed : " + e);
+                        if (error.contains(getString(R.string.code_400))) {
+                            showApplyFailedDialog(getString(R.string.applied));
+                        } else if (error.contains(getString(R.string.code_404))) {
+                            showApplyFailedDialog(getString(R.string.non_right));
+                        } else if (error.contains(getString(R.string.code_500))) {
+                            showApplyFailedDialog(getString(R.string.server_error));
+                        } else if (error.contains(getString(R.string.code_302))) {
+                            showApplyFailedDialog(getString(R.string.full_apply));
                         } else {
-                            showApplyFailedDialog("申请失败，请稍后再试");
+                            showApplyFailedDialog(getString(R.string.apply_failed));
                         }
                     }
 
@@ -122,7 +123,7 @@ public class BookFragment extends BaseFragment {
                             showApplySuccessDialog();// {"msg":"申请提交成功"}
                         } catch (IOException e) {
                             e.printStackTrace();
-                            showApplyFailedDialog("异常");
+                            showApplyFailedDialog(getString(R.string.exception));
                         }
                     }
                 });
@@ -157,20 +158,21 @@ public class BookFragment extends BaseFragment {
                 clearEditTextAndList();
             }
         });
-        delayDismissDialog();
+        delayDismissDialog(true);
     }
 
     /**
      * 若用户没有手动点确定  延迟两秒自动dismiss
      */
-    private void delayDismissDialog() {
+    private void delayDismissDialog(final boolean isClearable) {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 if (apply_dialog.isShowing()) {
                     apply_dialog.dismiss();
                     // 清空输入框以及列表
-                    clearEditTextAndList();
+                    if (isClearable)
+                        clearEditTextAndList();
                 }
             }
         }, 2000);
@@ -189,7 +191,7 @@ public class BookFragment extends BaseFragment {
                 sweetAlertDialog.dismiss();
             }
         });
-        delayDismissDialog();
+        delayDismissDialog(false);
     }
 
     /**
@@ -285,7 +287,7 @@ public class BookFragment extends BaseFragment {
                 if (result.equals("")){
                     // check全通过  添加成功
                     setAddedUIAndData(name, ic_card_number, phone);
-                    enableColse((Dialog) dialog);
+                    enableClose((Dialog) dialog);
                     dialog.dismiss();
                 }else {
                     showToastMsgShort(result);
@@ -296,7 +298,7 @@ public class BookFragment extends BaseFragment {
         builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                enableColse((Dialog) dialog);
+                enableClose((Dialog) dialog);
             }
         });
         AlertDialog _dialog = builder.create();
@@ -456,7 +458,7 @@ public class BookFragment extends BaseFragment {
 
     }
 
-    private void enableColse(Dialog dialog) {
+    private void enableClose(Dialog dialog) {
         isDisable = false;
         try {
             Field field = dialog.getClass().getSuperclass()
