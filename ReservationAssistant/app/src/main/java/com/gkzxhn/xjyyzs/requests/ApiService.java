@@ -1,5 +1,6 @@
 package com.gkzxhn.xjyyzs.requests;
 
+import com.gkzxhn.xjyyzs.entities.BookResult;
 import com.gkzxhn.xjyyzs.requests.bean.LoginResult;
 import com.gkzxhn.xjyyzs.requests.bean.SearchResultBean;
 import com.gkzxhn.xjyyzs.requests.bean.UpdateInfo;
@@ -57,7 +58,7 @@ public interface ApiService {
      * @return
      */
     @POST("applies")
-    Observable<ResponseBody> apply(
+    Observable<BookResult> apply(
             @Header("Authorization") String token,
             @Body RequestBody body
     );

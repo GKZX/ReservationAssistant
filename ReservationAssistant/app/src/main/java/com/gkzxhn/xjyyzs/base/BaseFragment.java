@@ -17,7 +17,7 @@ import com.gkzxhn.xjyyzs.utils.ToastUtil;
  */
 public abstract class BaseFragment extends Fragment {
 
-    public Context context;
+    protected Context context;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -30,16 +30,6 @@ public abstract class BaseFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         return initView();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
     }
 
     //填充数据

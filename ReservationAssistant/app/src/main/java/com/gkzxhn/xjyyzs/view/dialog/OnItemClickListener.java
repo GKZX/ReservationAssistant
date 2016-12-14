@@ -5,7 +5,7 @@ package com.gkzxhn.xjyyzs.view.dialog;
  */
 public interface OnItemClickListener {
 
-        public void onItemClick(Object o, int position);
+        void onItemClick(Object o, int position);
 
 
 }

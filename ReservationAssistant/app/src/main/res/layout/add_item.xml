@@ -25,7 +25,7 @@
             android:layout_height="wrap_content"
             android:textSize="16sp"
             android:textColor="@color/tv_mid"
-            android:text="张三"/>
+            android:text="@string/name"/>
 
         <TextView
             android:id="@+id/tv_id_card_number"
@@ -33,6 +33,6 @@
             android:layout_height="wrap_content"
             android:textSize="14sp"
             android:textColor="@color/tv_gray"
-            android:text="身份证：430482xxxxxxxxxxxx"/>
+            android:text="@string/id_ex"/>
     </LinearLayout>
 </LinearLayout>

@@ -30,7 +30,7 @@ import java.util.Map;
  */
 public class CrashHandler implements UncaughtExceptionHandler {
 
-    public static final String TAG = "CrashHandler";
+    private static final String TAG = "CrashHandler";
 
     //系统默认的UncaughtException处理类
     private UncaughtExceptionHandler mDefaultHandler;
@@ -117,7 +117,7 @@ public class CrashHandler implements UncaughtExceptionHandler {
      * 收集设备参数信息
      * @param ctx
      */
-    public void collectDeviceInfo(Context ctx) {
+    private void collectDeviceInfo(Context ctx) {
         try {
             PackageManager pm = ctx.getPackageManager();
             PackageInfo pi = pm.getPackageInfo(ctx.getPackageName(), PackageManager.GET_ACTIVITIES);

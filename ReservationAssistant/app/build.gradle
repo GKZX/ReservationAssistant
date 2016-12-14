@@ -9,8 +9,8 @@ android {
         applicationId "com.gkzxhn.xjyyzs"
         minSdkVersion 15
         targetSdkVersion 22
-        versionCode 3
-        versionName "1.1.0"
+        versionCode 4
+        versionName "1.1.0.2"
     }
     buildTypes {
         release {
@@ -24,7 +24,6 @@ android {
     applicationVariants. all{ variant->
         variant.outputs.each { output->
             def oldFile = output.outputFile
-            def newName = '';
             if (variant.buildType.name.equals('release')) {
                 def releaseApkName = 'yuyuezhushou-' + defaultConfig.versionName + '.apk'
                 output.outputFile = new File(oldFile.parent, releaseApkName)

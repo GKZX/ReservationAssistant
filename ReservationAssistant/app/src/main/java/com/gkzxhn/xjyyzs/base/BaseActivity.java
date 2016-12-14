@@ -1,5 +1,6 @@
 package com.gkzxhn.xjyyzs.base;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -24,7 +25,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     private View ly_title_bar;
     private RelativeLayout rl_content;// 标题以下内容布局
-    public Toolbar tool_bar; // toolbar
+    protected Toolbar tool_bar; // toolbar
     private TextView tv_title;// 标题
     private ImageButton ib_back;// 返回
 //    protected Button bt_logout;
@@ -33,7 +34,9 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         AppManager.getInstance().addActivity(this);
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        }
         setContentView(R.layout.root_view);
         ly_title_bar = findViewById(R.id.ly_title_bar);
         rl_content = (RelativeLayout) findViewById(R.id.rl_content);
@@ -59,14 +62,14 @@ public abstract class BaseActivity extends AppCompatActivity {
      * 子类必须重写
      * @return
      */
-    public abstract View initView();
+    protected abstract View initView();
 
     protected abstract void initData();
 
     /**
      * 隐藏标题栏
      */
-    public void removeTitleBar(){
+    protected void removeTitleBar(){
         ly_title_bar.setVisibility(View.GONE);
     }
 
@@ -74,7 +77,7 @@ public abstract class BaseActivity extends AppCompatActivity {
      * 设置标题
      * @param title
      */
-    public void setTitleText(String title){
+    protected void setTitleText(String title){
         tv_title.setText(title);
     }
 

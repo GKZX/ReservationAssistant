@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * author:huangzhengneng
@@ -26,7 +27,7 @@ public class DateUtils {
         List<String> list = new ArrayList<>();
         for(int i = 1; i <= n; i++) {
             Calendar c = Calendar.getInstance();
-            DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+            DateFormat df = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
             c.setTime(new Date());
             c.add(Calendar.DATE, i);
             Date d2 = c.getTime();
@@ -45,7 +46,7 @@ public class DateUtils {
      * @return
      */
     public static String formatDate(String format, long ms){
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(format);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(format, Locale.getDefault());
         Date date = new Date(ms);
         return simpleDateFormat.format(date);
     }
@@ -57,7 +58,7 @@ public class DateUtils {
      * @return
      */
     public static long reFormatDate(String format, String date){
-        SimpleDateFormat dateFormat = new SimpleDateFormat(format);
+        SimpleDateFormat dateFormat = new SimpleDateFormat(format, Locale.getDefault());
         long ms = 0;
         try {
            ms = dateFormat.parse(date).getTime();
@@ -96,7 +97,7 @@ public class DateUtils {
         long threeDay = day * 3L;// 三天
         String format = "HH:mm";
         long timeDiff = current - ms;
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(format);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(format, Locale.getDefault());
         Date date = new Date(ms);
         if(timeDiff >= 0 && timeDiff < day){
             // 一天内显示HH:mm
@@ -110,7 +111,7 @@ public class DateUtils {
         }else {
             // 超过三天显示具体日期
             format = "yyyy-MM-dd HH:mm";
-            simpleDateFormat = new SimpleDateFormat(format);
+            simpleDateFormat = new SimpleDateFormat(format, Locale.getDefault());
             return simpleDateFormat.format(date);
         }
     }

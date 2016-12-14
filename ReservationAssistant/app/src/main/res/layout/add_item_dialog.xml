@@ -12,7 +12,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="姓        名："
+            android:text="@string/name_ex"
             android:textSize="@dimen/book_main_text_size"
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="10dp"
@@ -29,7 +29,7 @@
             android:textSize="@dimen/book_main_text_size"
             android:gravity="center"
             android:layout_centerVertical="true"
-            android:hint="请输入姓名"/>
+            android:hint="@string/input_name"/>
     </RelativeLayout>
 
     <RelativeLayout
@@ -39,7 +39,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="身份证号："
+            android:text="@string/id_num"
             android:textSize="@dimen/book_main_text_size"
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="10dp"
@@ -56,7 +56,7 @@
             android:textSize="@dimen/book_main_text_size"
             android:layout_centerVertical="true"
             android:gravity="center"
-            android:hint="请输入身份证号"/>
+            android:hint="@string/input_id"/>
     </RelativeLayout>
 
     <RelativeLayout
@@ -66,7 +66,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="电话号码："
+            android:text="@string/phone_num"
             android:textSize="@dimen/book_main_text_size"
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="10dp"
@@ -83,6 +83,6 @@
             android:textSize="@dimen/book_main_text_size"
             android:layout_centerVertical="true"
             android:gravity="center"
-            android:hint="请输入电话号码"/>
+            android:hint="@string/input_phone_num"/>
     </RelativeLayout>
 </LinearLayout>

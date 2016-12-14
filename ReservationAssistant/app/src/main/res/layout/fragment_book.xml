@@ -19,7 +19,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="请填写相关信息"
+                android:text="@string/input_info"
                 android:textSize="@dimen/note_text_size"
                 android:textColor="@color/theme"
                 android:id="@+id/textView"/>
@@ -47,7 +47,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="姓名："
+                    android:text="@string/name_no"
                     android:textSize="@dimen/book_main_text_size"
                     android:layout_alignParentBottom="true"
                     android:layout_marginBottom="10dp"
@@ -64,7 +64,7 @@
                     android:background="@null"
                     android:gravity="right"
                     android:layout_centerVertical="true"
-                    android:hint="请输入姓名"/>
+                    android:hint="@string/input_name"/>
             </RelativeLayout>
 
             <RelativeLayout
@@ -74,7 +74,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="身份证号："
+                    android:text="@string/id_num"
                     android:textSize="@dimen/book_main_text_size"
                     android:layout_alignParentBottom="true"
                     android:layout_marginBottom="10dp"
@@ -91,7 +91,7 @@
                     android:layout_centerVertical="true"
                     android:gravity="right"
                     android:background="@null"
-                    android:hint="请输入身份证号"/>
+                    android:hint="@string/input_id"/>
             </RelativeLayout>
 
             <RelativeLayout
@@ -101,7 +101,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="电话号码："
+                    android:text="@string/phone_num"
                     android:textSize="@dimen/book_main_text_size"
                     android:layout_alignParentBottom="true"
                     android:layout_marginBottom="10dp"
@@ -118,7 +118,7 @@
                     android:layout_centerVertical="true"
                     android:gravity="right"
                     android:background="@null"
-                    android:hint="请输入电话号码"/>
+                    android:hint="@string/input_phone_num"/>
             </RelativeLayout>
 
             <LinearLayout
@@ -133,7 +133,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
                     android:layout_marginBottom="15dp"
-                    android:text="已添加:"
+                    android:text="@string/added"
                     android:textColor="@color/theme"
                     android:textSize="@dimen/note_text_size"/>
 
@@ -152,7 +152,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="申请探监日期："
+                    android:text="@string/apply_date"
                     android:textSize="@dimen/book_main_text_size"
                     android:textColor="@color/tv_mid"
                     android:layout_marginTop="10dp"/>
@@ -172,7 +172,7 @@
             android:id="@+id/bt_remote_meeting"
             android:layout_width="match_parent"
             android:layout_height="@dimen/book_item_height"
-            android:text="申    请"
+            android:text="@string/apply"
             android:textColor="@color/white"
             android:textSize="@dimen/book_main_text_size"
             android:background="@drawable/theme_bg_bt_selector"

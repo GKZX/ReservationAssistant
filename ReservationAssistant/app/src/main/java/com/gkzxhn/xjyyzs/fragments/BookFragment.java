@@ -21,6 +21,7 @@ import android.widget.TextView;
 
 import com.gkzxhn.xjyyzs.R;
 import com.gkzxhn.xjyyzs.base.BaseFragment;
+import com.gkzxhn.xjyyzs.entities.BookResult;
 import com.gkzxhn.xjyyzs.requests.bean.FamilyBean;
 import com.gkzxhn.xjyyzs.requests.methods.RequestMethods;
 import com.gkzxhn.xjyyzs.utils.DateUtils;
@@ -33,7 +34,6 @@ import com.gkzxhn.xjyyzs.view.decoration.DividerItemDecoration;
 import com.gkzxhn.xjyyzs.view.decoration.MyLinearLayoutManager;
 import com.gkzxhn.xjyyzs.view.dialog.SweetAlertDialog;
 
-import java.io.IOException;
 import java.lang.reflect.Field;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -42,7 +42,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import okhttp3.ResponseBody;
 import rx.Subscriber;
 
 /**
@@ -97,36 +96,51 @@ public class BookFragment extends BaseFragment {
         initAndShowDialog();// 进度条对话框
         RequestMethods.bookMeeting((String) SPUtil.get(getActivity(), "token", ""),
                 UIUtil.getRequestBody(getActivity(), name, phone, uuid, apply_date, familyList),
-                new Subscriber<ResponseBody>() {
+                new Subscriber<BookResult>() {
                     @Override public void onCompleted() {}
                     @Override public void onError(Throwable e) {
-                        String error = e.getMessage();
-                        Log.e(TAG, "apply failed : " + error);
                         Log.e(TAG, "apply failed : " + e);
-                        if (error.contains(getString(R.string.code_400))) {
-                            showApplyFailedDialog(getString(R.string.applied));
-                        } else if (error.contains(getString(R.string.code_404))) {
-                            showApplyFailedDialog(getString(R.string.non_right));
-                        } else if (error.contains(getString(R.string.code_500))) {
-                            showApplyFailedDialog(getString(R.string.server_error));
-                        } else if (error.contains(getString(R.string.code_302))) {
-                            showApplyFailedDialog(getString(R.string.full_apply));
-                        } else {
-                            showApplyFailedDialog(getString(R.string.apply_failed));
-                        }
+                        showApplyFailedDialog(getString(R.string.apply_failed));
                     }
-
-                    @Override public void onNext(ResponseBody responseBody) {
-                        try {
-                            String result = responseBody.string();
-                            Log.i(TAG, "apply success : " + result);
-                            showApplySuccessDialog();// {"msg":"申请提交成功"}
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                            showApplyFailedDialog(getString(R.string.exception));
+                    @Override public void onNext(BookResult bookResult) {
+                        // {code=404, msg='@#*@S%&BB@*@*D#P&S,@#*P&&&BB%*&*%QQ@x'}
+                        Log.i(TAG, "apply success : " + bookResult.toString());
+                        int code = bookResult.getCode();
+                        if (code == 200){
+                            showApplySuccessDialog();
+                        }else if(code == 404){
+                            String msg = getMessageContent(bookResult);
+                            showApplyFailedDialog(msg);
+                        }else {
+                            showApplyFailedDialog(bookResult.getMsg());
                         }
                     }
                 });
+    }
+
+    /**
+     *
+     * @param bookResult
+     * @return
+     */
+    private String getMessageContent(BookResult bookResult) {
+        String msg = bookResult.getMsg();
+        String content = "身份证尾号为 ";
+        if (msg.contains(",")){
+            String[] ids = msg.split(",");
+            for (int i = 0; i < ids.length; i++){
+                if (i == ids.length - 1) {
+                    content += StringUtils.decryptUuid(ids[i]).substring(ids[i].length() - 4);
+                }else {
+                    content += StringUtils.decryptUuid(ids[i]).substring(ids[i].length() - 4) + ",";
+                }
+            }
+            content += "等";
+        }else {
+            content += StringUtils.decryptUuid(msg).substring(msg.length() - 4);
+        }
+        Log.i(TAG, content);
+        return content + " 用户没有会见权限";
     }
 
     /**
@@ -158,13 +172,13 @@ public class BookFragment extends BaseFragment {
                 clearEditTextAndList();
             }
         });
-        delayDismissDialog(true);
+        delayDismissDialog(true, 2000);
     }
 
     /**
      * 若用户没有手动点确定  延迟两秒自动dismiss
      */
-    private void delayDismissDialog(final boolean isClearable) {
+    private void delayDismissDialog(final boolean isClearable, long timeout) {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -175,7 +189,7 @@ public class BookFragment extends BaseFragment {
                         clearEditTextAndList();
                 }
             }
-        }, 2000);
+        }, timeout);
     }
 
     /**
@@ -191,7 +205,7 @@ public class BookFragment extends BaseFragment {
                 sweetAlertDialog.dismiss();
             }
         });
-        delayDismissDialog(false);
+        delayDismissDialog(false, 3500);
     }
 
     /**
@@ -214,11 +228,8 @@ public class BookFragment extends BaseFragment {
         phone = et_phone.getText().toString().trim();
         uuid = et_ic_card_number.getText().toString().trim();
         apply_date = DATE_LIST[sp_date.getSelectedItemPosition()];
-        if (TextUtils.isEmpty(name) || TextUtils.isEmpty(phone) ||
-                TextUtils.isEmpty(uuid) || TextUtils.isEmpty(apply_date)) {
-            return false;
-        }
-        return true;
+        return !(TextUtils.isEmpty(name) || TextUtils.isEmpty(phone) ||
+                TextUtils.isEmpty(uuid) || TextUtils.isEmpty(apply_date));
     }
 
     @OnClick({R.id.add, R.id.bt_remote_meeting})
@@ -383,16 +394,15 @@ public class BookFragment extends BaseFragment {
         @Override
         public AddBookAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 //            Log.i(TAG, "onCreateViewHolder()");
-            AddBookAdapter.MyViewHolder holder = new AddBookAdapter.MyViewHolder(LayoutInflater.from(mContext)
+            return new AddBookAdapter.MyViewHolder(LayoutInflater.from(mContext)
                     .inflate(R.layout.add_item, parent, false));
-            return holder;
         }
 
         @Override
         public void onBindViewHolder(final AddBookAdapter.MyViewHolder holder, int position) {
 //            Log.i(TAG, list.get(position).toString());
             holder.tv_name.setText(list.get(position).getName());
-            holder.tv_id_card_number.setText("身份证：" + list.get(position).getUuid());
+            holder.tv_id_card_number.setText(getResources().getString(R.string.id_num) + list.get(position).getUuid());
             holder.iv_delete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

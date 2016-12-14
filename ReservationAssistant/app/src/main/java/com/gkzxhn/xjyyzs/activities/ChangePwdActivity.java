@@ -111,10 +111,7 @@ public class ChangePwdActivity extends BaseActivity {
         old = oldPwd.getText().toString().trim();
         newText = newPwd.getText().toString().trim();
         confirm = confirmNewPwd.getText().toString().trim();
-        if(TextUtils.isEmpty(old) || TextUtils.isEmpty(newText) || TextUtils.isEmpty(confirm)){
-            return false;
-        }
-        return true;
+        return !(TextUtils.isEmpty(old) || TextUtils.isEmpty(newText) || TextUtils.isEmpty(confirm));
     }
 
     @OnClick(R.id.bt_ok)

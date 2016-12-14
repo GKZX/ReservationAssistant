@@ -1,23 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="transparent">#00000000</color>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
     <color name="bg">#f0f0f0</color>
     <color name="tv_bg">#333333</color>
-    <color name="tv_red">#f10000</color>
-    <color name="tv_blue">#ff33b5e5</color>
-    <color name="tv_green">#1f9400</color>
     <color name="tv_gray">#999999</color>
     <color name="white">#ffffff</color>
     <color name="et_hint">#dadada</color>
     <color name="half_transparent_theme">#4e82df</color>
     <color name="tv_mid">#666666</color>
     <color name="item_press">#eeeeee</color>
-    <color name="half_transparent">#4000</color>
     <color name="theme">#6495ed</color>
-    <color name="bt_red_bg">#f65c44</color>
 
     <!-- sweet_alert_dialog相关 -->
     <color name="float_transparent">#00000000</color>
@@ -33,10 +25,4 @@
     <color name="success_stroke_color">#6495ed</color><!-- #A5DC86 -->
     <color name="trans_success_stroke_color">#33A5DC86</color>
     <color name="warning_stroke_color">#F8BB86</color>
-    <color name="text_color">#575757</color>
-    <color name="material_blue_grey_80">#ff37474f</color>
-    <color name="material_blue_grey_90">#ff263238</color>
-    <color name="material_blue_grey_95">#ff21272b</color>
-    <color name="material_deep_teal_20">#6495ed</color><!-- #ff80cbc4 -->
-    <color name="material_deep_teal_50">#6495ed</color><!-- #ff009688 -->
 </resources>

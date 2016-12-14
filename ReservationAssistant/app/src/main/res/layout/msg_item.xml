@@ -23,7 +23,7 @@
                 android:id="@+id/tv_msg_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="系统通知"
+                android:text="@string/system_notification"
                 android:textColor="@color/tv_bg"
                 android:textSize="16sp"/>
 
@@ -34,7 +34,7 @@
                 android:layout_alignParentRight="true"
                 android:textSize="12sp"
                 android:textColor="@color/tv_gray"
-                android:text="2016-10-08 11:29"/>
+                android:text="@string/date_ex"/>
         </RelativeLayout>
 
         <TextView

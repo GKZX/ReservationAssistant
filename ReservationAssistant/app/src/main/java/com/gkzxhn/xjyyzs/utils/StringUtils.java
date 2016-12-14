@@ -56,7 +56,7 @@ public class StringUtils {
         } else if (lowerCaseIdStr.length() == 15) {
             Ai = lowerCaseIdStr.substring(0, 6) + "19" + lowerCaseIdStr.substring(6, 15);
         }
-        if (isNumeric(Ai) == false) {
+        if (!isNumeric(Ai)) {
             errorInfo = "身份证15位号码都应为数字 ; 18位号码除最后一位外，都应为数字。";
             return errorInfo;
         }
@@ -105,7 +105,7 @@ public class StringUtils {
         Ai = Ai + strVerifyCode;
 
         if (lowerCaseIdStr.length() == 18) {
-            if (Ai.equals(lowerCaseIdStr) == false) {
+            if (!Ai.equals(lowerCaseIdStr)) {
                 errorInfo = "身份证无效，不是合法的身份证号码";
                 return errorInfo;
             }
@@ -120,14 +120,10 @@ public class StringUtils {
      * @param str
      * @return  true为全数字  false为含其它字符
      */
-    public static boolean isNumeric(String str) {
+    private static boolean isNumeric(String str) {
         Pattern pattern = Pattern.compile("[0-9]*");
         Matcher isNum = pattern.matcher(str);
-        if (isNum.matches()) {
-            return true;
-        } else {
-            return false;
-        }
+        return isNum.matches();
     }
 
     /**
@@ -135,7 +131,7 @@ public class StringUtils {
      * @return Hashtable 对象
      */
     public static Hashtable GetAreaCode() {
-        Hashtable hashtable = new Hashtable();
+        Hashtable<String, String> hashtable = new Hashtable<String, String>();
         hashtable.put("11", "北京");
         hashtable.put("12", "天津");
         hashtable.put("13", "河北");

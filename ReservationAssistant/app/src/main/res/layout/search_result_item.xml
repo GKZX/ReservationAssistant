@@ -25,7 +25,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/tv_mid"
                     android:textSize="@dimen/search_main_text_size"
-                    android:text="姓名："/>
+                    android:text="@string/name_no"/>
 
                 <TextView
                     android:id="@+id/tv_apply_name"
@@ -33,7 +33,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/tv_mid"
                     android:textSize="@dimen/search_main_text_size"
-                    android:text="xxx"/>
+                    android:text="@string/xxx"/>
             </LinearLayout>
 
 
@@ -48,7 +48,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/tv_mid"
                     android:textSize="@dimen/search_main_text_size"
-                    android:text="身份证号："/>
+                    android:text="@string/id_num"/>
 
                 <TextView
                     android:id="@+id/tv_id_card_number"
@@ -56,7 +56,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/tv_mid"
                     android:textSize="@dimen/search_main_text_size"
-                    android:text="xxxxxxxxxxxxxx"/>
+                    android:text="@string/xxxxxxxxxxxxxx"/>
             </LinearLayout>
 
             <LinearLayout
@@ -70,7 +70,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/tv_mid"
                     android:textSize="@dimen/search_main_text_size"
-                    android:text="电话号码："/>
+                    android:text="@string/phone_num"/>
 
                 <TextView
                     android:id="@+id/tv_phone"
@@ -78,7 +78,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/tv_mid"
                     android:textSize="@dimen/search_main_text_size"
-                    android:text="xxxxxxxxx"/>
+                    android:text="@string/xxxxxxxxx"/>
             </LinearLayout>
 
             <LinearLayout
@@ -92,7 +92,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/tv_mid"
                     android:textSize="@dimen/search_main_text_size"
-                    android:text="申请日期："/>
+                    android:text="@string/apply_date_"/>
 
                 <TextView
                     android:id="@+id/tv_apply_date"
@@ -100,7 +100,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/tv_mid"
                     android:textSize="@dimen/search_main_text_size"
-                    android:text="1970-01-01"/>
+                    android:text="@string/_1970_01_01"/>
             </LinearLayout>
 
             <LinearLayout
@@ -114,7 +114,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/tv_mid"
                     android:textSize="@dimen/search_main_text_size"
-                    android:text="状态："/>
+                    android:text="@string/status"/>
 
                 <TextView
                     android:id="@+id/tv_apply_status"
@@ -122,7 +122,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/tv_mid"
                     android:textSize="@dimen/search_main_text_size"
-                    android:text="未知"/>
+                    android:text="@string/unknown"/>
             </LinearLayout>
 
             <LinearLayout
@@ -136,7 +136,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/tv_mid"
                     android:textSize="@dimen/search_main_text_size"
-                    android:text="会见时间："/>
+                    android:text="@string/meeting_date"/>
 
                 <TextView
                     android:id="@+id/tv_meeting_date"
@@ -144,7 +144,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/tv_mid"
                     android:textSize="@dimen/search_main_text_size"
-                    android:text="1970-01-01"/>
+                    android:text="@string/_1970_01_01"/>
             </LinearLayout>
         </LinearLayout>
 </android.support.v7.widget.CardView>

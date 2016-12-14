@@ -1,21 +1,10 @@
 <resources>
     <string name="app_name">预约助手</string>
-    <string name="agreement">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;国科狱务公开APP是由国科政信科技（北京）股份有限公司开发的一款监狱类软件，用于服刑人员家属、社会各界人士知悉服刑情况和监狱狱务情况。请您在使用本软件前仔细阅读如下条款。您的安装使用行为将视为对本《协议》的接受，并同意接受本《协议》各项条款的约束。\n
-一、	许可证的授予。本《协议》授予您下列权利：\n
-&#160;&#160;&#160;&#160;&#160;&#160;&#160;您可安装、复制、分发和传播本产品来使用，但您必须保证每一份复制、分发和传播都必须是完整和真实的。\n
-二、其它权利和限制说明。\n
-&#160;&#160;&#160;&#160;&#160;&#160;&#160;本软件针对家属和社会人员有不同的设置，家属可以获得服刑人员相关服刑信息，社会人事只能获得监狱允许范围内的相关信息。
-本软件需付费使用，个人使用授权版本只能由单个用户在一台或多台手机上亲自使用；
-您不得对本软件产品进行反向工程、反向编译和反向汇编，不得删除本软件及其他副本上一切关于版权的信息，不得制作和提供该软件的注册机及破解程序。除非适用法律明文允许上述活动，否则您必须遵守此协议限制。
-最终解释权归国科政信科技（北京）股份有限公司所有。
-    </string>
 
     <!-- sweet-alert-dialog相关 -->
     <string name="dialog_default_title">Here\'s a message!</string>
     <string name="dialog_ok">OK</string>
     <string name="dialog_cancel">Cancel</string>
-    <string name="LOADING">Loading...</string>
-    <string name="default_progressbar">Default Progressbar:</string>
     <string name="setting_worker_phone_text">设置工作人员联系方式：</string>
     <string name="wifi_reminder">当前处于非WIFI网络环境，如果继续下载可能会产生高额流量费，继续下载吗？</string>
     <string name="please_enter_info">请输入工作人员信息</string>
@@ -43,4 +32,43 @@
     <string name="login_failed">登录失败，请稍后再试！</string>
     <string name="account_pwd_empty">用户名或密码为空</string>
     <string name="pwd_less_6">密码不能少于六位</string>
+    <string name="old_pwd">原密码</string>
+    <string name="new_pwd">新密码</string>
+    <string name="confirm_new_pwd">确认新密码</string>
+    <string name="confirm">确 定</string>
+    <string name="v_1_0">V 1.0</string>
+    <string name="company_name">国科政信（北京）股份有限公司</string>
+    <string name="copyright">copyright©2006-2015.All right reserved</string>
+    <string name="input_phone">请输入手机号码</string>
+    <string name="name">姓名</string>
+    <string name="id_ex">身份证：xxxxxxxxxxxxxxxxxx</string>
+    <string name="name_ex">姓 名：</string>
+    <string name="input_name">请输入姓名</string>
+    <string name="id_num">身份证号：</string>
+    <string name="input_id">请输入身份证号</string>
+    <string name="phone_num">电话号码：</string>
+    <string name="input_phone_num">请输入电话号码</string>
+    <string name="input_info">请填写相关信息</string>
+    <string name="name_no">姓名：</string>
+    <string name="added">已添加:</string>
+    <string name="apply_date">申请探监日期：</string>
+    <string name="apply">申 请</string>
+    <string name="system_notification">系统通知</string>
+    <string name="date_ex">2016-10-08 11:29</string>
+    <string name="confirm_exit">确定退出当前账号？</string>
+    <string name="cancel">取消</string>
+    <string name="confirm_non">确定</string>
+    <string name="xxx">xxx</string>
+    <string name="xxxxxxxxxxxxxx">xxxxxxxxxxxxxx</string>
+    <string name="xxxxxxxxx">xxxxxxxxx</string>
+    <string name="apply_date_">申请日期：</string>
+    <string name="_1970_01_01">1970-01-01</string>
+    <string name="status">状态：</string>
+    <string name="unknown">未知</string>
+    <string name="meeting_date">会见时间：</string>
+    <string name="soft_agreement">《狱务通软件使用协议》</string>
+    <string name="update_pwd">修改密码</string>
+    <string name="clear_msg">清空系统消息</string>
+    <string name="check_update">检查更新</string>
+    <string name="logout">注销</string>
 </resources>

@@ -17,7 +17,7 @@
             android:id="@+id/tv_version"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="V 1.0"
+            android:text="@string/v_1_0"
             android:layout_gravity="center"
             android:textColor="@color/white"
             android:textSize="11sp"
@@ -29,7 +29,7 @@
             android:textColor="@color/white"
             android:textSize="11sp"
             android:layout_gravity="center"
-            android:text="国科政信（北京）股份有限公司"
+            android:text="@string/company_name"
             android:padding="2dp"/>
         <LinearLayout
             android:layout_width="wrap_content"
@@ -42,7 +42,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="11sp"
                 android:textColor="@color/white"
-                android:text="copyright©2006-2015.All right reserved"
+                android:text="@string/copyright"
                 android:padding="2dp"/>
         </LinearLayout>
     </LinearLayout>

@@ -16,7 +16,7 @@
             android:id="@+id/old_pwd"
             android:layout_width="match_parent"
             android:layout_height="@dimen/input_height"
-            android:hint="原密码"
+            android:hint="@string/old_pwd"
             android:paddingLeft="10dp"
             android:layout_marginTop="20dp"
             android:background="@drawable/et_shape_gray"
@@ -29,7 +29,7 @@
             android:id="@+id/new_pwd"
             android:layout_width="match_parent"
             android:layout_height="@dimen/input_height"
-            android:hint="新密码"
+            android:hint="@string/new_pwd"
             android:paddingLeft="10dp"
             android:layout_marginTop="20dp"
             android:background="@drawable/et_shape_gray"
@@ -42,7 +42,7 @@
             android:id="@+id/confirm_new_pwd"
             android:layout_width="match_parent"
             android:layout_height="@dimen/input_height"
-            android:hint="确认新密码"
+            android:hint="@string/confirm_new_pwd"
             android:paddingLeft="10dp"
             android:layout_marginTop="20dp"
             android:background="@drawable/et_shape_gray"
@@ -58,7 +58,7 @@
             android:layout_marginTop="30dp"
             android:background="@drawable/theme_bg_bt_selector"
             android:textColor="@color/white"
-            android:text="确    定"
+            android:text="@string/confirm"
             android:textSize="@dimen/search_main_text_size"/>
     </LinearLayout>
 </RelativeLayout>

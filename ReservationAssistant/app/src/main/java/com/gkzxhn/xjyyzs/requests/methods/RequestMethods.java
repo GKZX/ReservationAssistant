@@ -2,6 +2,7 @@ package com.gkzxhn.xjyyzs.requests.methods;
 
 import android.content.Context;
 
+import com.gkzxhn.xjyyzs.entities.BookResult;
 import com.gkzxhn.xjyyzs.requests.ApiService;
 import com.gkzxhn.xjyyzs.requests.Constant;
 import com.gkzxhn.xjyyzs.requests.bean.LoginResult;
@@ -55,7 +56,7 @@ public class RequestMethods {
      * @param body
      * @param subscriber
      */
-    public static void bookMeeting(String token, RequestBody body, Subscriber<ResponseBody> subscriber){
+    public static void bookMeeting(String token, RequestBody body, Subscriber<BookResult> subscriber){
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(Constant.URL_HEAD)
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())

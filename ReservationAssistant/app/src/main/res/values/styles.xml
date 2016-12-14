@@ -23,18 +23,6 @@
         <item name="contentInsetStart">0dp</item><!-- 设置该属性解决空白部分-->
     </style>
 
-    <style name="main_tab_style">
-        <item name="android:layout_width">0dip</item>
-        <item name="android:layout_height">@dimen/main_tab_height</item>
-        <item name="android:layout_gravity">center</item>
-        <item name="android:layout_weight">1</item>
-        <item name="android:background">@android:color/transparent</item>
-        <item name="android:button">@null</item>
-        <item name="android:gravity">center</item>
-        <item name="android:textColor">@drawable/tab_textcolor</item>
-        <item name="android:textSize">14sp</item>
-    </style>
-
     <!-- tablayout相关 -->
     <style name="MyTabLayoutTextAppearance" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
         <item name="android:textSize">20sp</item>

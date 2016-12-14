@@ -9,7 +9,7 @@ package com.gkzxhn.xjyyzs.entities.events;
 
 public class ClearMsgResult {
 
-    boolean isSuccess;
+    private boolean isSuccess;
 
     public ClearMsgResult(){}
 
