@@ -4,7 +4,9 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -479,5 +481,39 @@ public class BookFragment extends BaseFragment {
             e.printStackTrace();
         }
 
+    }
+
+    @Override
+    public void onDestroyView() {
+        Log.i(TAG, TAG + "----onDestroyView --");
+        super.onDestroyView();
+        // 保存数据
+    }
+
+    @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        Log.i(TAG, TAG + "----onViewStateRestored --" + savedInstanceState);
+        super.onViewStateRestored(savedInstanceState);
+        restorView();
+    }
+
+    /**
+     * 恢复view状态（这里主要是添加的申请条目）
+     */
+    private void restorView() {
+        Log.i(TAG, TAG + "----restorView --" + familyList.size());
+        if (familyList.size() > 0 && ll_added.getVisibility() != View.VISIBLE){
+            Log.i(TAG, TAG + "----restorView --" + familyList.size());
+            ll_added.setVisibility(View.VISIBLE);
+            if (addBookAdapter != null){
+                addBookAdapter = new AddBookAdapter(context, familyList);
+                recycler_view.setLayoutManager(new MyLinearLayoutManager(context,
+                        LinearLayoutManager.VERTICAL, false));
+                recycler_view.addItemDecoration(new DividerItemDecoration(context
+                        , LinearLayoutManager.VERTICAL));
+                recycler_view.setAdapter(addBookAdapter);
+                Log.i(TAG, addBookAdapter.getItemCount() + "");
+            }
+        }
     }
 }

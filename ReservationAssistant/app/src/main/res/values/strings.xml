@@ -19,10 +19,10 @@
 
 
     <string name="exception">异常</string>
-    <string name="applied">已申请过该日，请勿重复申请</string>
     <string name="non_right">抱歉，没有权限</string>
     <string name="server_error">服务器错误</string>
     <string name="full_apply">该日司法所会见已满</string>
+    <string name="applied">已申请过该日，请勿重复申请</string>
     <string name="apply_failed">申请失败，请稍后再试</string>
     <string name="code_404">404</string>
     <string name="code_500">500</string>

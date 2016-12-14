@@ -14,7 +14,7 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
@@ -48,7 +48,7 @@ greendao {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
 
-    compile 'com.squareup.retrofit2:retrofit:2.1.0'
+    testCompile 'junit:junit:4.12'
 
     compile 'com.android.support:appcompat-v7:22.2.1'
     compile 'com.android.support:design:22.2.1'
@@ -59,10 +59,10 @@ dependencies {
     // 基础功能 (必需)
     compile 'com.netease.nimlib:basesdk:2.5.0'
 
+    // retrofit
+    compile 'com.squareup.retrofit2:retrofit:2.1.0'
     compile 'com.squareup.retrofit2:converter-gson:2.1.0'
     compile 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
-
-    testCompile 'junit:junit:4.12'
 
     // butter knife
     compile 'com.jakewharton:butterknife:8.2.1'
